@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "DailyTool.Packaged.Entry (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "DailyTool.Packaged.Entry (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

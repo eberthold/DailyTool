@@ -1,4 +1,5 @@
-﻿using DailyTool.BusinessLogic.Peoples;
+﻿using DailyTool.BusinessLogic.Parameters;
+using DailyTool.BusinessLogic.Peoples;
 using System.Collections.ObjectModel;
 
 namespace DailyTool.BusinessLogic.Initialization
@@ -7,8 +8,6 @@ namespace DailyTool.BusinessLogic.Initialization
     {
         public ObservableCollection<Person> Peoples { get; internal set; } = new();
 
-        public TimeSpan MeetingDuration { get; internal set; }
-
-        public TimeSpan MeetingStartTime { get; internal set; }
+        public MeetingInfo MeetingInfo { get; internal set; } = new();
     }
 }

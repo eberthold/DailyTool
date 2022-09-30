@@ -1,5 +1,4 @@
-﻿using DailyTool.BusinessLogic.Parameters;
-using DailyTool.BusinessLogic.Peoples;
+﻿using DailyTool.BusinessLogic.Peoples;
 
 namespace DailyTool.BusinessLogic.Initialization
 {
@@ -7,10 +6,10 @@ namespace DailyTool.BusinessLogic.Initialization
     {
         Task<InitializationStageState> GetStateAsync();
 
-        Task AddPerson(Person person);
+        Task AddPersonAsync(Person person);
 
-        Task RemovePerson(Person person);
+        Task RemovePersonAsync(Person person);
 
-        Task UpdateMeetingInfoAsync(MeetingInfo meetingInfo);
+        Task SaveStateAsync();
     }
 }

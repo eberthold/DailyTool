@@ -1,9 +1,22 @@
-﻿namespace DailyTool.BusinessLogic.Peoples
-{
-    public class Person
-    {
-        public string Name { get; set; } = string.Empty;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-        public bool IsParticipating { get; set; }
+namespace DailyTool.BusinessLogic.Peoples
+{
+    public class Person : ObservableObject
+    {
+        private string _name = string.Empty;
+        private bool _isParticipating;
+
+        public string Name
+        {
+            get => _name;
+            set => SetProperty(ref _name, value);
+        }
+
+        public bool IsParticipating
+        {
+            get => _isParticipating;
+            set => SetProperty(ref _isParticipating, value);
+        }
     }
 }

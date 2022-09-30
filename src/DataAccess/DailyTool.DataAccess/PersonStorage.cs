@@ -1,6 +1,6 @@
 ﻿namespace DailyTool.DataAccess
 {
-    public class Person
+    public class PersonStorage
     {
         public string Name { get; set; } = string.Empty;
 

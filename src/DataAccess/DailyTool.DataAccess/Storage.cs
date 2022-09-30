@@ -2,7 +2,7 @@
 {
     public class Storage
     {
-        public List<string> Peoples { get; set; } = new List<string>();
+        public IReadOnlyCollection<PersonStorage> Peoples { get; set; } = Array.Empty<PersonStorage>();
 
         public TimeSpan MeetingDuration { get; set; }
 

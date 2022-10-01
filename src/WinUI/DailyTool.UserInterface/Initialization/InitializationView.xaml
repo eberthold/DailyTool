@@ -12,15 +12,15 @@
     d:DataContext="{d:DesignInstance Type=vm:InitializationViewModel, IsDesignTimeCreatable=False}"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <!-- Add only for design time -->
     <Page.Resources>
         <ResourceDictionary>
+            <!-- Add only for design time -->
             <d:ResourceDictionary.MergedDictionaries>
                 <resources:ModuleResourceDictionary />
             </d:ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Page.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -29,14 +29,44 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock Text="TODO: Vorbereitung" Style="{StaticResource TitleTextBlockStyle}" />
+        <TextBlock Text="TODO: Vorbereitung" Margin="24, 12, 24, 12" Style="{ThemeResource TitleTextBlockStyle}" />
 
-        <toolkit:DataGrid ItemsSource="{Binding CurrentState.Peoples, Mode=OneWay}">
-            <toolkit:DataGrid.Columns>
-                <toolkit:DataGridCheckBoxColumn Header="TODO: IsSelected" />
-                <toolkit:DataGridTemplateColumn Header="TODO: IsParticipating"  CellTemplate="{StaticResource IsParticipatingCellTemplate}"/>
-                <toolkit:DataGridTextColumn Header="TODO: Name" Binding="{x:Bind Name}" />
-            </toolkit:DataGrid.Columns>
-        </toolkit:DataGrid>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="24, 0, 24, 12">
+            <TimePicker Header="TODO: Start" Time="{Binding StartTime, Mode=TwoWay}" />
+            <TimePicker Header="TODO: Ende" Time="{Binding EndTime, Mode=TwoWay}" />
+        </StackPanel>
+
+        <Grid Grid.Row="2" Margin="24, 0, 24, 12" IsHitTestVisible="{Binding IsInViewMode}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <TextBlock Text="TODO: Teilnehmer" />
+
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0, 4">
+                <Button Command="{Binding AddPersonCommand}">
+                    <SymbolIcon Symbol="Add" />
+                </Button>
+                <Button>
+                    <SymbolIcon Symbol="Delete" />
+                </Button>
+            </StackPanel>
+
+            <toolkit:DataGrid Grid.Row="2" ItemsSource="{Binding CurrentState.Peoples, Mode=OneWay}">
+                <toolkit:DataGrid.Columns>
+                    <toolkit:DataGridTemplateColumn Header="TODO: IsParticipating" CellTemplate="{StaticResource IsParticipatingCellTemplate}" />
+                    <toolkit:DataGridTextColumn MinWidth="300" Header="TODO: Name" Binding="{Binding Name}" />
+                </toolkit:DataGrid.Columns>
+            </toolkit:DataGrid>
+        </Grid>
+
+        <Grid Grid.Row="2" Visibility="{Binding IsInPersonAddMode, Converter={StaticResource BooleanToVisibilityConverter}}" Background="{ThemeResource ListViewItemOverlayBackgroundThemeBrush}">
+            
+        </Grid>
+
+        <StackPanel Grid.Row="3" HorizontalAlignment="Right" Orientation="Horizontal">
+            
+        </StackPanel>
     </Grid>
 </Page>

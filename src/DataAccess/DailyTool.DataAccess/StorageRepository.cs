@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace DailyTool.DataAccess
 {
-    internal class StorageRepository : IStorageRepository
+    public class StorageRepository : IStorageRepository
     {
         private readonly IFileSystem _fileSystem;
 
@@ -14,9 +14,9 @@ namespace DailyTool.DataAccess
 
         public async Task<Storage> GetStorageAsync()
         {
-            if (_fileSystem.File.Exists(Constants.JsonStoragePath))
+            if (!_fileSystem.File.Exists(Constants.JsonStoragePath))
             {
-                new Storage();
+                return new Storage();
             }
 
             var content = await _fileSystem.File.ReadAllTextAsync(Constants.JsonStoragePath).ConfigureAwait(false);

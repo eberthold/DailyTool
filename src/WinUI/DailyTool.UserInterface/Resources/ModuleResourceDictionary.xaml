@@ -1,9 +1,13 @@
 ﻿<ResourceDictionary x:Class="DailyTool.UserInterface.Resources.ModuleResourceDictionary"
                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converters="using:DailyTool.UserInterface.Converters"
                     xmlns:local="using:DailyTool.UserInterface.Resources">
 
+    <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    <converters:InvertedBooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" />
+
     <DataTemplate x:Key="IsParticipatingCellTemplate">
-        <ToggleSwitch IsOn="{x:Bind IsParticipating}"/>
+        <ToggleSwitch IsOn="{Binding IsParticipating}"/>
     </DataTemplate>
 </ResourceDictionary>

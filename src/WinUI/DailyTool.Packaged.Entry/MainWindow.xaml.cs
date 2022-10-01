@@ -1,36 +1,86 @@
-﻿using Microsoft.UI.Xaml;
+﻿using DailyTool.Packaged.Entry.Navigation;
+using DailyTool.ViewModels.Abstractions;
+using DailyTool.ViewModels.Navigation;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+using System.Threading.Tasks;
 
 namespace DailyTool.Packaged.Entry
 {
     /// <summary>
     /// An empty window that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainWindow : Window
+    public sealed partial class MainWindow : Window, INavigationService
     {
-        public MainWindow()
+        private readonly INavigationMap _navigationMap;
+        private readonly IServiceProvider _serviceProvider;
+
+        public MainWindow(
+            INavigationMap navigationMap,
+            IServiceProvider serviceProvider)
         {
-            this.InitializeComponent();
+            InitializeComponent();
+            _navigationMap = navigationMap;
+            _serviceProvider = serviceProvider;
         }
 
-        private void myButton_Click(object sender, RoutedEventArgs e)
+        public async Task GoBackAsync()
         {
-            myButton.Content = "Clicked";
+            if (!PART_NavigationFrame.CanGoBack)
+            {
+                return;
+            }
+
+            var content = PART_NavigationFrame.Content as Control;
+            var vm = content?.DataContext as INavigationTarget;
+            var canLeave = await (vm?.OnNavigatingFromAsync(NavigationMode.Backward)
+                ?? Task.FromResult(true));
+            if (!canLeave)
+            {
+                return;
+            }
+
+            PART_NavigationFrame.GoBack();
+        }
+
+        public async Task<T?> NavigateAsync<T>()
+            where T : class, INavigationTarget
+        {
+            var content = PART_NavigationFrame.Content as Control;
+            var oldViewModel = content?.DataContext as INavigationTarget;
+            var canLeave = await (oldViewModel?.OnNavigatingFromAsync(NavigationMode.Forward)
+                ?? Task.FromResult(true));
+            if (!canLeave)
+            {
+                return null;
+            }
+
+            PART_NavigationFrame.Navigate(_navigationMap.GetForTarget<T>());
+
+            content = PART_NavigationFrame.Content as Control;
+            if (content is null)
+            {
+                throw new InvalidOperationException("Navigation failed");
+            }
+
+            var newViewModel = _serviceProvider.GetRequiredService<T>();
+            content.DataContext = newViewModel;
+            await newViewModel.OnNavigatedToAsync(NavigationMode.Forward);
+
+            if (newViewModel is ILoadDataAsync loadDataAsync)
+            {
+                await loadDataAsync.LoadDataAsync();
+            }
+
+            return newViewModel;
+        }
+
+        public Task<T> CreateNavigationTarget<T>()
+            where T : INavigationTarget
+        {
+            return Task.FromResult(_serviceProvider.GetRequiredService<T>());
         }
     }
 }

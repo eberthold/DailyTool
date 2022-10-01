@@ -4,6 +4,6 @@
     {
         Task<MeetingInfo> GetAsync();
 
-        Task SaveAsync(MeetingInfo);
+        Task SaveAsync(MeetingInfo meetingInfo);
     }
 }

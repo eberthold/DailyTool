@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace DailyTool.UserInterface.Resources
 {
-    partial class ModuleResourceDictionary : ResourceDictionary
+    public partial class ModuleResourceDictionary : ResourceDictionary
     {
         public ModuleResourceDictionary()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
     }
 }

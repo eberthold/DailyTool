@@ -6,7 +6,7 @@ namespace DailyTool.BusinessLogic.Initialization
 {
     public class InitializationStageState
     {
-        public ObservableCollection<Person> Peoples { get; internal set; } = new();
+        public ObservableCollection<Person> People { get; internal set; } = new();
 
         public MeetingInfo MeetingInfo { get; internal set; } = new();
     }

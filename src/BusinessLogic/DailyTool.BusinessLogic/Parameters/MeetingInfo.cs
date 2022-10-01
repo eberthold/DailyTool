@@ -1,4 +1,6 @@
-﻿namespace DailyTool.BusinessLogic.Parameters
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+
+namespace DailyTool.BusinessLogic.Parameters
 {
     public class MeetingInfo
     {

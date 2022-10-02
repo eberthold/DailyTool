@@ -8,6 +8,6 @@
     <converters:InvertedBooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" />
 
     <DataTemplate x:Key="IsParticipatingCellTemplate">
-        <ToggleSwitch IsOn="{Binding IsParticipating}"/>
+        <ToggleSwitch IsOn="{Binding IsParticipating, Mode=TwoWay}" OnContent="" OffContent="" HorizontalAlignment="Center" MinWidth="50"/>
     </DataTemplate>
 </ResourceDictionary>

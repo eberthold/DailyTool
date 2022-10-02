@@ -2,6 +2,9 @@
 using DailyTool.ViewModels.Navigation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
+using System;
+using System.Text;
+using Windows.UI.Popups;
 
 namespace DailyTool.Packaged.Entry
 {
@@ -28,7 +31,11 @@ namespace DailyTool.Packaged.Entry
             var services = new ServiceCollection();
             services.Bootstrap();
 
-            var serviceProvider = services.BuildServiceProvider();
+            var options = new ServiceProviderOptions
+            {
+                ValidateOnBuild = true
+            };
+            var serviceProvider = services.BuildServiceProvider(options);
 
             var window = serviceProvider.GetRequiredService<MainWindow>();
             window.Activate();

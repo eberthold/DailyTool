@@ -5,6 +5,11 @@ namespace DailyTool.DataAccess
 {
     public class StorageRepository : IStorageRepository
     {
+        private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
+        {
+            WriteIndented = true,
+        };
+
         private readonly IFileSystem _fileSystem;
 
         public StorageRepository(IFileSystem fileSystem)
@@ -25,7 +30,7 @@ namespace DailyTool.DataAccess
 
         public Task SaveStorageAsync(Storage storage)
         {
-            var content = JsonSerializer.Serialize(storage);
+            var content = JsonSerializer.Serialize(storage, _serializerOptions);
             return _fileSystem.File.WriteAllTextAsync(Constants.JsonStoragePath, content);
         }
     }

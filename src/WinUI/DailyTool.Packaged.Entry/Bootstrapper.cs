@@ -1,6 +1,7 @@
-﻿using DailyTool.BusinessLogic.Initialization;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using DailyTool.BusinessLogic.Initialization;
 using DailyTool.BusinessLogic.Parameters;
-using DailyTool.BusinessLogic.Peoples;
+using DailyTool.BusinessLogic.People;
 using DailyTool.DataAccess;
 using DailyTool.Packaged.Entry.Navigation;
 using DailyTool.UserInterface.Initialization;
@@ -21,6 +22,7 @@ namespace DailyTool.Packaged.Entry
             services.RegisterControllers();
             services.RegisterServices();
             services.RegisterRepositories();
+            services.RegisterFrameworks();
         }
 
         private static void RegisterNavigation(this IServiceCollection services)
@@ -38,6 +40,7 @@ namespace DailyTool.Packaged.Entry
         private static void RegisterViewModels(this IServiceCollection services)
         {
             services.AddTransient<InitializationViewModel>();
+            services.AddTransient<AddPersonViewModel>();
         }
 
         private static void RegisterControllers(this IServiceCollection services)
@@ -55,7 +58,12 @@ namespace DailyTool.Packaged.Entry
             services.AddSingleton<IPersonRepository, PersonRepository>();
             services.AddSingleton<IMeetingInfoRepository, MeetingInfoRepository>();
             services.AddSingleton<IStorageRepository, StorageRepository>();
+        }
+
+        private static void RegisterFrameworks(this IServiceCollection services)
+        {
             services.AddSingleton<IFileSystem, FileSystem>();
+            services.AddSingleton<IMessenger, WeakReferenceMessenger>();
         }
     }
 }

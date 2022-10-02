@@ -1,5 +1,5 @@
 ﻿using DailyTool.BusinessLogic.Parameters;
-using DailyTool.BusinessLogic.Peoples;
+using DailyTool.BusinessLogic.People;
 using System.Collections.ObjectModel;
 
 namespace DailyTool.BusinessLogic.Initialization

@@ -1,4 +1,4 @@
-﻿using DailyTool.BusinessLogic.Peoples;
+﻿using DailyTool.BusinessLogic.People;
 using System.IO.Abstractions;
 
 namespace DailyTool.DataAccess
@@ -21,7 +21,7 @@ namespace DailyTool.DataAccess
             var storage = await _storageRepository.GetStorageAsync().ConfigureAwait(false);
 
             return storage
-                .Peoples
+                .People
                 .Select(ToBusinessObject)
                 .ToList();
         }
@@ -30,16 +30,16 @@ namespace DailyTool.DataAccess
         {
             var storage = await _storageRepository.GetStorageAsync().ConfigureAwait(false);
             return storage
-                .Peoples
+                .People
                 .Where(x => x.IsParticipating)
                 .Select(ToBusinessObject)
                 .ToList();
         }
 
-        public async Task SaveAllAsync(IReadOnlyCollection<Person> peoples)
+        public async Task SaveAllAsync(IReadOnlyCollection<Person> people)
         {
             var storage = await _storageRepository.GetStorageAsync().ConfigureAwait(false);
-            storage.Peoples = peoples.Select(ToStorageObject).ToList();
+            storage.People = people.Select(ToStorageObject).ToList();
             await _storageRepository.SaveStorageAsync(storage);
         }
 

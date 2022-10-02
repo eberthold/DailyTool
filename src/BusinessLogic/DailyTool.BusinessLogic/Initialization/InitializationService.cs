@@ -1,5 +1,5 @@
 ﻿using DailyTool.BusinessLogic.Parameters;
-using DailyTool.BusinessLogic.Peoples;
+using DailyTool.BusinessLogic.People;
 
 namespace DailyTool.BusinessLogic.Initialization
 {
@@ -21,9 +21,9 @@ namespace DailyTool.BusinessLogic.Initialization
             return _personRepository.GetAllAsync();
         }
 
-        public Task SavePeoplesAsync(IReadOnlyCollection<Person> peoples)
+        public Task SavePeopleAsync(IReadOnlyCollection<Person> people)
         {
-            return _personRepository.SaveAllAsync(peoples);
+            return _personRepository.SaveAllAsync(people);
         }
 
         public Task<MeetingInfo> GetMeetingInfoAsync()

@@ -1,4 +1,4 @@
-﻿using DailyTool.BusinessLogic.Peoples;
+﻿using DailyTool.BusinessLogic.People;
 
 namespace DailyTool.BusinessLogic.Initialization
 {

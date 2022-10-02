@@ -1,23 +1,14 @@
 ﻿using DailyTool.BusinessLogic.Parameters;
-using System;
-using System.Collections.Generic;
-using System.IO.Abstractions;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DailyTool.DataAccess
 {
     public class MeetingInfoRepository : IMeetingInfoRepository
     {
-        private readonly IFileSystem _fileSystem;
         private readonly IStorageRepository _storageRepository;
 
         public MeetingInfoRepository(
-            IFileSystem fileSystem,
             IStorageRepository storageRepository)
         {
-            _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
             _storageRepository = storageRepository ?? throw new ArgumentNullException(nameof(storageRepository));
         }
 
@@ -32,6 +23,7 @@ namespace DailyTool.DataAccess
             var storage = await _storageRepository.GetStorageAsync().ConfigureAwait(false);
             storage.MeetingDuration = meetingInfo.MeetingDuration;
             storage.MeetingStartTime = meetingInfo.MeetingStartTime;
+            storage.SprintBoardUri = meetingInfo.SprintBoardUri;
 
             await _storageRepository.SaveStorageAsync(storage);
         }
@@ -41,7 +33,8 @@ namespace DailyTool.DataAccess
             return new MeetingInfo
             {
                 MeetingDuration = storage.MeetingDuration,
-                MeetingStartTime = storage.MeetingStartTime
+                MeetingStartTime = storage.MeetingStartTime,
+                SprintBoardUri = storage.SprintBoardUri,
             };
         }
     }

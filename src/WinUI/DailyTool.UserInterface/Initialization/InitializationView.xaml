@@ -25,6 +25,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -36,7 +37,9 @@
             <TimePicker Header="TODO: Ende" Time="{Binding EndTime, Mode=TwoWay}" />
         </StackPanel>
 
-        <Grid Grid.Row="2" Margin="24, 0, 24, 12" IsHitTestVisible="{Binding IsInViewMode}">
+        <TextBox Grid.Row="2" Header="TODO: Sprint Board URL" Margin="24, 0, 24, 12" Text="{Binding CurrentState.MeetingInfo.SprintBoardUri, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+        <Grid Grid.Row="3" Margin="24, 0, 24, 12">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -48,12 +51,12 @@
                 <Button Command="{Binding AddPersonCommand}">
                     <SymbolIcon Symbol="Add" />
                 </Button>
-                <Button>
+                <Button Command="{Binding RemovePersonCommand}">
                     <SymbolIcon Symbol="Delete" />
                 </Button>
             </StackPanel>
 
-            <toolkit:DataGrid Grid.Row="2" ItemsSource="{Binding CurrentState.Peoples, Mode=OneWay}">
+            <toolkit:DataGrid x:Name="PART_Grid" Grid.Row="2" Background="{ThemeResource ListBoxBackgroundThemeBrush}" ItemsSource="{Binding CurrentState.People, Mode=OneWay}" VerticalScrollBarVisibility="Auto" IsReadOnly="True" AutoGenerateColumns="False" SelectionMode="Single" SelectedItem="{Binding SelectedPerson, Mode=TwoWay}">
                 <toolkit:DataGrid.Columns>
                     <toolkit:DataGridTemplateColumn Header="TODO: IsParticipating" CellTemplate="{StaticResource IsParticipatingCellTemplate}" />
                     <toolkit:DataGridTextColumn MinWidth="300" Header="TODO: Name" Binding="{Binding Name}" />
@@ -61,12 +64,12 @@
             </toolkit:DataGrid>
         </Grid>
 
-        <Grid Grid.Row="2" Visibility="{Binding IsInPersonAddMode, Converter={StaticResource BooleanToVisibilityConverter}}" Background="{ThemeResource ListViewItemOverlayBackgroundThemeBrush}">
-            
+        <Grid Grid.Row="1" Grid.RowSpan="4" Visibility="{Binding IsInPersonAddMode, Converter={StaticResource BooleanToVisibilityConverter}}" Background="{ThemeResource ListViewItemOverlayBackgroundThemeBrush}">
+            <local:AddPersonView TabFocusNavigation="Cycle" DataContext="{Binding AddPersonViewModel}" HorizontalAlignment="Center" VerticalAlignment="Center" CornerRadius="{ThemeResource OverlayCornerRadius}"/>
         </Grid>
 
-        <StackPanel Grid.Row="3" HorizontalAlignment="Right" Orientation="Horizontal">
-            
+        <StackPanel Grid.Row="4" HorizontalAlignment="Right" Orientation="Horizontal" Margin="0, 0, 24, 24">
+            <Button Content="TODO: Daily starten" />
         </StackPanel>
     </Grid>
 </Page>

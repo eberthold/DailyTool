@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace DailyTool.BusinessLogic.Peoples
+namespace DailyTool.BusinessLogic.People
 {
     public class Person : ObservableObject
     {

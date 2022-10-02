@@ -48,7 +48,8 @@ namespace DailyTool.ViewModels.Initialization
         {
             var person = new Person
             {
-                Name = Name
+                Name = Name,
+                IsParticipating = true
             };
 
             await _initializationStateController.AddPersonAsync(person);

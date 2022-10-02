@@ -7,6 +7,7 @@
     <UseWinUI>true</UseWinUI>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Daily\DailyView.xaml" />
     <None Remove="Initialization\AddPersonView.xaml" />
     <None Remove="Initialization\InitializationView.xaml" />
     <None Remove="Resources\ModuleResourceDictionary.xaml" />
@@ -40,6 +41,12 @@
 
   <ItemGroup>
     <Page Update="Resources\ModuleResourceDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Daily\DailyView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

@@ -48,7 +48,7 @@ namespace DailyTool.BusinessLogic.Initialization
 
                 _stageState = new InitializationStageState
                 {
-                    People = new ObservableCollection<Person>(people),
+                    People = new ObservableCollection<Person>(people.OrderBy(x => x.Name)),
                     MeetingInfo = meetingInfo
                 };
             }

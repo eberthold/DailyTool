@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using DailyTool.BusinessLogic.Initialization;
 using DailyTool.BusinessLogic.People;
 using DailyTool.ViewModels.Abstractions;
+using DailyTool.ViewModels.Daily;
 using DailyTool.ViewModels.Navigation;
 
 namespace DailyTool.ViewModels.Initialization
@@ -27,14 +28,14 @@ namespace DailyTool.ViewModels.Initialization
 
             AddPersonCommand = new AsyncRelayCommand(AddPersonAsync, CanAddPerson);
             RemovePersonCommand = new AsyncRelayCommand(RemovePersonAsync, CanRemovePerson);
-            StartMeetingCommand = new AsyncRelayCommand(StartMeetingAsync);
+            StartDailyCommand = new AsyncRelayCommand(StartDailyAsync);
         }
 
         public IAsyncRelayCommand AddPersonCommand { get; }
 
-        public AsyncRelayCommand RemovePersonCommand { get; }
+        public IAsyncRelayCommand RemovePersonCommand { get; }
 
-        public AsyncRelayCommand StartMeetingCommand { get; }
+        public IAsyncRelayCommand StartDailyCommand { get; }
 
         public Person? SelectedPerson
         {
@@ -124,9 +125,9 @@ namespace DailyTool.ViewModels.Initialization
             AddPersonViewModel.AddCloseCallback(() => OnAddPersonClosed());
         }
 
-        private Task StartMeetingAsync()
+        private Task StartDailyAsync()
         {
-            return _initializationStateController.SaveStateAsync();
+            return _navigationService.NavigateAsync<DailyViewModel>();
         }
 
         public Task OnNavigatedToAsync(NavigationMode navigationMode)
@@ -143,7 +144,7 @@ namespace DailyTool.ViewModels.Initialization
         {
             AddPersonCommand.NotifyCanExecuteChanged();
             RemovePersonCommand.NotifyCanExecuteChanged();
-            StartMeetingCommand.NotifyCanExecuteChanged();
+            StartDailyCommand.NotifyCanExecuteChanged();
         }
 
         private Task OnAddPersonClosed()

@@ -1,4 +1,6 @@
-﻿using DailyTool.UserInterface.Initialization;
+﻿using DailyTool.UserInterface.Daily;
+using DailyTool.UserInterface.Initialization;
+using DailyTool.ViewModels.Daily;
 using DailyTool.ViewModels.Initialization;
 using DailyTool.ViewModels.Navigation;
 using System;
@@ -13,6 +15,7 @@ namespace DailyTool.Packaged.Entry.Navigation
             => typeof(T).Name switch
             {
                 nameof(InitializationViewModel) => typeof(InitializationView),
+                nameof(DailyViewModel) => typeof(DailyView),
                 _ => throw new NotSupportedException($"Unmapped navigation target {typeof(T).Name}")
             };
     }

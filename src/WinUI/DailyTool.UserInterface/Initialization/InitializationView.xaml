@@ -30,7 +30,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock Text="TODO: Vorbereitung" Margin="24, 12, 24, 12" Style="{ThemeResource TitleTextBlockStyle}" />
+        <TextBlock Text="TODO: Daily Vorbereitung" Margin="24, 12, 24, 12" Style="{ThemeResource TitleTextBlockStyle}" />
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="24, 0, 24, 12">
             <TimePicker Header="TODO: Start" Time="{Binding StartTime, Mode=TwoWay}" />
@@ -69,7 +69,7 @@
         </Grid>
 
         <StackPanel Grid.Row="4" HorizontalAlignment="Right" Orientation="Horizontal" Margin="0, 0, 24, 24">
-            <Button Content="TODO: Daily starten" />
+            <Button Content="TODO: Daily starten" Command="{Binding StartDailyCommand}"/>
         </StackPanel>
     </Grid>
 </Page>

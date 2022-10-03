@@ -8,6 +8,7 @@
     xmlns:vm="using:DailyTool.ViewModels.Initialization"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    PreviewKeyUp="UserControl_PreviewKeyUp"
     d:DataContext="{d:DesignInstance Type=vm:AddPersonViewModel, IsDesignTimeCreatable=False}">
 
     <StackPanel Padding="24" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -16,8 +17,8 @@
         <TextBox x:Name="PART_Name" Header="TODO: Name" Margin="0, 12" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="TODO: Hinzufügen" Command="{Binding AddPersonCommand}" />
-            <Button Content="TODO: Abbrechen" Command="{Binding CancelCommand}" />
+            <Button x:Name="PART_Add" Content="TODO: Hinzufügen" Command="{Binding AddPersonCommand}" Style="{StaticResource AccentButtonStyle}"/>
+            <Button x:Name="PART_Cancel" Content="TODO: Abbrechen" Command="{Binding CancelCommand}" />
         </StackPanel>
     </StackPanel>
 </UserControl>

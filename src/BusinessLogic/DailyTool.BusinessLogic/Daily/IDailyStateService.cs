@@ -2,7 +2,7 @@
 {
     public interface IDailyStateService
     {
-        Task<DailyState> GetDailyStateAsync();
+        Task<DailyState> GetDailyStateAsync(bool force = false);
 
         Task RefreshStateAsync();
 

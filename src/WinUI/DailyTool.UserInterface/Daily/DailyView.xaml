@@ -1,15 +1,16 @@
 ﻿<Page
-    x:Class="DailyTool.UserInterface.Daily.DailyView"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:DailyTool.UserInterface.Daily"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:toolkit="using:CommunityToolkit.WinUI.UI.Controls"
-    xmlns:vm="using:DailyTool.ViewModels.Daily"
-    mc:Ignorable="d"
-    d:DataContext="{d:DesignInstance Type=vm:DailyViewModel, IsDesignTimeCreatable=False}"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+  x:Class="DailyTool.UserInterface.Daily.DailyView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="using:DailyTool.UserInterface.Daily"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:toolkit="using:CommunityToolkit.WinUI.UI.Controls"
+  xmlns:vm="using:DailyTool.ViewModels.Daily"
+  d:DataContext="{d:DesignInstance Type=vm:DailyViewModel,
+                                   IsDesignTimeCreatable=False}"
+  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+  mc:Ignorable="d">
 
     <Grid Margin="24">
         <Grid.RowDefinitions>
@@ -23,27 +24,76 @@
             <ColumnDefinition Width="3*" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="TODO: Daily" Style="{ThemeResource TitleTextBlockStyle}" />
+        <StackPanel Orientation="Horizontal">
+            <Button
+              Margin="0,0,12,0"
+              Command="{Binding NavigateBackCommand}"
+              Style="{StaticResource NavigationBackButtonSmallStyle}" />
 
-        <Grid Grid.Row="1" Margin="0, 12, 0, 0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition />
-            </Grid.RowDefinitions>
-
-            <TextBlock Text="{Binding Time}" Style="{ThemeResource TitleTextBlockStyle}" FontSize="{ThemeResource SubtitleTextBlockFontSize}" Margin="0, 0, 12, 0" />
-            
-            <!-- In this case performance has to follow function - because we don't expect that much entries anyways -->
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                <Grid Background="{ThemeResource ListBoxBackgroundThemeBrush}" Tapped="ItemsControl_Tapped">
-                    <ItemsControl ItemsSource="{Binding CurrentState.Participants}" ItemTemplate="{StaticResource ParticipantTemplate}" IsHitTestVisible="False"/>
-                </Grid>
-            </ScrollViewer>
-        </Grid>
+            <TextBlock
+              Style="{ThemeResource SubtitleTextBlockStyle}"
+              Text="TODO: Daily"
+              TextWrapping="NoWrap" />
+        </StackPanel>
 
 
-        <!-- Splitter -->
-        <toolkit:GridSplitter Grid.Column="1" Grid.RowSpan="3" GripperCursor="SizeWestEast" CursorBehavior="ChangeOnSplitterHover" HorizontalAlignment="Center" ResizeBehavior="BasedOnAlignment">
+        <!--  In this case performance has to follow function - because we don't expect that much entries anyways  -->
+        <ScrollViewer
+          Grid.Row="1"
+          Margin="0,12,0,0"
+          HorizontalScrollBarVisibility="Disabled"
+          VerticalScrollBarVisibility="Auto">
+            <Grid
+              x:Name="PART_Canvas"
+              Background="Transparent"
+              DoubleTapped="Grid_DoubleTapped"
+              SizeChanged="PART_Canvas_SizeChanged"
+              Tapped="ItemsControl_Tapped">
+                <ProgressBar
+                  x:Name="PART_Progress"
+                  Margin="3,0,0,0"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Top"
+                  IsIndeterminate="False"
+                  RenderTransformOrigin="0, 0"
+                  Value="{Binding Progress}">
+                    <ProgressBar.RenderTransform>
+                        <RotateTransform Angle="90" CenterX="0" CenterY="0" />
+                    </ProgressBar.RenderTransform>
+                </ProgressBar>
+
+                <ListView
+                  x:Name="PART_Participants"
+                  VerticalAlignment="Top"
+                  IsHitTestVisible="False"
+                  ItemContainerStyle="{StaticResource ParticipantItemContainerStyle}"
+                  ItemTemplate="{StaticResource ParticipantTemplate}"
+                  ItemsSource="{Binding CurrentState.Participants}"
+                  ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                  SelectionMode="None"
+                  SizeChanged="PART_Participants_SizeChanged" />
+            </Grid>
+        </ScrollViewer>
+
+        <TextBlock
+          Grid.Row="2"
+          Margin="0,0,12,0"
+          HorizontalAlignment="Right"
+          VerticalAlignment="Bottom"
+          FontSize="{ThemeResource SubtitleTextBlockFontSize}"
+          FontWeight="Bold"
+          Style="{ThemeResource HeaderTextBlockStyle}"
+          Text="{Binding Time}"
+          TextWrapping="NoWrap" />
+
+        <!--  Splitter  -->
+        <toolkit:GridSplitter
+          Grid.RowSpan="3"
+          Grid.Column="1"
+          HorizontalAlignment="Center"
+          CursorBehavior="ChangeOnSplitterHover"
+          GripperCursor="SizeWestEast"
+          ResizeBehavior="BasedOnAlignment">
             <toolkit:GridSplitter.Element>
                 <Grid MinHeight="50">
                     <Grid.ColumnDefinitions>
@@ -54,19 +104,40 @@
                         <ColumnDefinition Width="1" />
                     </Grid.ColumnDefinitions>
 
-                    <Rectangle Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="{ThemeResource ApplicationForegroundThemeBrush}" Opacity="0.8" />
-                    <Rectangle Grid.Column="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="{ThemeResource ApplicationForegroundThemeBrush}" Opacity="0.8" />
+                    <Rectangle
+                      Grid.Column="1"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      Fill="{ThemeResource ApplicationForegroundThemeBrush}"
+                      Opacity="0.8" />
+                    <Rectangle
+                      Grid.Column="3"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      Fill="{ThemeResource ApplicationForegroundThemeBrush}"
+                      Opacity="0.8" />
                 </Grid>
             </toolkit:GridSplitter.Element>
         </toolkit:GridSplitter>
 
-        <!-- Left Side -->
-        <TextBlock Grid.Column="2" Text="TODO: Board" Style="{ThemeResource TitleTextBlockStyle}" />
-        
-        <WebView2 Grid.Row="1" Grid.Column="2" Source="{Binding CurrentState.SprintBoardUri}" Margin="0, 12, 0, 0"/>
+        <!--  Left Side  -->
+        <TextBlock
+          Grid.Column="2"
+          Style="{ThemeResource SubtitleTextBlockStyle}"
+          Text="TODO: Board"
+          TextWrapping="NoWrap" />
 
-        <StackPanel Grid.Row="2" Grid.Column="2" Margin="0, 12, 0, 0">
-            <Button Content="TODO: Fertig" HorizontalAlignment="Right" />
+        <WebView2
+          Grid.Row="1"
+          Grid.Column="2"
+          Margin="0,12,0,0"
+          Source="{Binding CurrentState.SprintBoardUri}" />
+
+        <StackPanel
+          Grid.Row="2"
+          Grid.Column="2"
+          Margin="0,12,0,0">
+            <Button HorizontalAlignment="Right" Content="TODO: Fertig" Style="{StaticResource AccentButtonStyle}"/>
         </StackPanel>
     </Grid>
 </Page>

@@ -1,51 +1,15 @@
-﻿<ResourceDictionary x:Class="DailyTool.UserInterface.Resources.ModuleResourceDictionary"
-                    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:converters="using:DailyTool.UserInterface.Converters"
-                    xmlns:daily="using:DailyTool.UserInterface.Daily"
-                    xmlns:toolkit="using:CommunityToolkit.WinUI.UI.Controls"
-                    xmlns:local="using:DailyTool.UserInterface.Resources">
+﻿<ResourceDictionary
+  x:Class="DailyTool.UserInterface.Resources.ModuleResourceDictionary"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:converters="using:DailyTool.UserInterface.Converters"
+  xmlns:daily="using:DailyTool.UserInterface.Daily"
+  xmlns:local="using:DailyTool.UserInterface.Resources"
+  xmlns:toolkit="using:CommunityToolkit.WinUI.UI.Controls">
 
     <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     <converters:InvertedBooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" />
 
-    <DataTemplate x:Key="IsParticipatingCellTemplate">
-        <ToggleSwitch IsOn="{Binding IsParticipating, Mode=TwoWay}" OnContent="" OffContent="" HorizontalAlignment="Center" MinWidth="50"/>
-    </DataTemplate>
-
-    <DataTemplate x:Key="ParticipantTemplate">
-        <UserControl>
-            <Grid>
-                <TextBlock x:Name="PART_Participant" Text="{Binding Name}" Style="{ThemeResource BodyStrongTextBlockStyle}" FontSize="18"/>
-                <VisualStateManager.VisualStateGroups>
-                    <VisualStateGroup x:Name="States">
-                        <VisualState x:Name="Default">
-                            <VisualState.StateTriggers>
-                                <StateTrigger IsActive="{Binding IsActiveSpeaker}" />
-                            </VisualState.StateTriggers>
-                        </VisualState>
-                        <VisualState x:Name="IsDone">
-                            <VisualState.Setters>
-                                <Setter Target="PART_Participant.Foreground" Value="DarkSeaGreen" />
-                            </VisualState.Setters>
-                            <VisualState.StateTriggers>
-                                <StateTrigger IsActive="{Binding IsDone}" />
-                            </VisualState.StateTriggers>
-                        </VisualState>
-                        <VisualState x:Name="IsQueued">
-                            <VisualState.Setters>
-                                <Setter Target="PART_Participant.Foreground" Value="#888888" />
-                            </VisualState.Setters>
-                            <VisualState.StateTriggers>
-                                <StateTrigger IsActive="{Binding IsQueued}" />
-                            </VisualState.StateTriggers>
-                        </VisualState>
-                    </VisualStateGroup>
-                </VisualStateManager.VisualStateGroups>
-            </Grid>
-        </UserControl>
-    </DataTemplate>
-    
     <Style TargetType="toolkit:GridSplitter">
         <Setter Property="IsTabStop" Value="True" />
         <Setter Property="UseSystemFocusVisuals" Value="True" />
@@ -59,15 +23,81 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="toolkit:GridSplitter">
-                    <Grid x:Name="RootGrid"
-                          Background="{TemplateBinding Background}">
-                        <ContentPresenter HorizontalContentAlignment="Center"
-                                          VerticalContentAlignment="Center"
-                                          Content="{TemplateBinding Element}" />
+                    <Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
+                        <ContentPresenter
+                          HorizontalContentAlignment="Center"
+                          VerticalContentAlignment="Center"
+                          Content="{TemplateBinding Element}" />
 
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style x:Key="ParticipantItemContainerStyle" TargetType="ListViewItem">
+        <Setter Property="BorderBrush" Value="{StaticResource CheckBoxContentDisabledForegroundThemeBrush}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListViewItem">
+                    <Border
+                      Margin="8,2"
+                      Padding="4"
+                      Background="{ThemeResource ListBoxBackgroundThemeBrush}"
+                      BorderBrush="{ThemeResource ListBoxBorderThemeBrush}"
+                      CornerRadius="8">
+                        <ContentPresenter />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <DataTemplate x:Key="IsParticipatingCellTemplate">
+        <ToggleSwitch
+          MinWidth="50"
+          HorizontalAlignment="Center"
+          IsOn="{Binding IsParticipating, Mode=TwoWay}"
+          OffContent=""
+          OnContent="" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="ParticipantTemplate">
+        <UserControl>
+            <Border>
+                <TextBlock
+                  x:Name="PART_Participant"
+                  FontSize="26"
+                  Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                  Style="{ThemeResource BodyStrongTextBlockStyle}"
+                  Text="{Binding Name}"
+                  TextWrapping="NoWrap" />
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup x:Name="States">
+                        <VisualState x:Name="Default">
+                            <VisualState.StateTriggers>
+                                <StateTrigger IsActive="{Binding IsActiveSpeaker}" />
+                            </VisualState.StateTriggers>
+                        </VisualState>
+                        <VisualState x:Name="IsDone">
+                            <VisualState.Setters>
+                                <Setter Target="PART_Participant.Foreground" Value="{ThemeResource CheckBoxDisabledForegroundThemeBrush}" />
+                            </VisualState.Setters>
+                            <VisualState.StateTriggers>
+                                <StateTrigger IsActive="{Binding IsDone}" />
+                            </VisualState.StateTriggers>
+                        </VisualState>
+                        <VisualState x:Name="IsQueued">
+                            <VisualState.Setters>
+                                <Setter Target="PART_Participant.Foreground" Value="{ThemeResource CheckBoxDisabledForegroundThemeBrush}" />
+                            </VisualState.Setters>
+                            <VisualState.StateTriggers>
+                                <StateTrigger IsActive="{Binding IsQueued}" />
+                            </VisualState.StateTriggers>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
+            </Border>
+        </UserControl>
+    </DataTemplate>
 </ResourceDictionary>

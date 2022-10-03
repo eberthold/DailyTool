@@ -18,9 +18,9 @@ namespace DailyTool.BusinessLogic.Daily
             _meetingInfoRepository = meetingInfoRepository ?? throw new ArgumentNullException(nameof(meetingInfoRepository));
         }
 
-        public async Task<DailyState> GetDailyStateAsync()
+        public async Task<DailyState> GetDailyStateAsync(bool force = false)
         {
-            if (_state is null)
+            if (_state is null || force)
             {
                 var meetingInfo = await _meetingInfoRepository.GetAsync().ConfigureAwait(false);
                 var participants = await _dataService.GetParticipantsAsync().ConfigureAwait(false);
@@ -28,11 +28,11 @@ namespace DailyTool.BusinessLogic.Daily
                 participants = participants.OrderBy(x => x.Position).ToList();
                 participants.ElementAt(0).IsActiveSpeaker = true;
 
-
                 _state = new DailyState
                 {
                     Participants = new ObservableCollection<Participant>(participants.OrderBy(x => x.Position)),
-                    SprintBoardUri = meetingInfo.SprintBoardUri
+                    SprintBoardUri = meetingInfo.SprintBoardUri,
+                    MeetingInfo = meetingInfo
                 };
             }
 
@@ -58,10 +58,15 @@ namespace DailyTool.BusinessLogic.Daily
             }
 
             var affectedParticipants = _state.Participants.SkipWhile(x => !x.IsActiveSpeaker).Take(2).ToList();
+            if (affectedParticipants.Count == 0)
+            {
+                return Task.CompletedTask;
+            }
+
             affectedParticipants.First().IsActiveSpeaker = false;
             affectedParticipants.First().IsDone = true;
 
-            if (affectedParticipants.Count() == 1)
+            if (affectedParticipants.Count == 1)
             {
                 return Task.CompletedTask;
             }

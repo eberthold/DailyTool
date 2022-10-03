@@ -42,6 +42,8 @@ namespace DailyTool.Packaged.Entry
                 return;
             }
 
+            (vm as IDisposable)?.Dispose();
+
             PART_NavigationFrame.GoBack();
         }
 

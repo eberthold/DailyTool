@@ -5,10 +5,12 @@ namespace DailyTool.DataAccess
 {
     public class StorageRepository : IStorageRepository
     {
-        private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
+        private static readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
         {
             WriteIndented = true,
         };
+
+        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1);
 
         private readonly IFileSystem _fileSystem;
 
@@ -28,10 +30,19 @@ namespace DailyTool.DataAccess
             return JsonSerializer.Deserialize<Storage>(content) ?? new();
         }
 
-        public Task SaveStorageAsync(Storage storage)
+        public async Task SaveStorageAsync(Storage storage)
         {
-            var content = JsonSerializer.Serialize(storage, _serializerOptions);
-            return _fileSystem.File.WriteAllTextAsync(Constants.JsonStoragePath, content);
+            await _semaphore.WaitAsync().ConfigureAwait(false);
+
+            try
+            {
+                var content = JsonSerializer.Serialize(storage, _serializerOptions);
+                await _fileSystem.File.WriteAllTextAsync(Constants.JsonStoragePath, content).ConfigureAwait(false);
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
         }
     }
 }

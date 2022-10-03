@@ -9,6 +9,7 @@
 
     <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     <converters:InvertedBooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" />
+    <converters:PercentageToOffsetConverter x:Key="PercentageToOffsetConverter" />
 
     <Style TargetType="toolkit:GridSplitter">
         <Setter Property="IsTabStop" Value="True" />
@@ -28,7 +29,6 @@
                           HorizontalContentAlignment="Center"
                           VerticalContentAlignment="Center"
                           Content="{TemplateBinding Element}" />
-
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -40,14 +40,26 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListViewItem">
-                    <Border
-                      Margin="8,2"
-                      Padding="4"
-                      Background="{ThemeResource ListBoxBackgroundThemeBrush}"
+                    <Grid
+                      Margin="0,4"
+                      Background="{ThemeResource AcrylicBackgroundFillColorDefaultBrush}"
                       BorderBrush="{ThemeResource ListBoxBorderThemeBrush}"
                       CornerRadius="8">
-                        <ContentPresenter />
-                    </Border>
+                        <Border
+                          Width="8"
+                          HorizontalAlignment="Left"
+                          VerticalAlignment="Stretch">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0, 0" EndPoint="0, 1">
+                                    <GradientStop Offset="0" Color="{ThemeResource SystemAccentColor}" />
+                                    <GradientStop Offset="{Binding DataContext.AllocatedTalkProgress, ElementName=PART_Content, Converter={StaticResource PercentageToOffsetConverter}}" Color="{ThemeResource SystemAccentColor}" />
+                                    <GradientStop Offset="{Binding DataContext.AllocatedTalkProgress, ElementName=PART_Content, Converter={StaticResource PercentageToOffsetConverter}}" Color="Transparent" />
+                                    <GradientStop Offset="1" Color="Transparent" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+                        <ContentPresenter x:Name="PART_Content" Margin="16,4,4,4" />
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -68,10 +80,12 @@
                 <TextBlock
                   x:Name="PART_Participant"
                   FontSize="26"
-                  Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
                   Style="{ThemeResource BodyStrongTextBlockStyle}"
-                  Text="{Binding Name}"
-                  TextWrapping="NoWrap" />
+                  TextWrapping="NoWrap">
+                    <Run Text="{Binding Name}" />
+                    <Run Text="-" />
+                    <Run Text="{Binding AllocatedTalkProgress}" />
+                </TextBlock>
                 <VisualStateManager.VisualStateGroups>
                     <VisualStateGroup x:Name="States">
                         <VisualState x:Name="Default">
@@ -81,7 +95,7 @@
                         </VisualState>
                         <VisualState x:Name="IsDone">
                             <VisualState.Setters>
-                                <Setter Target="PART_Participant.Foreground" Value="{ThemeResource CheckBoxDisabledForegroundThemeBrush}" />
+                                <Setter Target="PART_Participant.Foreground" Value="{ThemeResource AccentTextFillColorDisabled}" />
                             </VisualState.Setters>
                             <VisualState.StateTriggers>
                                 <StateTrigger IsActive="{Binding IsDone}" />
@@ -89,7 +103,7 @@
                         </VisualState>
                         <VisualState x:Name="IsQueued">
                             <VisualState.Setters>
-                                <Setter Target="PART_Participant.Foreground" Value="{ThemeResource CheckBoxDisabledForegroundThemeBrush}" />
+                                <Setter Target="PART_Participant.Foreground" Value="{ThemeResource AccentTextFillColorDisabled}" />
                             </VisualState.Setters>
                             <VisualState.StateTriggers>
                                 <StateTrigger IsActive="{Binding IsQueued}" />

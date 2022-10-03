@@ -7,6 +7,7 @@ namespace DailyTool.BusinessLogic.Daily
         private bool _isActiveSpeaker;
         private bool _isDone;
         private bool _isQueued = true;
+        private double _allocatedTalkProgress;
 
         /// <summary>
         /// Gets a value indicating whether the participant has finished his daily talk already.
@@ -37,13 +38,15 @@ namespace DailyTool.BusinessLogic.Daily
 
         public string Name { get; init; } = string.Empty;
 
-        public TimeSpan TalkingStartedAt { get; internal set; }
-
-        public TimeSpan ActualTalkDuration { get; internal set; }
+        public TimeSpan AllocatedTalkStart { get; internal set; }
 
         public TimeSpan AllocatedTalkDuration { get; internal set; }
 
-        public double TalkPercentage => ActualTalkDuration.TotalMilliseconds * 100d / AllocatedTalkDuration.TotalMilliseconds;
+        public double AllocatedTalkProgress
+        {
+            get => _allocatedTalkProgress;
+            internal set => SetProperty(ref _allocatedTalkProgress, value);
+        }
 
         public int Position { get; internal set; }
     }

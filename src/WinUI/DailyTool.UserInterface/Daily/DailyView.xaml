@@ -43,25 +43,11 @@
           Margin="0,12,0,0"
           HorizontalScrollBarVisibility="Disabled"
           VerticalScrollBarVisibility="Auto">
-            <Grid
+            <Border
               x:Name="PART_Canvas"
               Background="Transparent"
               DoubleTapped="Grid_DoubleTapped"
-              SizeChanged="PART_Canvas_SizeChanged"
               Tapped="ItemsControl_Tapped">
-                <ProgressBar
-                  x:Name="PART_Progress"
-                  Margin="3,0,0,0"
-                  HorizontalAlignment="Left"
-                  VerticalAlignment="Top"
-                  IsIndeterminate="False"
-                  RenderTransformOrigin="0, 0"
-                  Value="{Binding Progress}">
-                    <ProgressBar.RenderTransform>
-                        <RotateTransform Angle="90" CenterX="0" CenterY="0" />
-                    </ProgressBar.RenderTransform>
-                </ProgressBar>
-
                 <ListView
                   x:Name="PART_Participants"
                   VerticalAlignment="Top"
@@ -70,9 +56,8 @@
                   ItemTemplate="{StaticResource ParticipantTemplate}"
                   ItemsSource="{Binding CurrentState.Participants}"
                   ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                  SelectionMode="None"
-                  SizeChanged="PART_Participants_SizeChanged" />
-            </Grid>
+                  SelectionMode="None" />
+            </Border>
         </ScrollViewer>
 
         <TextBlock
@@ -137,7 +122,10 @@
           Grid.Row="2"
           Grid.Column="2"
           Margin="0,12,0,0">
-            <Button HorizontalAlignment="Right" Content="TODO: Fertig" Style="{StaticResource AccentButtonStyle}"/>
+            <Button
+              HorizontalAlignment="Right"
+              Content="TODO: Fertig"
+              Style="{StaticResource AccentButtonStyle}" />
         </StackPanel>
     </Grid>
 </Page>

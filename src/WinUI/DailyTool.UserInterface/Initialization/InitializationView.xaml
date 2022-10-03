@@ -75,7 +75,7 @@
               x:Name="PART_Grid"
               Grid.Row="2"
               AutoGenerateColumns="False"
-              Background="{ThemeResource ListBoxBackgroundThemeBrush}"
+              Background="{ThemeResource AcrylicBackgroundFillColorDefaultBrush}"
               IsReadOnly="True"
               ItemsSource="{Binding CurrentState.People, Mode=OneWay}"
               SelectedItem="{Binding SelectedPerson, Mode=TwoWay}"

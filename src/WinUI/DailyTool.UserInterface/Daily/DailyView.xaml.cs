@@ -33,17 +33,5 @@ namespace DailyTool.UserInterface.Daily
         {
             NextParticipant();
         }
-
-        private void PART_Canvas_SizeChanged(object sender, Microsoft.UI.Xaml.SizeChangedEventArgs e)
-        {
-            PART_Participants.Width = PART_Canvas.ActualWidth;
-        }
-
-        private void PART_Participants_SizeChanged(object sender, Microsoft.UI.Xaml.SizeChangedEventArgs e)
-        {
-            PART_Progress.MinWidth = PART_Participants.ActualHeight;
-            PART_Progress.Width = PART_Participants.ActualHeight;
-            PART_Canvas.MinWidth = PART_Participants.ActualHeight;
-        }
     }
 }

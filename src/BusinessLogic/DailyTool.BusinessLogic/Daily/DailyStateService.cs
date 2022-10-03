@@ -28,9 +28,11 @@ namespace DailyTool.BusinessLogic.Daily
                 participants = participants.OrderBy(x => x.Position).ToList();
                 participants.ElementAt(0).IsActiveSpeaker = true;
 
+                await InitializeParticipants(participants, meetingInfo).ConfigureAwait(false);
+
                 _state = new DailyState
                 {
-                    Participants = new ObservableCollection<Participant>(participants.OrderBy(x => x.Position)),
+                    Participants = new ObservableCollection<Participant>(participants),
                     SprintBoardUri = meetingInfo.SprintBoardUri,
                     MeetingInfo = meetingInfo
                 };
@@ -95,6 +97,17 @@ namespace DailyTool.BusinessLogic.Daily
             for (var i = 0; i < positions.Count; i++)
             {
                 participants.ElementAt(i).Position = positions.ElementAt(i);
+            }
+        }
+
+        private async Task InitializeParticipants(IReadOnlyCollection<Participant> participants, MeetingInfo meetingInfo)
+        {
+            var averageTalkTime = await _dataService.CalculateAverageTalkDuration(meetingInfo, participants).ConfigureAwait(false);
+            for (var i = 0; i < participants.Count; i++)
+            {
+                var participant = participants.ElementAt(i);
+                participant.AllocatedTalkDuration = averageTalkTime;
+                participant.AllocatedTalkStart = meetingInfo.MeetingStartTime + (averageTalkTime * i);
             }
         }
     }

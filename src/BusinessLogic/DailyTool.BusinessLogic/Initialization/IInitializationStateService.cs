@@ -2,7 +2,7 @@
 
 namespace DailyTool.BusinessLogic.Initialization
 {
-    public interface IInitializationStateController
+    public interface IInitializationStateService
     {
         Task<InitializationStageState> GetStateAsync();
 

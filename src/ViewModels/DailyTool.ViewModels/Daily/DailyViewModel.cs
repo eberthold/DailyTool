@@ -78,6 +78,7 @@ namespace DailyTool.ViewModels.Daily
             {
                 OnPropertyChanged(nameof(Time));
                 OnPropertyChanged(nameof(Progress));
+                _stateService.RefreshStateAsync();
             });
         }
 

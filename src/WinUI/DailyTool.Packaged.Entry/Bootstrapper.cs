@@ -49,7 +49,7 @@ namespace DailyTool.Packaged.Entry
 
         private static void RegisterControllers(this IServiceCollection services)
         {
-            services.AddSingleton<IInitializationStateController, InitializationStateController>();
+            services.AddSingleton<IInitializationStateService, InitializationStateService>();
         }
 
         private static void RegisterServices(this IServiceCollection services)

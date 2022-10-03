@@ -9,12 +9,12 @@ namespace DailyTool.ViewModels.Initialization
 {
     public class AddPersonViewModel : ObservableObject, INavigationTarget, INotifyClose
     {
-        private readonly IInitializationStateController _initializationStateController;
+        private readonly IInitializationStateService _initializationStateController;
         private readonly List<Func<Task>> _closeCallbacks = new List<Func<Task>>();
 
         private string _name = string.Empty;
 
-        public AddPersonViewModel(IInitializationStateController initializationStateController)
+        public AddPersonViewModel(IInitializationStateService initializationStateController)
         {
             _initializationStateController = initializationStateController ?? throw new ArgumentNullException(nameof(initializationStateController));
             AddPersonCommand = new AsyncRelayCommand(AddPersonAsync, CanAddPerson);

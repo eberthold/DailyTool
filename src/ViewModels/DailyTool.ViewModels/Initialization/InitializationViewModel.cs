@@ -10,7 +10,7 @@ namespace DailyTool.ViewModels.Initialization
 {
     public class InitializationViewModel : ObservableObject, INavigationTarget, ILoadDataAsync
     {
-        private readonly IInitializationStateController _initializationStateController;
+        private readonly IInitializationStateService _initializationStateController;
         private readonly INavigationService _navigationService;
         private InitializationStageState _currentState = new();
 
@@ -20,7 +20,7 @@ namespace DailyTool.ViewModels.Initialization
         private TimeSpan _endTime;
 
         public InitializationViewModel(
-            IInitializationStateController initializationStateController,
+            IInitializationStateService initializationStateController,
             INavigationService navigationService)
         {
             _initializationStateController = initializationStateController ?? throw new ArgumentNullException(nameof(initializationStateController));

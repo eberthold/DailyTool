@@ -20,9 +20,6 @@ namespace DailyTool.BusinessLogic.Daily
         {
             var averageTalkTime = meetingInfo.MeetingDuration / participants.Count;
 
-            // trim milliseconds, they don't matter anyways
-            averageTalkTime = averageTalkTime.Subtract(TimeSpan.FromMilliseconds(averageTalkTime.Milliseconds));
-
             return Task.FromResult(averageTalkTime);
         }
 
@@ -45,12 +42,11 @@ namespace DailyTool.BusinessLogic.Daily
 
         public Task RefreshParticipantAsync(Participant participant)
         {
-            if (participant.IsDone || participant.IsActiveSpeaker)
-            {
-                return Task.CompletedTask;
-            }
-
-            participant.ActualTalkDuration = _timeStampProvider.CurrentClock - participant.TalkingStartedAt;
+            var elapsed = _timeStampProvider.CurrentClock - participant.AllocatedTalkStart;
+            var percentage = elapsed.TotalMilliseconds * 100d / participant.AllocatedTalkDuration.TotalMilliseconds;
+            percentage = Math.Min(percentage, 100);
+            percentage = Math.Max(percentage, 0);
+            participant.AllocatedTalkProgress = percentage;
             return Task.CompletedTask;
         }
     }

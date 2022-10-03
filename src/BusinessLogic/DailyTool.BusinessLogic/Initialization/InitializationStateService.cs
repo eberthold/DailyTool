@@ -5,13 +5,13 @@ using System.ComponentModel;
 
 namespace DailyTool.BusinessLogic.Initialization
 {
-    public class InitializationStateController : IInitializationStateController, IRecipient<InitializationStateChangedMessage>
+    public class InitializationStateService : IInitializationStateService, IRecipient<InitializationStateChangedMessage>
     {
         private readonly IInitializationService _initializationService;
         private readonly IMessenger _messenger;
         private InitializationStageState? _stageState;
 
-        public InitializationStateController(
+        public InitializationStateService(
             IInitializationService initializationService,
             IMessenger messenger)
         {

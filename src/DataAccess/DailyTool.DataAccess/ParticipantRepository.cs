@@ -4,10 +4,10 @@ namespace DailyTool.DataAccess
 {
     public class ParticipantRepository : IParticipantRepository
     {
-        private readonly IStorageRepository _storageRepository;
+        private readonly IStorageRepository<List<PersonStorage>> _storageRepository;
 
         public ParticipantRepository(
-            IStorageRepository storageRepository)
+            IStorageRepository<List<PersonStorage>> storageRepository)
         {
             _storageRepository = storageRepository ?? throw new ArgumentNullException(nameof(storageRepository));
         }
@@ -16,7 +16,6 @@ namespace DailyTool.DataAccess
         {
             var storage = await _storageRepository.GetStorageAsync().ConfigureAwait(false);
             var participants = storage
-                .People
                 .Where(x => x.IsParticipating)
                 .Select(ToBusinessObject)
                 .ToList();

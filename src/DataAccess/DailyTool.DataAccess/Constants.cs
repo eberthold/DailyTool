@@ -2,6 +2,10 @@
 {
     internal static class Constants
     {
-        public static string JsonStoragePath { get; } = Path.Combine(AppContext.BaseDirectory, "data.json");
+        public static IReadOnlyDictionary<Type, string> StoragePaths { get; } = new Dictionary<Type, string>
+        {
+            [typeof(MeetingInfoStorage)] = Path.Combine(AppContext.BaseDirectory, "meetingInfo.json"),
+            [typeof(List<PersonStorage>)] = Path.Combine(AppContext.BaseDirectory, "people.json")
+        };
     }
 }

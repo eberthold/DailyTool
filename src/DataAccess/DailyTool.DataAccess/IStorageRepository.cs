@@ -1,9 +1,10 @@
 ﻿namespace DailyTool.DataAccess
 {
-    public interface IStorageRepository
+    public interface IStorageRepository<T>
+        where T : new()
     {
-        public Task<Storage> GetStorageAsync();
+        public Task<T> GetStorageAsync();
 
-        public Task SaveStorageAsync(Storage storage);
+        public Task SaveStorageAsync(T storage);
     }
 }

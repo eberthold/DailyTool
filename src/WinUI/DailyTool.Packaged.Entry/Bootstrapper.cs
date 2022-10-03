@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.WinUI.UI.Controls.TextToolbarSymbols;
 using DailyTool.BusinessLogic.Daily;
 using DailyTool.BusinessLogic.Initialization;
 using DailyTool.BusinessLogic.Parameters;
@@ -12,6 +13,7 @@ using DailyTool.ViewModels.Daily;
 using DailyTool.ViewModels.Initialization;
 using DailyTool.ViewModels.Navigation;
 using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
 using System.IO.Abstractions;
 
 namespace DailyTool.Packaged.Entry
@@ -63,7 +65,8 @@ namespace DailyTool.Packaged.Entry
         {
             services.AddSingleton<IPersonRepository, PersonRepository>();
             services.AddSingleton<IMeetingInfoRepository, MeetingInfoRepository>();
-            services.AddSingleton<IStorageRepository, StorageRepository>();
+            services.AddSingleton<IStorageRepository<MeetingInfoStorage>, StorageRepository<MeetingInfoStorage>>();
+            services.AddSingleton<IStorageRepository<List<PersonStorage>>, StorageRepository<List<PersonStorage>>>();
             services.AddSingleton<IParticipantRepository, ParticipantRepository>();
         }
 

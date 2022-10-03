@@ -3,7 +3,8 @@ using System.Text.Json;
 
 namespace DailyTool.DataAccess
 {
-    public class StorageRepository : IStorageRepository
+    public class StorageRepository<T> : IStorageRepository<T>
+        where T : new()
     {
         private static readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
         {
@@ -13,31 +14,33 @@ namespace DailyTool.DataAccess
         private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1);
 
         private readonly IFileSystem _fileSystem;
+        private readonly string _storagePath;
 
         public StorageRepository(IFileSystem fileSystem)
         {
             _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+            _storagePath = Constants.StoragePaths[typeof(T)];
         }
 
-        public async Task<Storage> GetStorageAsync()
+        public async Task<T> GetStorageAsync()
         {
-            if (!_fileSystem.File.Exists(Constants.JsonStoragePath))
+            if (!_fileSystem.File.Exists(_storagePath))
             {
-                return new Storage();
+                return new T();
             }
 
-            var content = await _fileSystem.File.ReadAllTextAsync(Constants.JsonStoragePath).ConfigureAwait(false);
-            return JsonSerializer.Deserialize<Storage>(content) ?? new();
+            var content = await _fileSystem.File.ReadAllTextAsync(_storagePath).ConfigureAwait(false);
+            return JsonSerializer.Deserialize<T>(content) ?? new();
         }
 
-        public async Task SaveStorageAsync(Storage storage)
+        public async Task SaveStorageAsync(T storage)
         {
             await _semaphore.WaitAsync().ConfigureAwait(false);
 
             try
             {
                 var content = JsonSerializer.Serialize(storage, _serializerOptions);
-                await _fileSystem.File.WriteAllTextAsync(Constants.JsonStoragePath, content).ConfigureAwait(false);
+                await _fileSystem.File.WriteAllTextAsync(_storagePath, content).ConfigureAwait(false);
             }
             finally
             {

@@ -4,10 +4,10 @@ namespace DailyTool.DataAccess
 {
     public class MeetingInfoRepository : IMeetingInfoRepository
     {
-        private readonly IStorageRepository _storageRepository;
+        private readonly IStorageRepository<MeetingInfoStorage> _storageRepository;
 
         public MeetingInfoRepository(
-            IStorageRepository storageRepository)
+            IStorageRepository<MeetingInfoStorage> storageRepository)
         {
             _storageRepository = storageRepository ?? throw new ArgumentNullException(nameof(storageRepository));
         }
@@ -28,7 +28,7 @@ namespace DailyTool.DataAccess
             await _storageRepository.SaveStorageAsync(storage);
         }
 
-        private MeetingInfo ToBusinessObject(Storage storage)
+        private MeetingInfo ToBusinessObject(MeetingInfoStorage storage)
         {
             return new MeetingInfo
             {

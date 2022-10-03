@@ -6,11 +6,11 @@ namespace DailyTool.DataAccess
     public class PersonRepository : IPersonRepository
     {
         private readonly IFileSystem _fileSystem;
-        private readonly IStorageRepository _storageRepository;
+        private readonly IStorageRepository<List<PersonStorage>> _storageRepository;
 
         public PersonRepository(
             IFileSystem fileSystem,
-            IStorageRepository storageRepository)
+            IStorageRepository<List<PersonStorage>> storageRepository)
         {
             _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
             _storageRepository = storageRepository ?? throw new ArgumentNullException(nameof(storageRepository));
@@ -21,7 +21,6 @@ namespace DailyTool.DataAccess
             var storage = await _storageRepository.GetStorageAsync().ConfigureAwait(false);
 
             return storage
-                .People
                 .Select(ToBusinessObject)
                 .ToList();
         }
@@ -30,7 +29,6 @@ namespace DailyTool.DataAccess
         {
             var storage = await _storageRepository.GetStorageAsync().ConfigureAwait(false);
             return storage
-                .People
                 .Where(x => x.IsParticipating)
                 .Select(ToBusinessObject)
                 .ToList();
@@ -39,7 +37,7 @@ namespace DailyTool.DataAccess
         public async Task SaveAllAsync(IReadOnlyCollection<Person> people)
         {
             var storage = await _storageRepository.GetStorageAsync().ConfigureAwait(false);
-            storage.People = people.Select(ToStorageObject).ToList();
+            storage = people.Select(ToStorageObject).ToList();
             await _storageRepository.SaveStorageAsync(storage);
         }
 

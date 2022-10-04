@@ -1,24 +1,32 @@
-﻿<UserControl
-    x:Class="DailyTool.UserInterface.Initialization.AddPersonView"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:DailyTool.UserInterface.Initialization"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:vm="using:DailyTool.ViewModels.Initialization"
-    mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-    PreviewKeyUp="UserControl_PreviewKeyUp"
-    d:DataContext="{d:DesignInstance Type=vm:AddPersonViewModel, IsDesignTimeCreatable=False}">
+﻿<UserControl x:Class="DailyTool.UserInterface.Initialization.AddPersonView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="using:DailyTool.UserInterface.Initialization"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:DailyTool.ViewModels.Initialization"
+             d:DataContext="{d:DesignInstance Type=vm:AddPersonViewModel,
+                                              IsDesignTimeCreatable=False}"
+             Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+             PreviewKeyUp="UserControl_PreviewKeyUp"
+             mc:Ignorable="d">
 
     <StackPanel Padding="24" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <TextBlock Text="TODO: Person hinzufügen" Style="{ThemeResource SubheaderTextBlockStyle}"/>
+        <TextBlock Style="{ThemeResource SubheaderTextBlockStyle}" Text="TODO: Person hinzufügen" />
 
-        <TextBox x:Name="PART_Name" Header="TODO: Name" Margin="0, 12" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <TextBox x:Name="PART_Name"
+                 Margin="0 12"
+                 Header="TODO: Name"
+                 Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button x:Name="PART_Add" Content="TODO: Hinzufügen" Command="{Binding AddPersonCommand}" Style="{StaticResource AccentButtonStyle}"/>
-            <Button x:Name="PART_Cancel" Content="TODO: Abbrechen" Command="{Binding CancelCommand}" />
+        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+            <Button x:Name="PART_Add"
+                    Command="{Binding AddPersonCommand}"
+                    Content="TODO: Hinzufügen"
+                    Style="{StaticResource AccentButtonStyle}" />
+            <Button x:Name="PART_Cancel"
+                    Command="{Binding CancelCommand}"
+                    Content="TODO: Abbrechen" />
         </StackPanel>
     </StackPanel>
 </UserControl>

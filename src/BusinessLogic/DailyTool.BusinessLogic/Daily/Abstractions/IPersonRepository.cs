@@ -1,4 +1,4 @@
-﻿namespace DailyTool.BusinessLogic.People
+﻿namespace DailyTool.BusinessLogic.Daily.Abstractions
 {
     public interface IPersonRepository
     {

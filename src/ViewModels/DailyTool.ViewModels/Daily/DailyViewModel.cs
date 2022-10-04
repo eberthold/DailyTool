@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DailyTool.BusinessLogic.Daily;
+using DailyTool.BusinessLogic.Daily.Abstractions;
 using DailyTool.BusinessLogic.System;
 using DailyTool.ViewModels.Abstractions;
 using DailyTool.ViewModels.Navigation;
@@ -9,24 +10,29 @@ namespace DailyTool.ViewModels.Daily
 {
     public class DailyViewModel : ObservableObject, INavigationTarget, ILoadDataAsync, IDisposable
     {
-        private readonly IDailyStateService _stateService;
-        private readonly IDailyDataService _dataService;
+        private readonly IParticipantService _participantService;
+        private readonly IMeetingInfoService _meetingInfoService;
+        private readonly IDailyService _dailyService;
         private readonly INavigationService _navigationService;
         private readonly ITimeStampProvider _timeStampProvider;
         private readonly IMainThreadInvoker _mainThreadInvoker;
 
         private Timer? _timer;
-        private DailyState _currentState = new DailyState();
+        private DailyState _state = new DailyState();
 
         public DailyViewModel(
-            IDailyStateService stateService,
-            IDailyDataService dataService,
+            DailyState state,
+            IParticipantService participantService,
+            IMeetingInfoService meetingInfoService,
+            IDailyService dailyService,
             INavigationService navigationService,
             ITimeStampProvider timeStampProvider,
             IMainThreadInvoker mainThreadInvoker)
         {
-            _stateService = stateService ?? throw new ArgumentNullException(nameof(stateService));
-            _dataService = dataService ?? throw new ArgumentNullException(nameof(dataService));
+            State = state ?? throw new ArgumentNullException(nameof(state));
+            _participantService = participantService ?? throw new ArgumentNullException(nameof(participantService));
+            _meetingInfoService = meetingInfoService ?? throw new ArgumentNullException(nameof(meetingInfoService));
+            _dailyService = dailyService ?? throw new ArgumentNullException(nameof(dailyService));
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
             _timeStampProvider = timeStampProvider ?? throw new ArgumentNullException(nameof(timeStampProvider));
             _mainThreadInvoker = mainThreadInvoker ?? throw new ArgumentNullException(nameof(mainThreadInvoker));
@@ -39,15 +45,15 @@ namespace DailyTool.ViewModels.Daily
 
         public AsyncRelayCommand NextSpeakerCommand { get; }
 
-        public DailyState CurrentState
+        public DailyState State
         {
-            get => _currentState;
-            set => SetProperty(ref _currentState, value);
+            get => _state;
+            set => SetProperty(ref _state, value);
         }
 
         public string Time => _timeStampProvider.CurrentClock.ToString(@"hh\:mm\:ss");
 
-        public double Progress => _dataService.CalculateMeetingPercentage(CurrentState.MeetingInfo);
+        public double Progress => _dailyService.CalculateMeetingPercentage(State.MeetingInfo);
 
         public void Dispose()
         {
@@ -56,7 +62,8 @@ namespace DailyTool.ViewModels.Daily
 
         public async Task LoadDataAsync()
         {
-            CurrentState = await _stateService.GetDailyStateAsync(true);
+            await _meetingInfoService.LoadAsync(State);
+            await _participantService.LoadParticipantsForMeetingAsync(State.MeetingInfo, State);
 
             _timer = new Timer(OnTimerElapsed);
             _timer.Change(0, 100);
@@ -78,13 +85,13 @@ namespace DailyTool.ViewModels.Daily
             {
                 OnPropertyChanged(nameof(Time));
                 OnPropertyChanged(nameof(Progress));
-                _stateService.RefreshStateAsync();
+                _dailyService.RefreshParticipantsAsync(State);
             });
         }
 
         private Task SetNextSpeakerAsync()
         {
-            return _stateService.SetNextParticipantAsync();
+            return _dailyService.SetNextParticipantAsync(State);
         }
 
         private Task NavigateBackAsync()

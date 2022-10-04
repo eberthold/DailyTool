@@ -2,9 +2,6 @@
 using DailyTool.ViewModels.Navigation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
-using System;
-using System.Text;
-using Windows.UI.Popups;
 
 namespace DailyTool.Packaged.Entry
 {

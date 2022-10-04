@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DailyTool.BusinessLogic.Initialization;
-using DailyTool.BusinessLogic.People;
+using DailyTool.BusinessLogic.Daily;
+using DailyTool.BusinessLogic.Daily.Abstractions;
 using DailyTool.ViewModels.Abstractions;
 using DailyTool.ViewModels.Navigation;
 
@@ -9,14 +9,17 @@ namespace DailyTool.ViewModels.Initialization
 {
     public class AddPersonViewModel : ObservableObject, INavigationTarget, INotifyClose
     {
-        private readonly IInitializationStateService _initializationStateController;
         private readonly List<Func<Task>> _closeCallbacks = new List<Func<Task>>();
-
+        private readonly IPersonService _personService;
         private string _name = string.Empty;
 
-        public AddPersonViewModel(IInitializationStateService initializationStateController)
+        public AddPersonViewModel(
+            DailyState state,
+            IPersonService personService)
         {
-            _initializationStateController = initializationStateController ?? throw new ArgumentNullException(nameof(initializationStateController));
+            State = state;
+            _personService = personService ?? throw new ArgumentNullException(nameof(personService));
+
             AddPersonCommand = new AsyncRelayCommand(AddPersonAsync, CanAddPerson);
             CancelCommand = new AsyncRelayCommand(CancelAsync);
         }
@@ -39,6 +42,8 @@ namespace DailyTool.ViewModels.Initialization
             }
         }
 
+        public DailyState State { get; }
+
         private bool CanAddPerson()
         {
             return !string.IsNullOrWhiteSpace(Name);
@@ -52,7 +57,7 @@ namespace DailyTool.ViewModels.Initialization
                 IsParticipating = true
             };
 
-            await _initializationStateController.AddPersonAsync(person);
+            await _personService.AddPersonAsync(person, State);
             await OnCloseAsync();
         }
 

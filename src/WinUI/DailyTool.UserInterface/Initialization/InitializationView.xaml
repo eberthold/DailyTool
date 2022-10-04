@@ -45,7 +45,7 @@
         <TextBox Grid.Row="2"
                  Margin="24 0 24 12"
                  Header="TODO: Sprint Board URL"
-                 Text="{Binding CurrentState.MeetingInfo.SprintBoardUri, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                 Text="{Binding State.MeetingInfo.SprintBoardUri, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
         <Grid Grid.Row="3" Margin="24 0 24 12">
             <Grid.RowDefinitions>
@@ -71,7 +71,7 @@
                               AutoGenerateColumns="False"
                               Background="{ThemeResource AcrylicBackgroundFillColorDefaultBrush}"
                               IsReadOnly="True"
-                              ItemsSource="{Binding CurrentState.People, Mode=OneWay}"
+                              ItemsSource="{Binding State.People, Mode=OneWay}"
                               SelectedItem="{Binding SelectedPerson, Mode=TwoWay}"
                               SelectionMode="Single"
                               VerticalScrollBarVisibility="Auto">

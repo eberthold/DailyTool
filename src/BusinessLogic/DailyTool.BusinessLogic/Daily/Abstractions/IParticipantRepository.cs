@@ -1,6 +1,4 @@
-﻿using DailyTool.BusinessLogic.Parameters;
-
-namespace DailyTool.BusinessLogic.Daily
+﻿namespace DailyTool.BusinessLogic.Daily.Abstractions
 {
     public interface IParticipantRepository
     {

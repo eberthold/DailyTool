@@ -1,9 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
-using CommunityToolkit.WinUI.UI.Controls.TextToolbarSymbols;
 using DailyTool.BusinessLogic.Daily;
-using DailyTool.BusinessLogic.Initialization;
-using DailyTool.BusinessLogic.Parameters;
-using DailyTool.BusinessLogic.People;
+using DailyTool.BusinessLogic.Daily.Abstractions;
 using DailyTool.BusinessLogic.System;
 using DailyTool.DataAccess;
 using DailyTool.Packaged.Entry.Navigation;
@@ -25,9 +22,9 @@ namespace DailyTool.Packaged.Entry
             services.RegisterNavigation();
             services.RegisterViews();
             services.RegisterViewModels();
-            services.RegisterControllers();
             services.RegisterServices();
             services.RegisterRepositories();
+            services.RegisterStates();
             services.RegisterFrameworks();
         }
 
@@ -49,16 +46,12 @@ namespace DailyTool.Packaged.Entry
             services.AddTransient<AddPersonViewModel>();
         }
 
-        private static void RegisterControllers(this IServiceCollection services)
-        {
-            services.AddSingleton<IInitializationStateService, InitializationStateService>();
-        }
-
         private static void RegisterServices(this IServiceCollection services)
         {
-            services.AddSingleton<IInitializationService, InitializationService>();
-            services.AddSingleton<IDailyDataService, DailyDataService>();
-            services.AddSingleton<IDailyStateService, DailyStateService>();
+            services.AddSingleton<IDailyService, DailyService>();
+            services.AddSingleton<IPersonService, PersonService>();
+            services.AddSingleton<IParticipantService, ParticipantService>();
+            services.AddSingleton<IMeetingInfoService, MeetingInfoService>();
         }
 
         private static void RegisterRepositories(this IServiceCollection services)
@@ -68,6 +61,11 @@ namespace DailyTool.Packaged.Entry
             services.AddSingleton<IStorageRepository<MeetingInfoStorage>, StorageRepository<MeetingInfoStorage>>();
             services.AddSingleton<IStorageRepository<List<PersonStorage>>, StorageRepository<List<PersonStorage>>>();
             services.AddSingleton<IParticipantRepository, ParticipantRepository>();
+        }
+
+        private static void RegisterStates(this IServiceCollection services)
+        {
+            services.AddSingleton<DailyState>();
         }
 
         private static void RegisterFrameworks(this IServiceCollection services)

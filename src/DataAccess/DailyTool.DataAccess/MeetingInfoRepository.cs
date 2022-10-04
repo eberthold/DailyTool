@@ -1,4 +1,5 @@
-﻿using DailyTool.BusinessLogic.Parameters;
+﻿using DailyTool.BusinessLogic.Daily;
+using DailyTool.BusinessLogic.Daily.Abstractions;
 
 namespace DailyTool.DataAccess
 {

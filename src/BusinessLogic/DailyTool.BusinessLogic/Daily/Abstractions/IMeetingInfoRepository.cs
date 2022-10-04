@@ -1,4 +1,4 @@
-﻿namespace DailyTool.BusinessLogic.Parameters
+﻿namespace DailyTool.BusinessLogic.Daily.Abstractions
 {
     public interface IMeetingInfoRepository
     {

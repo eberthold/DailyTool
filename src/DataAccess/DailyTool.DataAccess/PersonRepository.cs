@@ -1,4 +1,5 @@
-﻿using DailyTool.BusinessLogic.People;
+﻿using DailyTool.BusinessLogic.Daily;
+using DailyTool.BusinessLogic.Daily.Abstractions;
 using System.IO.Abstractions;
 
 namespace DailyTool.DataAccess

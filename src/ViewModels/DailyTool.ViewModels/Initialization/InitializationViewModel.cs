@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DailyTool.BusinessLogic.Initialization;
-using DailyTool.BusinessLogic.People;
+using DailyTool.BusinessLogic.Daily;
+using DailyTool.BusinessLogic.Daily.Abstractions;
 using DailyTool.ViewModels.Abstractions;
 using DailyTool.ViewModels.Daily;
 using DailyTool.ViewModels.Navigation;
@@ -10,9 +10,9 @@ namespace DailyTool.ViewModels.Initialization
 {
     public class InitializationViewModel : ObservableObject, INavigationTarget, ILoadDataAsync
     {
-        private readonly IInitializationStateService _initializationStateController;
+        private readonly IMeetingInfoService _meetingInfoService;
+        private readonly IPersonService _personService;
         private readonly INavigationService _navigationService;
-        private InitializationStageState _currentState = new();
 
         private AddPersonViewModel? _addPersonViewModel;
         private Person? _selectedPerson;
@@ -20,10 +20,14 @@ namespace DailyTool.ViewModels.Initialization
         private TimeSpan _endTime;
 
         public InitializationViewModel(
-            IInitializationStateService initializationStateController,
+            DailyState state,
+            IMeetingInfoService meetingInfoService,
+            IPersonService personService,
             INavigationService navigationService)
         {
-            _initializationStateController = initializationStateController ?? throw new ArgumentNullException(nameof(initializationStateController));
+            State = state ?? throw new ArgumentNullException(nameof(state));
+            _meetingInfoService = meetingInfoService ?? throw new ArgumentNullException(nameof(meetingInfoService));
+            _personService = personService ?? throw new ArgumentNullException(nameof(personService));
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
 
             AddPersonCommand = new AsyncRelayCommand(AddPersonAsync, CanAddPerson);
@@ -81,7 +85,12 @@ namespace DailyTool.ViewModels.Initialization
                     return;
                 }
 
-                CurrentState.MeetingInfo.MeetingDuration = value.Subtract(StartTime);
+                var info = State.MeetingInfo with
+                {
+                    MeetingDuration = value.Subtract(StartTime),
+                };
+
+                _meetingInfoService.UpdateAsync(info, State);
             }
         }
 
@@ -95,23 +104,26 @@ namespace DailyTool.ViewModels.Initialization
                     return;
                 }
 
-                CurrentState.MeetingInfo.MeetingStartTime = value;
-                EndTime = StartTime.Add(CurrentState.MeetingInfo.MeetingDuration);
+                var info = State.MeetingInfo with
+                {
+                    MeetingStartTime = value
+                };
+
+                _meetingInfoService.UpdateAsync(info, State);
+
+                EndTime = StartTime.Add(State.MeetingInfo.MeetingDuration);
             }
         }
 
-        public InitializationStageState CurrentState
-        {
-            get => _currentState;
-            set => SetProperty(ref _currentState, value);
-        }
+        public DailyState State { get; }
 
         public async Task LoadDataAsync()
         {
-            CurrentState = await _initializationStateController.GetStateAsync();
+            await _meetingInfoService.LoadAsync(State);
+            await _personService.LoadAllAsync(State);
 
-            StartTime = CurrentState.MeetingInfo.MeetingStartTime;
-            EndTime = StartTime.Add(CurrentState.MeetingInfo.MeetingDuration);
+            StartTime = State.MeetingInfo.MeetingStartTime;
+            EndTime = StartTime.Add(State.MeetingInfo.MeetingDuration);
         }
 
         private bool CanAddPerson()
@@ -165,7 +177,7 @@ namespace DailyTool.ViewModels.Initialization
                 return Task.CompletedTask;
             }
 
-            return _initializationStateController.RemovePersonAsync(SelectedPerson);
+            return _personService.RemovePersonAsync(SelectedPerson, State);
         }
     }
 }

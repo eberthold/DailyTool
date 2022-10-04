@@ -8,11 +8,11 @@
 
   <Identity
     Name="d631c7ff-2556-472f-97bb-33cc29a4220d"
-    Publisher="CN=ebert"
-    Version="1.0.0.0" />
+    Publisher="CN=Erik Berthold"
+    Version="0.9.1.0" />
 
   <Properties>
-    <DisplayName>DailyTool.Packaged.Entry</DisplayName>
+    <DisplayName>Daily Tool</DisplayName>
     <PublisherDisplayName>Erik Berthold</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>

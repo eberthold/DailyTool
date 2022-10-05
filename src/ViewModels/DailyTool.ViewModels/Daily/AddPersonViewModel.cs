@@ -3,11 +3,10 @@ using CommunityToolkit.Mvvm.Input;
 using DailyTool.BusinessLogic.Daily;
 using DailyTool.BusinessLogic.Daily.Abstractions;
 using DailyTool.ViewModels.Abstractions;
-using DailyTool.ViewModels.Daily;
 using DailyTool.ViewModels.Extensions;
 using DailyTool.ViewModels.Navigation;
 
-namespace DailyTool.ViewModels.Initialization
+namespace DailyTool.ViewModels.Daily
 {
     public class AddPersonViewModel : ObservableObject, INavigationTarget, INotifyClose
     {

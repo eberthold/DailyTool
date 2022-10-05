@@ -44,6 +44,8 @@ namespace DailyTool.Packaged.Entry
             services.AddTransient<InitializationViewModel>();
             services.AddTransient<DailyViewModel>();
             services.AddTransient<AddPersonViewModel>();
+            services.AddTransient<IMeetingInfoEditViewModel, MeetingInfoEditViewModel>();
+            services.AddTransient<IPeopleEditViewModel, PeopleEditViewModel>();
         }
 
         private static void RegisterServices(this IServiceCollection services)

@@ -8,6 +8,8 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Daily\DailyView.xaml" />
+    <None Remove="Daily\MeetingInfoEditView.xaml" />
+    <None Remove="Daily\PeopleEditView.xaml" />
     <None Remove="Initialization\AddPersonView.xaml" />
     <None Remove="Initialization\InitializationView.xaml" />
     <None Remove="Resources\ModuleResourceDictionary.xaml" />
@@ -28,7 +30,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Update="Initialization\AddPersonView.xaml">
+    <Page Update="Daily\PeopleEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Daily\MeetingInfoEditView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Daily\AddPersonView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

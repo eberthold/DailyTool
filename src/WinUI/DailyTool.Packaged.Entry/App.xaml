@@ -1,9 +1,8 @@
-﻿<Application
-    x:Class="DailyTool.Packaged.Entry.App"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:DailyTool.Packaged.Entry"
-    xmlns:ui="using:DailyTool.UserInterface.Resources">
+﻿<Application x:Class="DailyTool.Packaged.Entry.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="using:DailyTool.Packaged.Entry"
+             xmlns:ui="using:DailyTool.UserInterface.Resources">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

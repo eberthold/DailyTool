@@ -39,7 +39,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="ListViewItem">
                     <Grid Margin="0 4"
-                          Background="{ThemeResource AcrylicBackgroundFillColorDefaultBrush}"
+                          Background="{ThemeResource SystemChromeMediumColor}"
                           BorderBrush="{ThemeResource ListBoxBorderThemeBrush}"
                           CornerRadius="8">
                         <Border Width="8"
@@ -75,6 +75,7 @@
                 <TextBlock x:Name="PART_Participant"
                            FontSize="26"
                            Style="{ThemeResource BodyStrongTextBlockStyle}"
+                           Foreground="{ThemeResource SystemAccentColor}"
                            Text="{Binding Name}"
                            TextWrapping="NoWrap" />
                 <VisualStateManager.VisualStateGroups>
@@ -86,7 +87,7 @@
                         </VisualState>
                         <VisualState x:Name="IsDone">
                             <VisualState.Setters>
-                                <Setter Target="PART_Participant.Foreground" Value="{ThemeResource AccentTextFillColorDisabled}" />
+                                <Setter Target="PART_Participant.Foreground" Value="{ThemeResource TextFillColorSecondaryBrush}" />
                             </VisualState.Setters>
                             <VisualState.StateTriggers>
                                 <StateTrigger IsActive="{Binding IsDone}" />
@@ -94,7 +95,7 @@
                         </VisualState>
                         <VisualState x:Name="IsQueued">
                             <VisualState.Setters>
-                                <Setter Target="PART_Participant.Foreground" Value="{ThemeResource AccentTextFillColorDisabled}" />
+                                <Setter Target="PART_Participant.Foreground" Value="{ThemeResource TextFillColorSecondaryBrush}" />
                             </VisualState.Setters>
                             <VisualState.StateTriggers>
                                 <StateTrigger IsActive="{Binding IsQueued}" />

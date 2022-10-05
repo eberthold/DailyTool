@@ -1,51 +1,79 @@
 ﻿using DailyTool.BusinessLogic.Daily;
 using DailyTool.BusinessLogic.Daily.Abstractions;
-using System.IO.Abstractions;
 
 namespace DailyTool.DataAccess
 {
     public class PersonRepository : IPersonRepository
     {
-        private readonly IFileSystem _fileSystem;
         private readonly IStorageRepository<List<PersonStorage>> _storageRepository;
 
         public PersonRepository(
-            IFileSystem fileSystem,
             IStorageRepository<List<PersonStorage>> storageRepository)
         {
-            _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
             _storageRepository = storageRepository ?? throw new ArgumentNullException(nameof(storageRepository));
+        }
+
+        public async Task<int> CreatePersonAsync(Person person)
+        {
+            var people = await _storageRepository.GetStorageAsync().ConfigureAwait(false);
+            var id = people.Max(x => x.Id) + 1;
+            var storagePerson = ToStorageObject(person);
+            storagePerson.Id = id;
+            people.Add(storagePerson);
+            await _storageRepository.SaveStorageAsync(people).ConfigureAwait(false);
+            return id;
+        }
+
+        public async Task DeletePersonAsync(int id)
+        {
+            var people = await _storageRepository.GetStorageAsync().ConfigureAwait(false);
+            var person = people.FirstOrDefault(x => x.Id == id);
+            if (person is null)
+            {
+                return;
+            }
+
+            people.Remove(person);
+            await _storageRepository.SaveStorageAsync(people).ConfigureAwait(false);
         }
 
         public async Task<IReadOnlyCollection<Person>> GetAllAsync()
         {
             var storage = await _storageRepository.GetStorageAsync().ConfigureAwait(false);
 
+            // TODO: only temporary hack to keep old data
+            var lastId = storage.Max(x => x.Id);
+            foreach (var person in storage.Where(x => x.Id == 0).ToList())
+            {
+                person.Id = lastId + 1;
+                lastId++;
+                await _storageRepository.SaveStorageAsync(storage);
+            }
+
             return storage
                 .Select(ToBusinessObject)
                 .ToList();
         }
 
-        public async Task<IReadOnlyCollection<Person>> GetParticipantsAsync()
+        public async Task UpdatePersonAsync(Person person)
         {
-            var storage = await _storageRepository.GetStorageAsync().ConfigureAwait(false);
-            return storage
-                .Where(x => x.IsParticipating)
-                .Select(ToBusinessObject)
-                .ToList();
-        }
+            var people = await _storageRepository.GetStorageAsync().ConfigureAwait(false);
+            var storagePerson = people.FirstOrDefault(x => x.Id == person.Id);
+            if (storagePerson is null)
+            {
+                return;
+            }
 
-        public async Task SaveAllAsync(IReadOnlyCollection<Person> people)
-        {
-            var storage = await _storageRepository.GetStorageAsync().ConfigureAwait(false);
-            storage = people.Select(ToStorageObject).ToList();
-            await _storageRepository.SaveStorageAsync(storage);
+            storagePerson.Name = person.Name;
+            storagePerson.IsParticipating = person.IsParticipating;
+            await _storageRepository.SaveStorageAsync(people);
         }
 
         private Person ToBusinessObject(PersonStorage person)
         {
             return new Person
             {
+                Id = person.Id,
                 Name = person.Name,
                 IsParticipating = person.IsParticipating,
             };
@@ -55,6 +83,7 @@ namespace DailyTool.DataAccess
         {
             return new PersonStorage
             {
+                Id = person.Id,
                 Name = person.Name,
                 IsParticipating = person.IsParticipating,
             };

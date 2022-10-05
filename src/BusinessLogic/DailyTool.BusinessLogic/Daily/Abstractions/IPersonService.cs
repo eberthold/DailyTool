@@ -2,12 +2,12 @@
 {
     public interface IPersonService
     {
-        Task LoadAllAsync(DailyState state);
+        Task<IReadOnlyCollection<Person>> GetAllAsync();
 
-        Task SaveAsync(IReadOnlyCollection<Person> people);
+        Task<int> CreatePersonAsync(Person person);
 
-        Task AddPersonAsync(Person person, DailyState state);
+        Task UpdatePersonAsync(Person person);
 
-        Task RemovePersonAsync(Person person, DailyState state);
+        Task DeletePersonAsync(int id);
     }
 }

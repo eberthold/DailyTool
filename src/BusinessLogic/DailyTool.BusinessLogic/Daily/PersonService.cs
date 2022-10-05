@@ -1,5 +1,4 @@
 ﻿using DailyTool.BusinessLogic.Daily.Abstractions;
-using System.Collections.ObjectModel;
 
 namespace DailyTool.BusinessLogic.Daily
 {
@@ -12,28 +11,24 @@ namespace DailyTool.BusinessLogic.Daily
             _repository = repository;
         }
 
-        public Task AddPersonAsync(Person person, DailyState state)
+        public Task<int> CreatePersonAsync(Person person)
         {
-            state.EditablePeople.Add(person);
-            return SaveAsync(state.People);
+            return _repository.CreatePersonAsync(person);
         }
 
-        public async Task LoadAllAsync(DailyState state)
+        public Task DeletePersonAsync(int id)
         {
-            var people = await _repository.GetAllAsync();
-            people = people.OrderBy(x => x.Name).ToList();
-            state.EditablePeople = new ObservableCollection<Person>(people);
+            return _repository.DeletePersonAsync(id);
         }
 
-        public Task RemovePersonAsync(Person person, DailyState state)
+        public Task<IReadOnlyCollection<Person>> GetAllAsync()
         {
-            state.EditablePeople.Remove(person);
-            return SaveAsync(state.People);
+            return _repository.GetAllAsync();
         }
 
-        public Task SaveAsync(IReadOnlyCollection<Person> people)
+        public Task UpdatePersonAsync(Person person)
         {
-            return _repository.SaveAllAsync(people);
+            return _repository.UpdatePersonAsync(person);
         }
     }
 }

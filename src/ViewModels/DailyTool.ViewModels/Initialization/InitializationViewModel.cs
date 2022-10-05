@@ -4,7 +4,9 @@ using DailyTool.BusinessLogic.Daily;
 using DailyTool.BusinessLogic.Daily.Abstractions;
 using DailyTool.ViewModels.Abstractions;
 using DailyTool.ViewModels.Daily;
+using DailyTool.ViewModels.Extensions;
 using DailyTool.ViewModels.Navigation;
+using System.Collections.ObjectModel;
 
 namespace DailyTool.ViewModels.Initialization
 {
@@ -15,9 +17,10 @@ namespace DailyTool.ViewModels.Initialization
         private readonly INavigationService _navigationService;
         private string _sprintBoardUri = string.Empty;
         private AddPersonViewModel? _addPersonViewModel;
-        private Person? _selectedPerson;
+        private PersonViewModel? _selectedPerson;
         private TimeSpan _startTime;
         private TimeSpan _endTime;
+        private ObservableCollection<PersonViewModel> _people = new();
 
         public InitializationViewModel(
             DailyState state,
@@ -41,7 +44,7 @@ namespace DailyTool.ViewModels.Initialization
 
         public IAsyncRelayCommand StartDailyCommand { get; }
 
-        public Person? SelectedPerson
+        public PersonViewModel? SelectedPerson
         {
             get => _selectedPerson;
             set
@@ -136,16 +139,36 @@ namespace DailyTool.ViewModels.Initialization
 
         public DailyState State { get; }
 
+        public ObservableCollection<PersonViewModel> People
+        {
+            get => _people;
+            set => SetProperty(ref _people, value);
+        }
+
         public async Task LoadDataAsync()
         {
             await _meetingInfoService.LoadAsync(State);
-            await _personService.LoadAllAsync(State);
+
+            await LoadPeopleAsync();
 
             _startTime = State.MeetingInfo.MeetingStartTime;
             _endTime = StartTime.Add(State.MeetingInfo.MeetingDuration);
             _sprintBoardUri = State.MeetingInfo.SprintBoardUri;
 
             OnPropertyChanged(string.Empty);
+        }
+
+        private async Task LoadPeopleAsync()
+        {
+            var people = await _personService.GetAllAsync();
+            var mappedPeople = people.Select(x =>
+            {
+                var viewModel = x.ToViewModel();
+                viewModel.PropertyChanged += OnPersonChanged;
+                return viewModel;
+            });
+
+            People = new ObservableCollection<PersonViewModel>(mappedPeople);
         }
 
         private bool CanAddPerson()
@@ -183,6 +206,12 @@ namespace DailyTool.ViewModels.Initialization
 
         private Task OnAddPersonClosed()
         {
+            if (AddPersonViewModel?.AddedPerson is null)
+            {
+                return Task.CompletedTask;
+            }
+
+            People.Add(AddPersonViewModel.AddedPerson);
             AddPersonViewModel = null;
             return Task.CompletedTask;
         }
@@ -192,14 +221,27 @@ namespace DailyTool.ViewModels.Initialization
             return SelectedPerson is not null;
         }
 
-        private Task RemovePersonAsync()
+        private async Task RemovePersonAsync()
         {
             if (SelectedPerson is null)
             {
-                return Task.CompletedTask;
+                return;
             }
 
-            return _personService.RemovePersonAsync(SelectedPerson, State);
+            SelectedPerson.PropertyChanged -= OnPersonChanged;
+            await _personService.DeletePersonAsync(SelectedPerson.Id);
+            People.Remove(SelectedPerson);
+        }
+
+        private void OnPersonChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            var person = sender as PersonViewModel;
+            if (person is null)
+            {
+                return;
+            }
+
+            _personService.UpdatePersonAsync(person.ToBusinessObject());
         }
     }
 }

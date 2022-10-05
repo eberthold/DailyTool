@@ -1,22 +1,22 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-
-namespace DailyTool.BusinessLogic.Daily
+﻿namespace DailyTool.BusinessLogic.Daily
 {
-    public class Person : ObservableObject
+    public class Person
     {
-        private string _name = string.Empty;
-        private bool _isParticipating;
+        private int _id;
 
-        public string Name
+        public int Id
         {
-            get => _name;
-            set => SetProperty(ref _name, value);
+            get => _id;
+            init => _id = value;
         }
 
-        public bool IsParticipating
+        public string Name { get; set; } = string.Empty;
+
+        public bool IsParticipating { get; set; }
+
+        internal void UpdateId(int id)
         {
-            get => _isParticipating;
-            set => SetProperty(ref _isParticipating, value);
+            _id = id;
         }
     }
 }

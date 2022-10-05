@@ -3,6 +3,8 @@ using CommunityToolkit.Mvvm.Input;
 using DailyTool.BusinessLogic.Daily;
 using DailyTool.BusinessLogic.Daily.Abstractions;
 using DailyTool.ViewModels.Abstractions;
+using DailyTool.ViewModels.Daily;
+using DailyTool.ViewModels.Extensions;
 using DailyTool.ViewModels.Navigation;
 
 namespace DailyTool.ViewModels.Initialization
@@ -28,6 +30,8 @@ namespace DailyTool.ViewModels.Initialization
 
         public IAsyncRelayCommand CancelCommand { get; }
 
+        public PersonViewModel? AddedPerson { get; private set; }
+
         public string Name
         {
             get => _name;
@@ -51,13 +55,13 @@ namespace DailyTool.ViewModels.Initialization
 
         private async Task AddPersonAsync()
         {
-            var person = new Person
+            AddedPerson = new PersonViewModel
             {
                 Name = Name,
                 IsParticipating = true
             };
 
-            await _personService.AddPersonAsync(person, State);
+            AddedPerson.Id = await _personService.CreatePersonAsync(AddedPerson.ToBusinessObject());
             await OnCloseAsync();
         }
 

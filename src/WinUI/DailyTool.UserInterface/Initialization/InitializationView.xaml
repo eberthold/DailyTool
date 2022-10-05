@@ -71,7 +71,7 @@
                               AutoGenerateColumns="False"
                               Background="{ThemeResource AcrylicBackgroundFillColorDefaultBrush}"
                               IsReadOnly="True"
-                              ItemsSource="{Binding State.People, Mode=OneWay}"
+                              ItemsSource="{Binding People, Mode=OneWay}"
                               SelectedItem="{Binding SelectedPerson, Mode=TwoWay}"
                               SelectionMode="Single"
                               VerticalScrollBarVisibility="Auto">

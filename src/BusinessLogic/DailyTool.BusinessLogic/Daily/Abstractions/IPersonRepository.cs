@@ -2,10 +2,12 @@
 {
     public interface IPersonRepository
     {
+        Task<int> CreatePersonAsync(Person person);
+
         Task<IReadOnlyCollection<Person>> GetAllAsync();
 
-        Task SaveAllAsync(IReadOnlyCollection<Person> people);
+        Task UpdatePersonAsync(Person person);
 
-        Task<IReadOnlyCollection<Person>> GetParticipantsAsync();
+        Task DeletePersonAsync(int id);
     }
 }

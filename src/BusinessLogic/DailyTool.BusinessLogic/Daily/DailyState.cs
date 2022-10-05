@@ -5,26 +5,13 @@ namespace DailyTool.BusinessLogic.Daily
 {
     public class DailyState : ObservableObject
     {
-        private MeetingInfo _meetingInfo = new MeetingInfo();
-        private ObservableCollection<Person> _editablePeople = null!;
-        private ReadOnlyObservableCollection<Person> _people = null!;
+        private MeetingInfo _meetingInfo = new();
         private ObservableCollection<Participant> _editableParticipants = null!;
         private ReadOnlyObservableCollection<Participant> _participants = null!;
 
         public DailyState()
         {
-            EditablePeople = new ObservableCollection<Person>();
             EditableParticipants = new ObservableCollection<Participant>();
-        }
-
-        internal ObservableCollection<Person> EditablePeople
-        {
-            get => _editablePeople;
-            set
-            {
-                _editablePeople = value;
-                People = new ReadOnlyObservableCollection<Person>(value);
-            }
         }
 
         internal ObservableCollection<Participant> EditableParticipants
@@ -35,15 +22,6 @@ namespace DailyTool.BusinessLogic.Daily
                 _editableParticipants = value;
                 Participants = new ReadOnlyObservableCollection<Participant>(value);
             }
-        }
-
-        /// <summary>
-        /// Gets all persons which are known to the application.
-        /// </summary>
-        public ReadOnlyObservableCollection<Person> People
-        {
-            get => _people;
-            private set => SetProperty(ref _people, value);
         }
 
         /// <summary>

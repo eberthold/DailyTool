@@ -21,6 +21,7 @@ namespace DailyTool.BusinessLogic.Daily
         public async Task LoadAllAsync(DailyState state)
         {
             var people = await _repository.GetAllAsync();
+            people = people.OrderBy(x => x.Name).ToList();
             state.EditablePeople = new ObservableCollection<Person>(people);
         }
 

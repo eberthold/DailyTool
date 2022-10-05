@@ -19,6 +19,7 @@ namespace DailyTool.ViewModels.Daily
 
         private Timer? _timer;
         private DailyState _state = new DailyState();
+        private Uri? _sprintBoardUri;
 
         public DailyViewModel(
             DailyState state,
@@ -51,6 +52,12 @@ namespace DailyTool.ViewModels.Daily
             set => SetProperty(ref _state, value);
         }
 
+        public Uri? SprintBoardUri
+        {
+            get => _sprintBoardUri;
+            private set => SetProperty(ref _sprintBoardUri, value);
+        }
+
         public string Time => _timeStampProvider.CurrentClock.ToString(@"hh\:mm\:ss");
 
         public double Progress => _dailyService.CalculateMeetingPercentage(State.MeetingInfo);
@@ -64,6 +71,7 @@ namespace DailyTool.ViewModels.Daily
         {
             await _meetingInfoService.LoadAsync(State);
             await _participantService.LoadParticipantsForMeetingAsync(State.MeetingInfo, State);
+            SprintBoardUri = new Uri(State.MeetingInfo.SprintBoardUri);
 
             _timer = new Timer(OnTimerElapsed);
             _timer.Change(0, 100);

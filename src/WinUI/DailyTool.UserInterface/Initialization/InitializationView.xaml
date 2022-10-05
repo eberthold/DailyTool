@@ -45,7 +45,7 @@
         <TextBox Grid.Row="2"
                  Margin="24 0 24 12"
                  Header="TODO: Sprint Board URL"
-                 Text="{Binding State.MeetingInfo.SprintBoardUri, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                 Text="{Binding SprintBoardUri, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
         <Grid Grid.Row="3" Margin="24 0 24 12">
             <Grid.RowDefinitions>

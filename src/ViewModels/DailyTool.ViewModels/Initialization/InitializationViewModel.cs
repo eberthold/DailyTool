@@ -13,7 +13,7 @@ namespace DailyTool.ViewModels.Initialization
         private readonly IMeetingInfoService _meetingInfoService;
         private readonly IPersonService _personService;
         private readonly INavigationService _navigationService;
-
+        private string _sprintBoardUri = string.Empty;
         private AddPersonViewModel? _addPersonViewModel;
         private Person? _selectedPerson;
         private TimeSpan _startTime;
@@ -115,6 +115,25 @@ namespace DailyTool.ViewModels.Initialization
             }
         }
 
+        public string SprintBoardUri
+        {
+            get => _sprintBoardUri;
+            set
+            {
+                if (!SetProperty(ref _sprintBoardUri, value))
+                {
+                    return;
+                }
+
+                var info = State.MeetingInfo with
+                {
+                    SprintBoardUri = value
+                };
+
+                _meetingInfoService.UpdateAsync(info, State);
+            }
+        }
+
         public DailyState State { get; }
 
         public async Task LoadDataAsync()
@@ -122,8 +141,11 @@ namespace DailyTool.ViewModels.Initialization
             await _meetingInfoService.LoadAsync(State);
             await _personService.LoadAllAsync(State);
 
-            StartTime = State.MeetingInfo.MeetingStartTime;
-            EndTime = StartTime.Add(State.MeetingInfo.MeetingDuration);
+            _startTime = State.MeetingInfo.MeetingStartTime;
+            _endTime = StartTime.Add(State.MeetingInfo.MeetingDuration);
+            _sprintBoardUri = State.MeetingInfo.SprintBoardUri;
+
+            OnPropertyChanged(string.Empty);
         }
 
         private bool CanAddPerson()

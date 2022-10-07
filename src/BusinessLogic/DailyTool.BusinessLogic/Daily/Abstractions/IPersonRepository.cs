@@ -6,6 +6,8 @@
 
         Task<IReadOnlyCollection<Person>> GetAllAsync();
 
+        Task<IReadOnlyCollection<Person>> GetAllParticipantsAsync();
+
         Task UpdatePersonAsync(Person person);
 
         Task DeletePersonAsync(int id);

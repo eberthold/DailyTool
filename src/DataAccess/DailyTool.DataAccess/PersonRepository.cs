@@ -41,16 +41,17 @@ namespace DailyTool.DataAccess
         {
             var storage = await _storageRepository.GetStorageAsync().ConfigureAwait(false);
 
-            // TODO: only temporary hack to keep old data
-            var lastId = storage.Max(x => x.Id);
-            foreach (var person in storage.Where(x => x.Id == 0).ToList())
-            {
-                person.Id = lastId + 1;
-                lastId++;
-                await _storageRepository.SaveStorageAsync(storage);
-            }
+            return storage
+                .Select(ToBusinessObject)
+                .ToList();
+        }
+
+        public async Task<IReadOnlyCollection<Person>> GetAllParticipantsAsync()
+        {
+            var storage = await _storageRepository.GetStorageAsync().ConfigureAwait(false);
 
             return storage
+                .Where(x => x.IsParticipating)
                 .Select(ToBusinessObject)
                 .ToList();
         }

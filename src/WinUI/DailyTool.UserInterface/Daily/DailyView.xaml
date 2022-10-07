@@ -33,26 +33,22 @@
                        TextWrapping="NoWrap" />
         </StackPanel>
 
-
-        <!--  In this case performance has to follow function - because we don't expect that much entries anyways  -->
-        <ScrollViewer Grid.Row="1"
-                      Margin="0 12 0 0"
-                      HorizontalScrollBarVisibility="Disabled"
-                      VerticalScrollBarVisibility="Auto">
-            <Border x:Name="PART_Canvas"
-                    Background="Transparent"
-                    DoubleTapped="Grid_DoubleTapped"
-                    Tapped="ItemsControl_Tapped">
-                <ListView x:Name="PART_Participants"
-                          VerticalAlignment="Top"
-                          IsHitTestVisible="False"
-                          ItemContainerStyle="{StaticResource ParticipantItemContainerStyle}"
-                          ItemTemplate="{StaticResource ParticipantTemplate}"
-                          ItemsSource="{Binding State.Participants}"
-                          ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                          SelectionMode="None" />
-            </Border>
-        </ScrollViewer>
+        <Border x:Name="PART_Canvas"
+                Grid.Row="1"
+                Margin="0 12 0 0"
+                Background="Transparent"
+                DoubleTapped="ParticipantsDoubleTapped"
+                RightTapped="ParticipantsRightTapped"
+                Tapped="ParticipantsTapped">
+            <ListView x:Name="PART_Participants"
+                      VerticalAlignment="Top"
+                      IsHitTestVisible="False"
+                      ItemContainerStyle="{StaticResource ParticipantItemContainerStyle}"
+                      ItemTemplate="{StaticResource ParticipantTemplate}"
+                      ItemsSource="{Binding ParticipantState.Participants}"
+                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                      SelectionMode="None" />
+        </Border>
 
         <TextBlock Grid.Row="2"
                    Margin="0 0 12 0"
@@ -104,7 +100,7 @@
         <WebView2 Grid.Row="1"
                   Grid.Column="2"
                   Margin="0 12 0 0"
-                  Source="{Binding SprintBoardUri}" />
+                  Source="{Binding MeetingInfoState.SprintBoardUri}" />
 
         <StackPanel Grid.Row="2"
                     Grid.Column="2"

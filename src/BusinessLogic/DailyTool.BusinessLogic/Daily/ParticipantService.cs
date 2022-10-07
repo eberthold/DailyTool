@@ -1,32 +1,32 @@
 ﻿using DailyTool.BusinessLogic.Daily.Abstractions;
-using System.Collections.ObjectModel;
+using DailyTool.BusinessLogic.System;
 
 namespace DailyTool.BusinessLogic.Daily
 {
-    public class ParticipantService : IParticipantService
+    public class ParticipantService<T> : IParticipantService<T>
+        where T : IParticipant
     {
-        private readonly IParticipantRepository _repository;
+        private readonly IPersonRepository _repository;
+        private readonly IParticipantFactory<T> _participantFactory;
+        private readonly ITimeStampProvider _timeStampProvider;
 
-        public ParticipantService(IParticipantRepository repository)
+        public ParticipantService(
+            IPersonRepository repository,
+            IParticipantFactory<T> participantFactory,
+            ITimeStampProvider timeStampProvider)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _participantFactory = participantFactory ?? throw new ArgumentNullException(nameof(participantFactory));
+            _timeStampProvider = timeStampProvider ?? throw new ArgumentNullException(nameof(timeStampProvider));
         }
 
-        public async Task LoadParticipantsForMeetingAsync(MeetingInfo meetingInfo, DailyState state)
+        public async Task<IReadOnlyCollection<T>> GetAllAsync()
         {
-            var participants = await _repository.GetAllAsync();
-
-            participants = ShuffleParticipants(participants);
-
-            // TODO: move to set next speaker
-            participants.ElementAt(0).IsActiveSpeaker = true;
-
-            InitializeParticipants(participants, meetingInfo);
-
-            state.EditableParticipants = new ObservableCollection<Participant>(participants);
+            var persons = await _repository.GetAllAsync();
+            return persons.Select(_participantFactory.Create).ToList();
         }
 
-        private IReadOnlyCollection<Participant> ShuffleParticipants(IReadOnlyCollection<Participant> participants)
+        public void ShuffleParticipantsIndex(IReadOnlyCollection<T> participants)
         {
             var rand = new Random();
             var positions = new HashSet<int>();
@@ -43,13 +43,11 @@ namespace DailyTool.BusinessLogic.Daily
 
             for (var i = 0; i < positions.Count; i++)
             {
-                participants.ElementAt(i).Position = positions.ElementAt(i);
+                participants.ElementAt(i).Index = positions.ElementAt(i);
             }
-
-            return participants = participants.OrderBy(x => x.Position).ToList();
         }
 
-        private void InitializeParticipants(IReadOnlyCollection<Participant> participants, MeetingInfo meetingInfo)
+        public void CalculateAllocatedTimeSlots(IReadOnlyCollection<T> participants, MeetingInfo meetingInfo)
         {
             var averageTalkTime = CalculateAverageTalkDuration(meetingInfo, participants);
             for (var i = 0; i < participants.Count; i++)
@@ -60,11 +58,64 @@ namespace DailyTool.BusinessLogic.Daily
             }
         }
 
-        private TimeSpan CalculateAverageTalkDuration(MeetingInfo meetingInfo, IReadOnlyCollection<Participant> participants)
+        private TimeSpan CalculateAverageTalkDuration(MeetingInfo meetingInfo, IReadOnlyCollection<T> participants)
         {
             var averageTalkTime = meetingInfo.MeetingDuration / participants.Count;
 
             return averageTalkTime;
+        }
+
+        public Task RefreshParticipantsAsync(IReadOnlyCollection<T> participants)
+        {
+            foreach (var participant in participants)
+            {
+                participant.AllocatedTalkProgress = CalculateAllocatedProgressForParticipant(participant);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        private double CalculateAllocatedProgressForParticipant(T participant)
+        {
+            var elapsed = _timeStampProvider.CurrentClock - participant.AllocatedTalkStart;
+            var percentage = elapsed.TotalMilliseconds * 100d / participant.AllocatedTalkDuration.TotalMilliseconds;
+            percentage = Math.Min(percentage, 100);
+            percentage = Math.Max(percentage, 0);
+            return percentage;
+        }
+
+        public Task SetPreviousParticipantAsync(IReadOnlyCollection<T> participants)
+        {
+            var deactivedParticipant = participants.FirstOrDefault(x => x.ParticipantMode == ParticipantMode.Active);
+            if (deactivedParticipant is not null)
+            {
+                deactivedParticipant.ParticipantMode = ParticipantMode.Queued;
+            }
+
+            var reactivatedParticipant = participants.LastOrDefault(x => x.ParticipantMode == ParticipantMode.Done);
+            if (reactivatedParticipant is not null)
+            {
+                reactivatedParticipant.ParticipantMode = ParticipantMode.Active;
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public Task SetNextParticipantAsync(IReadOnlyCollection<T> participants)
+        {
+            var doneParticipant = participants.FirstOrDefault(x => x.ParticipantMode == ParticipantMode.Active);
+            if (doneParticipant is not null)
+            {
+                doneParticipant.ParticipantMode = ParticipantMode.Done;
+            }
+
+            var activedParticipant = participants.FirstOrDefault(x => x.ParticipantMode == ParticipantMode.Queued);
+            if (activedParticipant is not null)
+            {
+                activedParticipant.ParticipantMode = ParticipantMode.Active;
+            }
+
+            return Task.CompletedTask;
         }
     }
 }

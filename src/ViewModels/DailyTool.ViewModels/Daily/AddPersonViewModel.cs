@@ -1,7 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DailyTool.BusinessLogic.Daily;
-using DailyTool.BusinessLogic.Daily.Abstractions;
 using DailyTool.ViewModels.Abstractions;
 using DailyTool.ViewModels.Extensions;
 using DailyTool.ViewModels.Navigation;
@@ -11,15 +9,11 @@ namespace DailyTool.ViewModels.Daily
     public class AddPersonViewModel : ObservableObject, INavigationTarget, INotifyClose
     {
         private readonly List<Func<Task>> _closeCallbacks = new List<Func<Task>>();
-        private readonly IPersonService _personService;
         private string _name = string.Empty;
 
-        public AddPersonViewModel(
-            DailyState state,
-            IPersonService personService)
+        public AddPersonViewModel(IPeopleState state)
         {
-            State = state;
-            _personService = personService ?? throw new ArgumentNullException(nameof(personService));
+            State = state ?? throw new ArgumentNullException(nameof(state));
 
             AddPersonCommand = new AsyncRelayCommand(AddPersonAsync, CanAddPerson);
             CancelCommand = new AsyncRelayCommand(CancelAsync);
@@ -28,8 +22,6 @@ namespace DailyTool.ViewModels.Daily
         public IAsyncRelayCommand AddPersonCommand { get; }
 
         public IAsyncRelayCommand CancelCommand { get; }
-
-        public PersonViewModel? AddedPerson { get; private set; }
 
         public string Name
         {
@@ -45,7 +37,7 @@ namespace DailyTool.ViewModels.Daily
             }
         }
 
-        public DailyState State { get; }
+        public IPeopleState State { get; }
 
         private bool CanAddPerson()
         {
@@ -54,13 +46,13 @@ namespace DailyTool.ViewModels.Daily
 
         private async Task AddPersonAsync()
         {
-            AddedPerson = new PersonViewModel
+            var person = new PersonViewModel
             {
                 Name = Name,
                 IsParticipating = true
             };
 
-            AddedPerson.Id = await _personService.CreatePersonAsync(AddedPerson.ToBusinessObject());
+            State.People.Add(person);
             await OnCloseAsync();
         }
 

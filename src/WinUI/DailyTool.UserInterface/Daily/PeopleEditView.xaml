@@ -5,6 +5,9 @@
              xmlns:local="using:DailyTool.UserInterface.Daily"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:toolkit="using:CommunityToolkit.WinUI.UI.Controls"
+             xmlns:vm="using:DailyTool.ViewModels.Daily"
+             d:DataContext="{d:DesignInstance Type=vm:PeopleEditViewModel,
+                                              IsDesignTimeCreatable=False}"
              mc:Ignorable="d">
 
     <Grid>
@@ -31,7 +34,7 @@
                           AutoGenerateColumns="False"
                           Background="{ThemeResource AcrylicBackgroundFillColorDefaultBrush}"
                           IsReadOnly="True"
-                          ItemsSource="{Binding People, Mode=OneWay}"
+                          ItemsSource="{Binding State.People, Mode=OneWay}"
                           SelectedItem="{Binding SelectedPerson, Mode=TwoWay}"
                           SelectionMode="Single"
                           VerticalScrollBarVisibility="Auto">

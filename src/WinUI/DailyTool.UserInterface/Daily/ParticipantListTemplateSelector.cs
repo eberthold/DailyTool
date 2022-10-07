@@ -1,4 +1,5 @@
 ﻿using DailyTool.BusinessLogic.Daily;
+using DailyTool.BusinessLogic.Daily.Abstractions;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
@@ -14,23 +15,19 @@ namespace DailyTool.UserInterface.Daily
 
         protected override DataTemplate? SelectTemplateCore(object item, DependencyObject container)
         {
-            var participant = item as Participant;
+            var participant = item as IParticipant;
             if (participant is null)
             {
                 return null;
             }
 
-            if (participant.IsDone)
+            return participant.ParticipantMode switch
             {
-                return IsDoneTemplate;
-            }
-
-            if (participant.IsActiveSpeaker)
-            {
-                return IsActiveTemplate;
-            }
-
-            return IsQueuedTemplate;
+                ParticipantMode.Done => IsDoneTemplate,
+                ParticipantMode.Active => IsActiveTemplate,
+                ParticipantMode.Queued => IsQueuedTemplate,
+                _ => IsQueuedTemplate
+            };
         }
     }
 }

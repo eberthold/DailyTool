@@ -2,8 +2,10 @@
 {
     public interface IMeetingInfoService
     {
-        Task LoadAsync(DailyState state);
+        Task<MeetingInfo> GetAsync();
 
-        Task UpdateAsync(MeetingInfo meetingInfo, DailyState state);
+        Task UpdateAsync(MeetingInfo meetingInfo);
+
+        double CalculateMeetingPercentage(MeetingInfo meetingInfo);
     }
 }

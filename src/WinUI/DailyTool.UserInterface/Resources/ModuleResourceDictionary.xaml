@@ -74,8 +74,8 @@
             <Border>
                 <TextBlock x:Name="PART_Participant"
                            FontSize="26"
-                           Style="{ThemeResource BodyStrongTextBlockStyle}"
                            Foreground="{ThemeResource SystemAccentColor}"
+                           Style="{ThemeResource BodyStrongTextBlockStyle}"
                            Text="{Binding Name}"
                            TextWrapping="NoWrap" />
                 <VisualStateManager.VisualStateGroups>

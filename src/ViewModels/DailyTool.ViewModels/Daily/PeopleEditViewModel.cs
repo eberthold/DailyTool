@@ -1,27 +1,21 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DailyTool.BusinessLogic.Daily.Abstractions;
-using DailyTool.ViewModels.Extensions;
-using DailyTool.ViewModels.Initialization;
 using DailyTool.ViewModels.Navigation;
-using System.Collections.ObjectModel;
 
 namespace DailyTool.ViewModels.Daily
 {
-    public class PeopleEditViewModel : ObservableObject, IPeopleEditViewModel
+    public class PeopleEditViewModel : ObservableObject, INavigationTarget
     {
-        private readonly IPersonService _personService;
         private readonly INavigationService _navigationService;
 
         private AddPersonViewModel? _addPersonViewModel;
         private PersonViewModel? _selectedPerson;
-        private ObservableCollection<PersonViewModel> _people = new();
 
         public PeopleEditViewModel(
-            IPersonService personService,
+            IPeopleState state,
             INavigationService navigationService)
         {
-            _personService = personService ?? throw new ArgumentNullException(nameof(personService));
+            State = state ?? throw new ArgumentNullException(nameof(state));
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
 
             AddPersonCommand = new AsyncRelayCommand(AddPersonAsync, CanAddPerson);
@@ -66,23 +60,11 @@ namespace DailyTool.ViewModels.Daily
 
         public bool IsInViewMode => AddPersonViewModel is null;
 
-        public ObservableCollection<PersonViewModel> People
-        {
-            get => _people;
-            set => SetProperty(ref _people, value);
-        }
+        public IPeopleState State { get; }
 
-        public async Task LoadDataAsync()
+        public Task LoadDataAsync()
         {
-            var people = await _personService.GetAllAsync();
-            var mappedPeople = people.Select(x =>
-            {
-                var viewModel = x.ToViewModel();
-                viewModel.PropertyChanged += OnPersonChanged;
-                return viewModel;
-            });
-
-            People = new ObservableCollection<PersonViewModel>(mappedPeople);
+            return State.LoadDataAsync();
         }
 
         public Task OnNavigatedToAsync(NavigationMode navigationMode)
@@ -114,13 +96,6 @@ namespace DailyTool.ViewModels.Daily
 
         private Task OnAddPersonClosed()
         {
-            if (AddPersonViewModel?.AddedPerson is null)
-            {
-                AddPersonViewModel = null;
-                return Task.CompletedTask;
-            }
-
-            People.Add(AddPersonViewModel.AddedPerson);
             AddPersonViewModel = null;
             return Task.CompletedTask;
         }
@@ -130,27 +105,15 @@ namespace DailyTool.ViewModels.Daily
             return SelectedPerson is not null;
         }
 
-        private async Task RemovePersonAsync()
+        private Task RemovePersonAsync()
         {
             if (SelectedPerson is null)
             {
-                return;
+                return Task.CompletedTask;
             }
 
-            SelectedPerson.PropertyChanged -= OnPersonChanged;
-            await _personService.DeletePersonAsync(SelectedPerson.Id);
-            People.Remove(SelectedPerson);
-        }
-
-        private void OnPersonChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            var person = sender as PersonViewModel;
-            if (person is null)
-            {
-                return;
-            }
-
-            _personService.UpdatePersonAsync(person.ToBusinessObject());
+            State.People.Remove(SelectedPerson);
+            return Task.CompletedTask;
         }
     }
 }

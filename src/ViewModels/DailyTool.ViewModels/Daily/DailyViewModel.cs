@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DailyTool.BusinessLogic.Daily;
 using DailyTool.BusinessLogic.Daily.Abstractions;
 using DailyTool.BusinessLogic.System;
 using DailyTool.ViewModels.Abstractions;
@@ -10,57 +9,44 @@ namespace DailyTool.ViewModels.Daily
 {
     public class DailyViewModel : ObservableObject, INavigationTarget, ILoadDataAsync, IDisposable
     {
-        private readonly IParticipantService _participantService;
-        private readonly IMeetingInfoService _meetingInfoService;
-        private readonly IDailyService _dailyService;
+        private readonly IParticipantService<ParticipantViewModel> _participantService;
         private readonly INavigationService _navigationService;
         private readonly ITimeStampProvider _timeStampProvider;
         private readonly IMainThreadInvoker _mainThreadInvoker;
 
         private Timer? _timer;
-        private DailyState _state = new DailyState();
-        private Uri? _sprintBoardUri;
 
         public DailyViewModel(
-            DailyState state,
-            IParticipantService participantService,
-            IMeetingInfoService meetingInfoService,
-            IDailyService dailyService,
+            IMeetingInfoState meetingInfoState,
+            IParticipantState participantState,
+            IParticipantService<ParticipantViewModel> participantService,
             INavigationService navigationService,
             ITimeStampProvider timeStampProvider,
             IMainThreadInvoker mainThreadInvoker)
         {
-            State = state ?? throw new ArgumentNullException(nameof(state));
+            MeetingInfoState = meetingInfoState ?? throw new ArgumentNullException(nameof(meetingInfoState));
+            ParticipantState = participantState ?? throw new ArgumentNullException(nameof(participantState));
             _participantService = participantService ?? throw new ArgumentNullException(nameof(participantService));
-            _meetingInfoService = meetingInfoService ?? throw new ArgumentNullException(nameof(meetingInfoService));
-            _dailyService = dailyService ?? throw new ArgumentNullException(nameof(dailyService));
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
             _timeStampProvider = timeStampProvider ?? throw new ArgumentNullException(nameof(timeStampProvider));
             _mainThreadInvoker = mainThreadInvoker ?? throw new ArgumentNullException(nameof(mainThreadInvoker));
 
             NavigateBackCommand = new AsyncRelayCommand(NavigateBackAsync);
-            NextSpeakerCommand = new AsyncRelayCommand(SetNextSpeakerAsync);
+            PreviousSpeakerCommand = new AsyncRelayCommand(SetPreviousParticipantAsync);
+            NextSpeakerCommand = new AsyncRelayCommand(SetNextParticipantAsync);
         }
 
         public AsyncRelayCommand NavigateBackCommand { get; }
 
+        public AsyncRelayCommand PreviousSpeakerCommand { get; }
+
         public AsyncRelayCommand NextSpeakerCommand { get; }
 
-        public DailyState State
-        {
-            get => _state;
-            set => SetProperty(ref _state, value);
-        }
+        public IMeetingInfoState MeetingInfoState { get; }
 
-        public Uri? SprintBoardUri
-        {
-            get => _sprintBoardUri;
-            private set => SetProperty(ref _sprintBoardUri, value);
-        }
+        public IParticipantState ParticipantState { get; }
 
         public string Time => _timeStampProvider.CurrentClock.ToString(@"hh\:mm\:ss");
-
-        public double Progress => _dailyService.CalculateMeetingPercentage(State.MeetingInfo);
 
         public void Dispose()
         {
@@ -69,42 +55,35 @@ namespace DailyTool.ViewModels.Daily
 
         public async Task LoadDataAsync()
         {
-            await _meetingInfoService.LoadAsync(State);
-            await _participantService.LoadParticipantsForMeetingAsync(State.MeetingInfo, State);
-            SprintBoardUri = new Uri(State.MeetingInfo.SprintBoardUri);
+            await ParticipantState.LoadDataAsync();
+            await MeetingInfoState.LoadDataAsync();
 
             _timer = new Timer(OnTimerElapsed);
             _timer.Change(0, 100);
         }
 
         public Task OnNavigatedToAsync(NavigationMode navigationMode)
-        {
-            return Task.CompletedTask;
-        }
+         => Task.CompletedTask;
 
         public Task<bool> OnNavigatingFromAsync(NavigationMode navigationMode)
-        {
-            return Task.FromResult(true);
-        }
+         => Task.FromResult(true);
 
         private void OnTimerElapsed(object? state)
         {
             _mainThreadInvoker.InvokeAsync(() =>
             {
                 OnPropertyChanged(nameof(Time));
-                OnPropertyChanged(nameof(Progress));
-                _dailyService.RefreshParticipantsAsync(State);
+                _participantService.RefreshParticipantsAsync(ParticipantState.Participants);
             });
         }
 
-        private Task SetNextSpeakerAsync()
-        {
-            return _dailyService.SetNextParticipantAsync(State);
-        }
-
         private Task NavigateBackAsync()
-        {
-            return _navigationService.GoBackAsync();
-        }
+            => _navigationService.GoBackAsync();
+
+        private Task SetPreviousParticipantAsync()
+            => _participantService.SetPreviousParticipantAsync(ParticipantState.Participants);
+
+        private Task SetNextParticipantAsync()
+            => _participantService.SetNextParticipantAsync(ParticipantState.Participants);
     }
 }

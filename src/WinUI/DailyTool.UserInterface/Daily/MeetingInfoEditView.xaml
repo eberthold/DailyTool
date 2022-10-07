@@ -17,12 +17,12 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <TimePicker Header="TODO: Start" SelectedTime="{Binding StartTime, Mode=TwoWay}" />
-            <TimePicker Header="TODO: Ende" SelectedTime="{Binding EndTime, Mode=TwoWay}" />
+            <TimePicker Header="TODO: Start" SelectedTime="{Binding State.StartTime, Mode=TwoWay}" />
+            <TimePicker Header="TODO: Ende" SelectedTime="{Binding State.EndTime, Mode=TwoWay}" />
         </StackPanel>
 
         <TextBox Grid.Row="2"
                  Header="TODO: Sprint Board URL"
-                 Text="{Binding SprintBoardUri, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                 Text="{Binding State.SprintBoardUri, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
     </Grid>
 </UserControl>

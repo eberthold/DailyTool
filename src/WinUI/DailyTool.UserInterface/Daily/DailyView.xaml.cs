@@ -1,5 +1,6 @@
 ﻿using DailyTool.ViewModels.Daily;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
 
 namespace DailyTool.UserInterface.Daily
 {
@@ -13,7 +14,7 @@ namespace DailyTool.UserInterface.Daily
             InitializeComponent();
         }
 
-        private void ItemsControl_Tapped(object sender, Microsoft.UI.Xaml.Input.TappedRoutedEventArgs e)
+        private void ParticipantsTapped(object sender, TappedRoutedEventArgs e)
         {
             NextParticipant();
         }
@@ -29,9 +30,20 @@ namespace DailyTool.UserInterface.Daily
             vm.NextSpeakerCommand.Execute(null);
         }
 
-        private void Grid_DoubleTapped(object sender, Microsoft.UI.Xaml.Input.DoubleTappedRoutedEventArgs e)
+        private void ParticipantsDoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
             NextParticipant();
+        }
+
+        private void ParticipantsRightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            var vm = DataContext as DailyViewModel;
+            if (vm is null)
+            {
+                return;
+            }
+
+            vm.PreviousSpeakerCommand.Execute(null);
         }
     }
 }

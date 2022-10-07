@@ -44,16 +44,17 @@ namespace DailyTool.Packaged.Entry
             services.AddTransient<InitializationViewModel>();
             services.AddTransient<DailyViewModel>();
             services.AddTransient<AddPersonViewModel>();
-            services.AddTransient<IMeetingInfoEditViewModel, MeetingInfoEditViewModel>();
-            services.AddTransient<IPeopleEditViewModel, PeopleEditViewModel>();
+            services.AddTransient<MeetingInfoEditViewModel>();
+            services.AddTransient<PeopleEditViewModel>();
         }
 
         private static void RegisterServices(this IServiceCollection services)
         {
-            services.AddSingleton<IDailyService, DailyService>();
             services.AddSingleton<IPersonService, PersonService>();
-            services.AddSingleton<IParticipantService, ParticipantService>();
+            services.AddSingleton<IParticipantService<ParticipantViewModel>, ParticipantService<ParticipantViewModel>>();
             services.AddSingleton<IMeetingInfoService, MeetingInfoService>();
+
+            services.AddSingleton<IParticipantFactory<ParticipantViewModel>, ParticipantFactory>();
         }
 
         private static void RegisterRepositories(this IServiceCollection services)
@@ -62,12 +63,13 @@ namespace DailyTool.Packaged.Entry
             services.AddSingleton<IMeetingInfoRepository, MeetingInfoRepository>();
             services.AddSingleton<IStorageRepository<MeetingInfoStorage>, StorageRepository<MeetingInfoStorage>>();
             services.AddSingleton<IStorageRepository<List<PersonStorage>>, StorageRepository<List<PersonStorage>>>();
-            services.AddSingleton<IParticipantRepository, ParticipantRepository>();
         }
 
         private static void RegisterStates(this IServiceCollection services)
         {
-            services.AddSingleton<DailyState>();
+            services.AddSingleton<IMeetingInfoState, MeetingInfoState>();
+            services.AddSingleton<IPeopleState, PeopleState>();
+            services.AddSingleton<IParticipantState, ParticipantState>();
         }
 
         private static void RegisterFrameworks(this IServiceCollection services)

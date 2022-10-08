@@ -1,18 +1,17 @@
 ﻿namespace DailyTool.BusinessLogic.Daily.Abstractions
 {
-    public interface IParticipantService<T>
-        where T : IParticipant
+    public interface IParticipantService
     {
-        Task<IReadOnlyCollection<T>> GetAllAsync();
+        Task<IReadOnlyCollection<Participant>> GetAllAsync();
 
-        Task RefreshParticipantsAsync(IReadOnlyCollection<T> participants);
+        Task RefreshParticipantsAsync(IReadOnlyCollection<Participant> participants);
 
-        void ShuffleParticipantsIndex(IReadOnlyCollection<T> participants);
+        void ShuffleParticipantsIndex(IReadOnlyCollection<Participant> participants);
 
-        void CalculateAllocatedTimeSlots(IReadOnlyCollection<T> participants, MeetingInfo meetingInfo);
+        void CalculateAllocatedTimeSlots(IReadOnlyCollection<Participant> participants, MeetingInfo meetingInfo);
 
-        Task SetPreviousParticipantAsync(IReadOnlyCollection<T> participants);
+        Task SetPreviousParticipantAsync(IReadOnlyCollection<Participant> participants);
 
-        Task SetNextParticipantAsync(IReadOnlyCollection<T> participants);
+        Task SetNextParticipantAsync(IReadOnlyCollection<Participant> participants);
     }
 }

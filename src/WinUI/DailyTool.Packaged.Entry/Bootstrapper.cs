@@ -51,10 +51,8 @@ namespace DailyTool.Packaged.Entry
         private static void RegisterServices(this IServiceCollection services)
         {
             services.AddSingleton<IPersonService, PersonService>();
-            services.AddSingleton<IParticipantService<ParticipantViewModel>, ParticipantService<ParticipantViewModel>>();
             services.AddSingleton<IMeetingInfoService, MeetingInfoService>();
-
-            services.AddSingleton<IParticipantFactory<ParticipantViewModel>, ParticipantFactory>();
+            services.AddSingleton<IParticipantService, ParticipantService>();
         }
 
         private static void RegisterRepositories(this IServiceCollection services)

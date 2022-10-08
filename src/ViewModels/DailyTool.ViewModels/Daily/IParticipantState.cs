@@ -7,5 +7,11 @@ namespace DailyTool.ViewModels.Daily
     public interface IParticipantState : INotifyPropertyChanged, ILoadDataAsync
     {
         ObservableCollection<ParticipantViewModel> Participants { get; }
+
+        Task Refresh();
+
+        Task SetNextParticipant();
+
+        Task SetPreviousParticipant();
     }
 }

@@ -1,7 +1,10 @@
 ﻿using DailyTool.ViewModels.Initialization;
 using DailyTool.ViewModels.Navigation;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI;
+using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
+using System;
 
 namespace DailyTool.Packaged.Entry
 {

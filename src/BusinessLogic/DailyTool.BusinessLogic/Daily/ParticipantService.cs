@@ -3,30 +3,34 @@ using DailyTool.BusinessLogic.System;
 
 namespace DailyTool.BusinessLogic.Daily
 {
-    public class ParticipantService<T> : IParticipantService<T>
-        where T : IParticipant
+    public class ParticipantService : IParticipantService
     {
         private readonly IPersonRepository _repository;
-        private readonly IParticipantFactory<T> _participantFactory;
         private readonly ITimeStampProvider _timeStampProvider;
 
         public ParticipantService(
             IPersonRepository repository,
-            IParticipantFactory<T> participantFactory,
             ITimeStampProvider timeStampProvider)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
-            _participantFactory = participantFactory ?? throw new ArgumentNullException(nameof(participantFactory));
             _timeStampProvider = timeStampProvider ?? throw new ArgumentNullException(nameof(timeStampProvider));
         }
 
-        public async Task<IReadOnlyCollection<T>> GetAllAsync()
+        public async Task<IReadOnlyCollection<Participant>> GetAllAsync()
         {
             var persons = await _repository.GetAllAsync();
-            return persons.Select(_participantFactory.Create).ToList();
+
+            return persons
+                .Select(person =>
+                    new Participant
+                    {
+                        Id = person.Id,
+                        Name = person.Name
+                    })
+                .ToList();
         }
 
-        public void ShuffleParticipantsIndex(IReadOnlyCollection<T> participants)
+        public void ShuffleParticipantsIndex(IReadOnlyCollection<Participant> participants)
         {
             var rand = new Random();
             var positions = new HashSet<int>();
@@ -47,7 +51,7 @@ namespace DailyTool.BusinessLogic.Daily
             }
         }
 
-        public void CalculateAllocatedTimeSlots(IReadOnlyCollection<T> participants, MeetingInfo meetingInfo)
+        public void CalculateAllocatedTimeSlots(IReadOnlyCollection<Participant> participants, MeetingInfo meetingInfo)
         {
             var averageTalkTime = CalculateAverageTalkDuration(meetingInfo, participants);
             for (var i = 0; i < participants.Count; i++)
@@ -58,14 +62,14 @@ namespace DailyTool.BusinessLogic.Daily
             }
         }
 
-        private TimeSpan CalculateAverageTalkDuration(MeetingInfo meetingInfo, IReadOnlyCollection<T> participants)
+        private TimeSpan CalculateAverageTalkDuration(MeetingInfo meetingInfo, IReadOnlyCollection<Participant> participants)
         {
             var averageTalkTime = meetingInfo.MeetingDuration / participants.Count;
 
             return averageTalkTime;
         }
 
-        public Task RefreshParticipantsAsync(IReadOnlyCollection<T> participants)
+        public Task RefreshParticipantsAsync(IReadOnlyCollection<Participant> participants)
         {
             foreach (var participant in participants)
             {
@@ -75,7 +79,7 @@ namespace DailyTool.BusinessLogic.Daily
             return Task.CompletedTask;
         }
 
-        private double CalculateAllocatedProgressForParticipant(T participant)
+        private double CalculateAllocatedProgressForParticipant(Participant participant)
         {
             var elapsed = _timeStampProvider.CurrentClock - participant.AllocatedTalkStart;
             var percentage = elapsed.TotalMilliseconds * 100d / participant.AllocatedTalkDuration.TotalMilliseconds;
@@ -84,7 +88,7 @@ namespace DailyTool.BusinessLogic.Daily
             return percentage;
         }
 
-        public Task SetPreviousParticipantAsync(IReadOnlyCollection<T> participants)
+        public Task SetPreviousParticipantAsync(IReadOnlyCollection<Participant> participants)
         {
             var deactivedParticipant = participants.FirstOrDefault(x => x.ParticipantMode == ParticipantMode.Active);
             if (deactivedParticipant is not null)
@@ -101,7 +105,7 @@ namespace DailyTool.BusinessLogic.Daily
             return Task.CompletedTask;
         }
 
-        public Task SetNextParticipantAsync(IReadOnlyCollection<T> participants)
+        public Task SetNextParticipantAsync(IReadOnlyCollection<Participant> participants)
         {
             var doneParticipant = participants.FirstOrDefault(x => x.ParticipantMode == ParticipantMode.Active);
             if (doneParticipant is not null)

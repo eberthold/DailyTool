@@ -71,5 +71,28 @@ namespace DailyTool.ViewModels.Daily
             get => _index;
             set => SetProperty(ref _index, value);
         }
+
+        public static ParticipantViewModel FromParticipant(Participant participant)
+        {
+            return new ParticipantViewModel
+            {
+                Id = participant.Id,
+                Name = participant.Name,
+                ParticipantMode = participant.ParticipantMode,
+                AllocatedTalkStart = participant.AllocatedTalkStart,
+                AllocatedTalkDuration = participant.AllocatedTalkDuration,
+                AllocatedTalkProgress = participant.AllocatedTalkProgress,
+                Index = participant.Index,
+            };
+        }
+
+        public void MergeFromParticipant(Participant participant)
+        {
+            ParticipantMode = participant.ParticipantMode;
+            AllocatedTalkStart = participant.AllocatedTalkStart;
+            AllocatedTalkDuration = participant.AllocatedTalkDuration;
+            AllocatedTalkProgress = participant.AllocatedTalkProgress;
+            Index = participant.Index;
+        }
     }
 }

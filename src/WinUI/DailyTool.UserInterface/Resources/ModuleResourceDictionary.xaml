@@ -76,18 +76,20 @@
                            FontSize="26"
                            Foreground="{ThemeResource SystemAccentColor}"
                            Style="{ThemeResource BodyStrongTextBlockStyle}"
+                           FontWeight="Bold"
                            Text="{Binding Name}"
                            TextWrapping="NoWrap" />
                 <VisualStateManager.VisualStateGroups>
                     <VisualStateGroup x:Name="States">
                         <VisualState x:Name="Default">
                             <VisualState.StateTriggers>
-                                <StateTrigger IsActive="{Binding IsActiveSpeaker}" />
+                                <StateTrigger IsActive="{Binding IsActive}" />
                             </VisualState.StateTriggers>
                         </VisualState>
                         <VisualState x:Name="IsDone">
                             <VisualState.Setters>
                                 <Setter Target="PART_Participant.Foreground" Value="{ThemeResource TextFillColorSecondaryBrush}" />
+                                <Setter Target="PART_Participant.FontWeight" Value="Medium" />
                             </VisualState.Setters>
                             <VisualState.StateTriggers>
                                 <StateTrigger IsActive="{Binding IsDone}" />
@@ -96,6 +98,7 @@
                         <VisualState x:Name="IsQueued">
                             <VisualState.Setters>
                                 <Setter Target="PART_Participant.Foreground" Value="{ThemeResource TextFillColorSecondaryBrush}" />
+                                <Setter Target="PART_Participant.FontWeight" Value="Medium" />
                             </VisualState.Setters>
                             <VisualState.StateTriggers>
                                 <StateTrigger IsActive="{Binding IsQueued}" />

@@ -9,7 +9,7 @@ namespace DailyTool.ViewModels.Daily
 {
     public class DailyViewModel : ObservableObject, INavigationTarget, ILoadDataAsync, IDisposable
     {
-        private readonly IParticipantService<ParticipantViewModel> _participantService;
+        private readonly IParticipantService _participantService;
         private readonly INavigationService _navigationService;
         private readonly ITimeStampProvider _timeStampProvider;
         private readonly IMainThreadInvoker _mainThreadInvoker;
@@ -19,7 +19,7 @@ namespace DailyTool.ViewModels.Daily
         public DailyViewModel(
             IMeetingInfoState meetingInfoState,
             IParticipantState participantState,
-            IParticipantService<ParticipantViewModel> participantService,
+            IParticipantService participantService,
             INavigationService navigationService,
             ITimeStampProvider timeStampProvider,
             IMainThreadInvoker mainThreadInvoker)
@@ -73,7 +73,7 @@ namespace DailyTool.ViewModels.Daily
             _mainThreadInvoker.InvokeAsync(() =>
             {
                 OnPropertyChanged(nameof(Time));
-                _participantService.RefreshParticipantsAsync(ParticipantState.Participants);
+                ParticipantState.Refresh();
             });
         }
 
@@ -81,9 +81,9 @@ namespace DailyTool.ViewModels.Daily
             => _navigationService.GoBackAsync();
 
         private Task SetPreviousParticipantAsync()
-            => _participantService.SetPreviousParticipantAsync(ParticipantState.Participants);
+            => ParticipantState.SetPreviousParticipant();
 
         private Task SetNextParticipantAsync()
-            => _participantService.SetNextParticipantAsync(ParticipantState.Participants);
+            => ParticipantState.SetNextParticipant();
     }
 }

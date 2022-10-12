@@ -1,10 +1,8 @@
-﻿using DailyTool.ViewModels.Initialization;
+﻿using DailyTool.UserInterface;
+using DailyTool.ViewModels.Initialization;
 using DailyTool.ViewModels.Navigation;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.UI;
-using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
-using System;
 
 namespace DailyTool.Packaged.Entry
 {
@@ -36,9 +34,11 @@ namespace DailyTool.Packaged.Entry
                 ValidateOnBuild = true
             };
             var serviceProvider = services.BuildServiceProvider(options);
+            UIHelper.ServiceProvider = serviceProvider;
 
             var window = serviceProvider.GetRequiredService<MainWindow>();
             window.Activate();
+            UIHelper.CurrentWindow = window;
 
             var navigationService = serviceProvider.GetRequiredService<INavigationService>();
             navigationService.NavigateAsync<InitializationViewModel>();

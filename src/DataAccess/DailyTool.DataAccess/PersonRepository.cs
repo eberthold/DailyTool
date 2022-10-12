@@ -3,14 +3,17 @@ using DailyTool.BusinessLogic.Daily.Abstractions;
 
 namespace DailyTool.DataAccess
 {
-    public class PersonRepository : IPersonRepository
+    public class PersonRepository : IPersonRepository, IImportable, IExportable
     {
         private readonly IStorageRepository<List<PersonStorage>> _storageRepository;
+        private readonly IFileCopy _fileCopy;
 
         public PersonRepository(
-            IStorageRepository<List<PersonStorage>> storageRepository)
+            IStorageRepository<List<PersonStorage>> storageRepository,
+            IFileCopy fileCopy)
         {
             _storageRepository = storageRepository ?? throw new ArgumentNullException(nameof(storageRepository));
+            _fileCopy = fileCopy ?? throw new ArgumentNullException(nameof(fileCopy));
         }
 
         public async Task<int> CreatePersonAsync(Person person)
@@ -54,6 +57,16 @@ namespace DailyTool.DataAccess
                 .Where(x => x.IsParticipating)
                 .Select(ToBusinessObject)
                 .ToList();
+        }
+
+        public Task ImportAsync(string path)
+        {
+            return _fileCopy.CopyFileAsync(path, Constants.StoragePaths[typeof(List<PersonStorage>)]);
+        }
+
+        public Task ExportAsync(string path)
+        {
+            return _fileCopy.CopyFileAsync(Constants.StoragePaths[typeof(List<PersonStorage>)], path);
         }
 
         public async Task UpdatePersonAsync(Person person)

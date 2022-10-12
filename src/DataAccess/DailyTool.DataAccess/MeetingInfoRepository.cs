@@ -3,14 +3,17 @@ using DailyTool.BusinessLogic.Daily.Abstractions;
 
 namespace DailyTool.DataAccess
 {
-    public class MeetingInfoRepository : IMeetingInfoRepository
+    public class MeetingInfoRepository : IMeetingInfoRepository, IImportable, IExportable
     {
         private readonly IStorageRepository<MeetingInfoStorage> _storageRepository;
+        private readonly IFileCopy _fileCopy;
 
         public MeetingInfoRepository(
-            IStorageRepository<MeetingInfoStorage> storageRepository)
+            IStorageRepository<MeetingInfoStorage> storageRepository,
+            IFileCopy fileCopy)
         {
             _storageRepository = storageRepository ?? throw new ArgumentNullException(nameof(storageRepository));
+            _fileCopy = fileCopy ?? throw new ArgumentNullException(nameof(fileCopy));
         }
 
         public async Task<MeetingInfo> GetAsync()
@@ -27,6 +30,16 @@ namespace DailyTool.DataAccess
             storage.SprintBoardUri = meetingInfo.SprintBoardUri;
 
             await _storageRepository.SaveStorageAsync(storage);
+        }
+
+        public Task ImportAsync(string path)
+        {
+            return _fileCopy.CopyFileAsync(path, Constants.StoragePaths[typeof(MeetingInfoStorage)]);
+        }
+
+        public Task ExportAsync(string path)
+        {
+            return _fileCopy.CopyFileAsync(Constants.StoragePaths[typeof(MeetingInfoStorage)], path);
         }
 
         private MeetingInfo ToBusinessObject(MeetingInfoStorage storage)

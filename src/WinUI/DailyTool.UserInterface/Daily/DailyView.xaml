@@ -33,22 +33,33 @@
                        TextWrapping="NoWrap" />
         </StackPanel>
 
-        <Border x:Name="PART_Canvas"
-                Grid.Row="1"
-                Margin="0 12 0 0"
-                Background="Transparent"
-                DoubleTapped="ParticipantsDoubleTapped"
-                RightTapped="ParticipantsRightTapped"
-                Tapped="ParticipantsTapped">
-            <ListView x:Name="PART_Participants"
-                      VerticalAlignment="Top"
-                      IsHitTestVisible="False"
-                      ItemContainerStyle="{StaticResource ParticipantItemContainerStyle}"
-                      ItemTemplate="{StaticResource ParticipantTemplate}"
-                      ItemsSource="{Binding ParticipantState.Participants}"
-                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                      SelectionMode="None" />
-        </Border>
+        <Grid Grid.Row="1" Margin="0 12 0 0">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <Border x:Name="PART_Canvas"
+                    Background="Transparent"
+                    DoubleTapped="ParticipantsDoubleTapped"
+                    RightTapped="ParticipantsRightTapped"
+                    Tapped="ParticipantsTapped">
+                <ListView x:Name="PART_Participants"
+                          VerticalAlignment="Top"
+                          IsHitTestVisible="False"
+                          ItemContainerStyle="{StaticResource ParticipantItemContainerStyle}"
+                          ItemTemplate="{StaticResource ParticipantTemplate}"
+                          ItemsSource="{Binding ParticipantState.Participants}"
+                          ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                          SelectionMode="None" />
+            </Border>
+
+            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <Button Command="{Binding ShuffleParticipantsCommand}">
+                    <SymbolIcon Symbol="Shuffle" />
+                </Button>
+            </StackPanel>
+        </Grid>
 
         <TextBlock Grid.Row="2"
                    Margin="0 0 12 0"

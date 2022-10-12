@@ -89,7 +89,7 @@ namespace DailyTool.ViewModels.Daily
             _participantService.ShuffleParticipantsIndex(_participantSource.Values);
 
             await Refresh();
-            foreach (var participant in Participants.ToList())
+            foreach (var participant in Participants.OrderBy(x => x.Index).ToList())
             {
                 var currentIndex = Participants.IndexOf(participant);
                 Participants.Move(currentIndex, participant.Index);

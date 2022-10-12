@@ -13,5 +13,7 @@ namespace DailyTool.ViewModels.Daily
         Task SetNextParticipant();
 
         Task SetPreviousParticipant();
+
+        Task ShuffleParticipants();
     }
 }

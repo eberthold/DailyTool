@@ -34,6 +34,7 @@ namespace DailyTool.ViewModels.Daily
             NavigateBackCommand = new AsyncRelayCommand(NavigateBackAsync);
             PreviousSpeakerCommand = new AsyncRelayCommand(SetPreviousParticipantAsync);
             NextSpeakerCommand = new AsyncRelayCommand(SetNextParticipantAsync);
+            ShuffleParticipantsCommand = new AsyncRelayCommand(ShuffleParticipantsAsync);
         }
 
         public AsyncRelayCommand NavigateBackCommand { get; }
@@ -41,6 +42,8 @@ namespace DailyTool.ViewModels.Daily
         public AsyncRelayCommand PreviousSpeakerCommand { get; }
 
         public AsyncRelayCommand NextSpeakerCommand { get; }
+
+        public AsyncRelayCommand ShuffleParticipantsCommand { get; }
 
         public IMeetingInfoState MeetingInfoState { get; }
 
@@ -85,5 +88,8 @@ namespace DailyTool.ViewModels.Daily
 
         private Task SetNextParticipantAsync()
             => ParticipantState.SetNextParticipant();
+
+        private Task ShuffleParticipantsAsync()
+            => ParticipantState.ShuffleParticipants();
     }
 }

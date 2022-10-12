@@ -70,12 +70,15 @@ namespace DailyTool.ViewModels.Daily
             var people = await _personService.GetAllAsync();
             foreach (var person in people)
             {
-                People.Add(new PersonViewModel
+                var viewModel = new PersonViewModel
                 {
                     Id = person.Id,
                     Name = person.Name,
                     IsParticipating = person.IsParticipating
-                });
+                };
+
+                viewModel.PropertyChanged += OnPersonChanged;
+                People.Add(viewModel);
             }
 
             People.CollectionChanged -= OnPeopleChanged;

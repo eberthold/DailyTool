@@ -61,6 +61,7 @@ namespace DailyTool.Packaged.Entry
             services.AddSingleton<IMeetingInfoRepository, MeetingInfoRepository>();
             services.AddSingleton<IStorageRepository<MeetingInfoStorage>, StorageRepository<MeetingInfoStorage>>();
             services.AddSingleton<IStorageRepository<List<PersonStorage>>, StorageRepository<List<PersonStorage>>>();
+            services.AddSingleton<IParticipantRepository, ParticpantRepository>();
 
             services.AddSingleton<IFileCopy, FileCopy>();
         }

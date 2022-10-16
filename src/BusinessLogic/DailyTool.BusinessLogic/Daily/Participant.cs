@@ -2,9 +2,9 @@
 {
     public class Participant
     {
-        public int Id { get; internal init; }
+        public int Id { get; init; }
 
-        public string Name { get; internal init; } = string.Empty;
+        public string Name { get; init; } = string.Empty;
 
         public ParticipantMode ParticipantMode { get; internal set; } = ParticipantMode.Queued;
 

@@ -5,29 +5,20 @@ namespace DailyTool.BusinessLogic.Daily
 {
     public class ParticipantService : IParticipantService
     {
-        private readonly IPersonRepository _repository;
+        private readonly IParticipantRepository _repository;
         private readonly ITimeStampProvider _timeStampProvider;
 
         public ParticipantService(
-            IPersonRepository repository,
+            IParticipantRepository repository,
             ITimeStampProvider timeStampProvider)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _timeStampProvider = timeStampProvider ?? throw new ArgumentNullException(nameof(timeStampProvider));
         }
 
-        public async Task<IReadOnlyCollection<Participant>> GetAllAsync()
+        public Task<IReadOnlyCollection<Participant>> GetAllAsync()
         {
-            var persons = await _repository.GetAllAsync();
-
-            return persons
-                .Select(person =>
-                    new Participant
-                    {
-                        Id = person.Id,
-                        Name = person.Name
-                    })
-                .ToList();
+            return _repository.GetAllAsync();
         }
 
         public void ShuffleParticipantsIndex(IReadOnlyCollection<Participant> participants)

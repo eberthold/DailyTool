@@ -22,6 +22,8 @@ dotnet_diagnostic.SA1615.severity = silent
 dotnet_diagnostic.SA1611.severity = silent
 # SA1202: Elements should be ordered by access
 dotnet_diagnostic.SA1202.severity = none
+# SA1604: Element documentation should have summary
+dotnet_diagnostic.SA1604.severity = none
 
 # IDE0003: Remove qualification
 dotnet_diagnostic.IDE0003.severity = warning

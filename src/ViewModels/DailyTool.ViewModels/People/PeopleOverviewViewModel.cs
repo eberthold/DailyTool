@@ -1,19 +1,16 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DailyTool.BusinessLogic.Daily;
 using DailyTool.BusinessLogic.Daily.Abstractions;
 using DailyTool.Infrastructure.Abstractions;
 using DailyTool.ViewModels.Navigation;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
 
 namespace DailyTool.ViewModels.People
 {
     public class PeopleOverviewViewModel : ObservableObject, INavigationTarget
     {
         private readonly IPersonService _personService;
-        private readonly IMapper _mapper;
+        private readonly IPersonViewModelFactory _personViewModelFactory;
         private readonly INavigationService _navigationService;
 
         private AddPersonViewModel? _addPersonViewModel;
@@ -22,11 +19,11 @@ namespace DailyTool.ViewModels.People
 
         public PeopleOverviewViewModel(
             IPersonService personService,
-            IMapper mapper,
+            IPersonViewModelFactory personViewModelFactory,
             INavigationService navigationService)
         {
             _personService = personService ?? throw new ArgumentNullException(nameof(personService));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _personViewModelFactory = personViewModelFactory ?? throw new ArgumentNullException(nameof(personViewModelFactory));
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
 
             AddPersonCommand = new AsyncRelayCommand(AddPersonAsync, CanAddPerson);
@@ -76,51 +73,14 @@ namespace DailyTool.ViewModels.People
             get => _people;
             set
             {
-                foreach (var person in _people)
-                {
-                    person.PropertyChanged -= OnPersonChanged;
-                }
-
-                _people.CollectionChanged -= PeopleCollectionChanged;
                 SetProperty(ref _people, value);
-                value.CollectionChanged += PeopleCollectionChanged;
-
-                foreach (var person in value)
-                {
-                    person.PropertyChanged += OnPersonChanged;
-                }
             }
-        }
-
-        private void PeopleCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-        {
-            foreach (var person in e.OldItems?.OfType<PersonViewModel>() ?? Enumerable.Empty<PersonViewModel>())
-            {
-                person.PropertyChanged -= OnPersonChanged;
-            }
-
-            foreach (var person in e.NewItems?.OfType<PersonViewModel>() ?? Enumerable.Empty<PersonViewModel>())
-            {
-                person.PropertyChanged += OnPersonChanged;
-            }
-        }
-
-        private void OnPersonChanged(object? sender, PropertyChangedEventArgs e)
-        {
-            var person = sender as PersonViewModel;
-            if (person is null)
-            {
-                return;
-            }
-
-            var mappedPerson = _mapper.Map<Person>(person);
-            _personService.UpdatePersonAsync(mappedPerson);
         }
 
         public async Task LoadDataAsync()
         {
             var people = await _personService.GetAllAsync().ConfigureAwait(true);
-            var mappedPeople = people.Select(_mapper.Map<PersonViewModel>);
+            var mappedPeople = people.Select(_personViewModelFactory.Create);
             People = new ObservableCollection<PersonViewModel>(mappedPeople);
         }
 

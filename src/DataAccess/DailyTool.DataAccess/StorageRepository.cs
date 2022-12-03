@@ -30,6 +30,11 @@ namespace DailyTool.DataAccess
             }
 
             var content = await _fileSystem.File.ReadAllTextAsync(_storagePath).ConfigureAwait(false);
+            if (string.IsNullOrWhiteSpace(content))
+            {
+                return new T();
+            }
+
             return JsonSerializer.Deserialize<T>(content) ?? new();
         }
 

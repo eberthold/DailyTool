@@ -8,12 +8,14 @@ using DailyTool.DataAccess.People;
 using DailyTool.Infrastructure;
 using DailyTool.Infrastructure.Abstractions;
 using DailyTool.Packaged.Entry.Navigation;
+using DailyTool.Packaged.Entry.Notifications;
 using DailyTool.Packaged.Entry.Threading;
 using DailyTool.ViewModels.Abstractions;
 using DailyTool.ViewModels.Daily;
 using DailyTool.ViewModels.Initialization;
 using DailyTool.ViewModels.MeetingInfos;
 using DailyTool.ViewModels.Navigation;
+using DailyTool.ViewModels.Notifications;
 using DailyTool.ViewModels.People;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -59,6 +61,9 @@ namespace DailyTool.Packaged.Entry
             services.AddTransient<AddPersonViewModel>();
             services.AddTransient<MeetingInfoEditViewModel>();
             services.AddTransient<PeopleOverviewViewModel>();
+
+            services.AddSingleton<IPersonViewModelFactory, PersonViewModelFactory>();
+            services.AddTransient<MainWindowViewModel>();
         }
 
         private static void RegisterServices(this IServiceCollection services)
@@ -67,6 +72,8 @@ namespace DailyTool.Packaged.Entry
             services.AddSingleton<IPersonService, PersonService>();
             services.AddSingleton<IMeetingInfoService, MeetingInfoService>();
             services.AddSingleton<IParticipantService, ParticipantService>();
+
+            services.AddSingleton<INotificationService, NotificationService>();
         }
 
         private static void RegisterRepositories(this IServiceCollection services)

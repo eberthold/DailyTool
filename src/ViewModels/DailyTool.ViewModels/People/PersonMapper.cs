@@ -3,18 +3,8 @@ using DailyTool.Infrastructure.Abstractions;
 
 namespace DailyTool.ViewModels.People
 {
-    public class PersonMapper : IMapper<Person, PersonViewModel>, IMapper<PersonViewModel, Person>
+    public class PersonMapper : IMapper<PersonViewModel, Person>, IMerger<Person, PersonViewModel>
     {
-        public PersonViewModel Map(Person source)
-        {
-            return new PersonViewModel
-            {
-                Id = source.Id,
-                IsParticipating = source.IsParticipating,
-                Name = source.Name
-            };
-        }
-
         public Person Map(PersonViewModel source)
         {
             return new Person
@@ -23,6 +13,13 @@ namespace DailyTool.ViewModels.People
                 IsParticipating = source.IsParticipating,
                 Name = source.Name
             };
+        }
+
+        public void Merge(PersonViewModel destination, Person source)
+        {
+            destination.Id = source.Id;
+            destination.IsParticipating = source.IsParticipating;
+            destination.Name = source.Name;
         }
     }
 }

@@ -37,6 +37,8 @@ namespace DailyTool.Packaged.Entry
             UIHelper.ServiceProvider = serviceProvider;
 
             var window = serviceProvider.GetRequiredService<MainWindow>();
+            var windowViewModel = serviceProvider.GetRequiredService<MainWindowViewModel>();
+            window.DataContext = windowViewModel;
             window.Activate();
             UIHelper.CurrentWindow = window;
 

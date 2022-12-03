@@ -16,6 +16,7 @@ namespace DailyTool.Packaged.Entry
     {
         private readonly INavigationMap _navigationMap;
         private readonly IServiceProvider _serviceProvider;
+        private object? _dataContext;
 
         public MainWindow(
             INavigationMap navigationMap,
@@ -24,6 +25,16 @@ namespace DailyTool.Packaged.Entry
             InitializeComponent();
             _navigationMap = navigationMap;
             _serviceProvider = serviceProvider;
+        }
+
+        public object? DataContext
+        {
+            get => _dataContext;
+            set
+            {
+                _dataContext = value;
+                PART_Content.DataContext = value;
+            }
         }
 
         public async Task GoBackAsync()

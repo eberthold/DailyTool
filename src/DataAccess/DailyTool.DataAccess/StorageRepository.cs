@@ -6,7 +6,7 @@ namespace DailyTool.DataAccess
     public class StorageRepository<T> : IStorageRepository<T>
         where T : new()
     {
-        private static readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions
+        private static readonly JsonSerializerOptions SerializerOptions = new JsonSerializerOptions
         {
             WriteIndented = true,
         };
@@ -39,7 +39,7 @@ namespace DailyTool.DataAccess
 
             try
             {
-                var content = JsonSerializer.Serialize(storage, _serializerOptions);
+                var content = JsonSerializer.Serialize(storage, SerializerOptions);
                 await _fileSystem.File.WriteAllTextAsync(_storagePath, content).ConfigureAwait(false);
             }
             finally

@@ -1,5 +1,5 @@
 ﻿using DailyTool.BusinessLogic.Daily;
-using DailyTool.ViewModels.Daily;
+using DailyTool.ViewModels.People;
 
 namespace DailyTool.ViewModels.Extensions
 {

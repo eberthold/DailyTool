@@ -1,7 +1,6 @@
 ﻿using DailyTool.BusinessLogic.Daily.Abstractions;
 using DailyTool.DataAccess;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Threading.Tasks;
@@ -10,9 +9,6 @@ using Windows.Storage.Pickers;
 
 namespace DailyTool.UserInterface.Initialization
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class InitializationView : Page
     {
         private readonly IMeetingInfoRepository? _meetingInfoRepository;

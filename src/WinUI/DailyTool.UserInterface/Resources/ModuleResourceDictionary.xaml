@@ -42,19 +42,7 @@
                           Background="{ThemeResource SystemChromeMediumColor}"
                           BorderBrush="{ThemeResource ListBoxBorderThemeBrush}"
                           CornerRadius="8">
-                        <Border Width="8"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Stretch">
-                            <Border.Background>
-                                <LinearGradientBrush StartPoint="0, 0" EndPoint="0, 1">
-                                    <GradientStop Offset="0" Color="{ThemeResource SystemAccentColor}" />
-                                    <GradientStop Offset="{Binding DataContext.AllocatedTalkProgress, ElementName=PART_Content, Converter={StaticResource PercentageToOffsetConverter}}" Color="{ThemeResource SystemAccentColor}" />
-                                    <GradientStop Offset="{Binding DataContext.AllocatedTalkProgress, ElementName=PART_Content, Converter={StaticResource PercentageToOffsetConverter}}" Color="Transparent" />
-                                    <GradientStop Offset="1" Color="Transparent" />
-                                </LinearGradientBrush>
-                            </Border.Background>
-                        </Border>
-                        <ContentPresenter x:Name="PART_Content" Margin="16 4 4 4" />
+                        <ContentPresenter x:Name="PART_Content" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -71,14 +59,35 @@
 
     <DataTemplate x:Key="ParticipantTemplate">
         <UserControl>
-            <Border>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                
+                <Border Width="8"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Stretch">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0, 0" EndPoint="0, 1">
+                            <GradientStop Offset="0" Color="{ThemeResource SystemAccentColor}" />
+                            <GradientStop Offset="{Binding DataContext.AllocatedProgress, ElementName=PART_Content, Converter={StaticResource PercentageToOffsetConverter}}" Color="{ThemeResource SystemAccentColor}" />
+                            <GradientStop Offset="{Binding DataContext.AllocatedProgress, ElementName=PART_Content, Converter={StaticResource PercentageToOffsetConverter}}" Color="Transparent" />
+                            <GradientStop Offset="1" Color="Transparent" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                </Border>
+
                 <TextBlock x:Name="PART_Participant"
+                           Grid.Column="1"
                            FontSize="26"
+                           Margin="12, 4"
+                           FontWeight="Bold"
                            Foreground="{ThemeResource SystemAccentColor}"
                            Style="{ThemeResource BodyStrongTextBlockStyle}"
-                           FontWeight="Bold"
                            Text="{Binding Name}"
                            TextWrapping="NoWrap" />
+
                 <VisualStateManager.VisualStateGroups>
                     <VisualStateGroup x:Name="States">
                         <VisualState x:Name="Default">
@@ -106,7 +115,7 @@
                         </VisualState>
                     </VisualStateGroup>
                 </VisualStateManager.VisualStateGroups>
-            </Border>
+            </Grid>
         </UserControl>
     </DataTemplate>
 </ResourceDictionary>

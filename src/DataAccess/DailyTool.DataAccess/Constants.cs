@@ -1,4 +1,7 @@
-﻿namespace DailyTool.DataAccess
+﻿using DailyTool.DataAccess.MeetingInfos;
+using DailyTool.DataAccess.People;
+
+namespace DailyTool.DataAccess
 {
     internal static class Constants
     {

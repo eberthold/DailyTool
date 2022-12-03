@@ -1,16 +1,16 @@
 ﻿using DailyTool.BusinessLogic.Daily.Abstractions;
-using DailyTool.BusinessLogic.System;
+using DailyTool.Infrastructure.Abstractions;
 
 namespace DailyTool.BusinessLogic.Daily
 {
     public class MeetingInfoService : IMeetingInfoService
     {
         private readonly IMeetingInfoRepository _repository;
-        private readonly ITimeStampProvider _timeStampProvider;
+        private readonly ITimestampProvider _timeStampProvider;
 
         public MeetingInfoService(
             IMeetingInfoRepository repository,
-            ITimeStampProvider timeStampProvider)
+            ITimestampProvider timeStampProvider)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _timeStampProvider = timeStampProvider ?? throw new ArgumentNullException(nameof(timeStampProvider));
@@ -28,14 +28,14 @@ namespace DailyTool.BusinessLogic.Daily
 
         public double CalculateMeetingPercentage(MeetingInfo meetingInfo)
         {
-            var elapsed = _timeStampProvider.CurrentClock - meetingInfo.MeetingStartTime;
+            var elapsed = _timeStampProvider.CurrentClock - meetingInfo.StartTime;
 
-            if (meetingInfo.MeetingDuration.TotalMilliseconds <= 0)
+            if (meetingInfo.Duration.TotalMilliseconds <= 0)
             {
                 return 100;
             }
 
-            return elapsed.TotalMilliseconds * 100d / meetingInfo.MeetingDuration.TotalMilliseconds;
+            return elapsed.TotalMilliseconds * 100d / meetingInfo.Duration.TotalMilliseconds;
         }
     }
 }

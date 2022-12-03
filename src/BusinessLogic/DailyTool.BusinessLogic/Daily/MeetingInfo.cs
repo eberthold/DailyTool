@@ -1,11 +1,11 @@
 ﻿namespace DailyTool.BusinessLogic.Daily
 {
-    public record MeetingInfo
+    public class MeetingInfo
     {
-        public TimeSpan MeetingDuration { get; init; }
+        public TimeSpan StartTime { get; set; }
 
-        public TimeSpan MeetingStartTime { get; init; }
+        public TimeSpan Duration { get; set; }
 
-        public string SprintBoardUri { get; init; } = string.Empty;
+        public string SprintBoardUri { get; set; } = string.Empty;
     }
 }

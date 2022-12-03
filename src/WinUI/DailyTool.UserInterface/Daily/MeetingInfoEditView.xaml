@@ -4,7 +4,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="using:DailyTool.UserInterface.Daily"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="using:DailyTool.ViewModels.Daily"
+             xmlns:vm="using:DailyTool.ViewModels.MeetingInfos"
              d:DataContext="{d:DesignInstance Type=vm:MeetingInfoEditViewModel,
                                               IsDesignTimeCreatable=False}"
              mc:Ignorable="d">
@@ -17,12 +17,12 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <TimePicker Header="TODO: Start" SelectedTime="{Binding State.StartTime, Mode=TwoWay}" />
-            <TimePicker Header="TODO: Ende" SelectedTime="{Binding State.EndTime, Mode=TwoWay}" />
+            <TimePicker Header="TODO: Start" SelectedTime="{Binding MeetingInfo.StartTime, Mode=TwoWay}" />
+            <TimePicker Header="TODO: Ende" SelectedTime="{Binding MeetingInfo.EndTime, Mode=TwoWay}" />
         </StackPanel>
 
         <TextBox Grid.Row="2"
                  Header="TODO: Sprint Board URL"
-                 Text="{Binding State.SprintBoardUri, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                 Text="{Binding MeetingInfo.SprintBoardUri, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
     </Grid>
 </UserControl>

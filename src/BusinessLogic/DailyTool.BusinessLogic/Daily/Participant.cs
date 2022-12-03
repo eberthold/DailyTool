@@ -6,13 +6,9 @@
 
         public string Name { get; init; } = string.Empty;
 
-        public ParticipantMode ParticipantMode { get; internal set; } = ParticipantMode.Queued;
+        public ParticipantState ParticipantState { get; internal set; } = ParticipantState.Queued;
 
-        public TimeSpan AllocatedTalkStart { get; internal set; }
-
-        public TimeSpan AllocatedTalkDuration { get; internal set; }
-
-        public double AllocatedTalkProgress { get; internal set; }
+        public double AllocatedProgress { get; internal set; }
 
         public int Index { get; internal set; }
 

@@ -2,7 +2,9 @@
 using CommunityToolkit.Mvvm.Input;
 using DailyTool.ViewModels.Abstractions;
 using DailyTool.ViewModels.Daily;
+using DailyTool.ViewModels.MeetingInfos;
 using DailyTool.ViewModels.Navigation;
+using DailyTool.ViewModels.People;
 
 namespace DailyTool.ViewModels.Initialization
 {
@@ -10,7 +12,7 @@ namespace DailyTool.ViewModels.Initialization
     {
         private readonly INavigationService _navigationService;
         private MeetingInfoEditViewModel? _meetingInfoEditViewModel;
-        private PeopleEditViewModel? _peopleEditViewModel;
+        private PeopleOverviewViewModel? _peopleEditViewModel;
 
         public InitializationViewModel(INavigationService navigationService)
         {
@@ -27,7 +29,7 @@ namespace DailyTool.ViewModels.Initialization
             private set => SetProperty(ref _meetingInfoEditViewModel, value);
         }
 
-        public PeopleEditViewModel? PeopleEditViewModel
+        public PeopleOverviewViewModel? PeopleEditViewModel
         {
             get => _peopleEditViewModel;
             private set => SetProperty(ref _peopleEditViewModel, value);
@@ -36,7 +38,7 @@ namespace DailyTool.ViewModels.Initialization
         public async Task LoadDataAsync()
         {
             MeetingInfoEditViewModel = await _navigationService.CreateNavigationTarget<MeetingInfoEditViewModel>();
-            PeopleEditViewModel = await _navigationService.CreateNavigationTarget<PeopleEditViewModel>();
+            PeopleEditViewModel = await _navigationService.CreateNavigationTarget<PeopleOverviewViewModel>();
 
             PeopleEditViewModel.PropertyChanged += (_, __) => RefreshCommands();
 

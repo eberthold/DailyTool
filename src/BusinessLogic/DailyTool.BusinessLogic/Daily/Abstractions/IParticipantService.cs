@@ -4,14 +4,8 @@
     {
         Task<IReadOnlyCollection<Participant>> GetAllAsync();
 
-        Task RefreshParticipantsAsync(IReadOnlyCollection<Participant> participants);
+        Task RefreshParticipantsAsync(IReadOnlyCollection<Participant> participants, MeetingInfo meetingInfo);
 
-        void ShuffleParticipantsIndex(IReadOnlyCollection<Participant> participants);
-
-        void CalculateAllocatedTimeSlots(IReadOnlyCollection<Participant> participants, MeetingInfo meetingInfo);
-
-        Task SetPreviousParticipantAsync(IReadOnlyCollection<Participant> participants);
-
-        Task SetNextParticipantAsync(IReadOnlyCollection<Participant> participants);
+        IReadOnlyCollection<Participant> ShuffleQueuedParticipants(IReadOnlyCollection<Participant> participants);
     }
 }

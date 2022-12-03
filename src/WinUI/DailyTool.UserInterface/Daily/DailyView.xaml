@@ -2,7 +2,6 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:local="using:DailyTool.UserInterface.Daily"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:toolkit="using:CommunityToolkit.WinUI.UI.Controls"
       xmlns:vm="using:DailyTool.ViewModels.Daily"
@@ -35,30 +34,38 @@
 
         <Grid Grid.Row="1" Margin="0 12 0 0">
             <Grid.RowDefinitions>
-                <RowDefinition />
                 <RowDefinition Height="Auto"/>
+                <RowDefinition />
             </Grid.RowDefinitions>
             
             <Border x:Name="PART_Canvas"
-                    Background="Transparent"
-                    DoubleTapped="ParticipantsDoubleTapped"
-                    RightTapped="ParticipantsRightTapped"
-                    Tapped="ParticipantsTapped">
+                    Grid.Row="1"
+                    Background="Transparent">
                 <ListView x:Name="PART_Participants"
                           VerticalAlignment="Top"
                           IsHitTestVisible="False"
                           ItemContainerStyle="{StaticResource ParticipantItemContainerStyle}"
                           ItemTemplate="{StaticResource ParticipantTemplate}"
-                          ItemsSource="{Binding ParticipantState.Participants}"
+                          ItemsSource="{Binding Participants}"
                           ScrollViewer.VerticalScrollBarVisibility="Disabled"
                           SelectionMode="None" />
             </Border>
 
-            <StackPanel Grid.Row="1" Orientation="Horizontal">
-                <Button Command="{Binding ShuffleParticipantsCommand}">
+            <CommandBar Grid.Row="0" Background="{ThemeResource AcrylicBackgroundFillColorBaseBrush}" HorizontalContentAlignment="Left" IsDynamicOverflowEnabled="False" OverflowButtonVisibility="Auto">
+                <AppBarButton Command="{Binding PreviousSpeakerCommand}" Label="TODO: Vorheriger">
+                    <SymbolIcon Symbol="Back" />
+                </AppBarButton>
+                
+                <AppBarButton Command="{Binding NextSpeakerCommand}" Label="TODO: Nächster">
+                    <SymbolIcon Symbol="Forward" />
+                </AppBarButton>
+
+                <AppBarSeparator Margin="4, 0"/>
+
+                <AppBarButton Command="{Binding ShuffleParticipantsCommand}" Label="TODO: Mischen">
                     <SymbolIcon Symbol="Shuffle" />
-                </Button>
-            </StackPanel>
+                </AppBarButton>
+            </CommandBar>
         </Grid>
 
         <TextBlock Grid.Row="2"

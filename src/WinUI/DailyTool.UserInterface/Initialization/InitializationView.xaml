@@ -38,7 +38,7 @@
                                    Margin="24 0 24 12"
                                    DataContext="{Binding MeetingInfoEditViewModel}" />
 
-        <daily:PeopleEditView Grid.Row="2"
+        <daily:PeopleOverviewView Grid.Row="2"
                               Margin="24 0 24 12"
                               DataContext="{Binding PeopleEditViewModel}" />
 

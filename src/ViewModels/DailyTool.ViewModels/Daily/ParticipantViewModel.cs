@@ -1,40 +1,36 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using DailyTool.BusinessLogic.Daily;
-using DailyTool.BusinessLogic.Daily.Abstractions;
 
 namespace DailyTool.ViewModels.Daily
 {
-    public class ParticipantViewModel : ObservableObject, IParticipant
+    public class ParticipantViewModel : ObservableObject
     {
-        private ParticipantMode _participantMode = ParticipantMode.Queued;
         private int _id;
         private string _name = string.Empty;
         private TimeSpan _allocatedTalkStart;
         private TimeSpan _allocatedTalkDuration;
         private double _allocatedTalkProgress;
         private int _index;
+        private bool _isDone;
+        private bool _isActive;
+        private bool _isQueued;
 
-        public ParticipantMode ParticipantMode
+        public bool IsDone
         {
-            get => _participantMode;
-            set
-            {
-                if (!SetProperty(ref _participantMode, value))
-                {
-                    return;
-                }
-
-                OnPropertyChanged(nameof(IsDone));
-                OnPropertyChanged(nameof(IsActive));
-                OnPropertyChanged(nameof(IsQueued));
-            }
+            get => _isDone;
+            set => SetProperty(ref _isDone, value);
         }
 
-        public bool IsDone => ParticipantMode == ParticipantMode.Done;
+        public bool IsActive
+        {
+            get => _isActive;
+            set => SetProperty(ref _isActive, value);
+        }
 
-        public bool IsActive => ParticipantMode == ParticipantMode.Active;
-
-        public bool IsQueued => ParticipantMode == ParticipantMode.Queued;
+        public bool IsQueued
+        {
+            get => _isQueued;
+            set => SetProperty(ref _isQueued, value);
+        }
 
         public int Id
         {
@@ -60,7 +56,7 @@ namespace DailyTool.ViewModels.Daily
             set => SetProperty(ref _allocatedTalkDuration, value);
         }
 
-        public double AllocatedTalkProgress
+        public double AllocatedProgress
         {
             get => _allocatedTalkProgress;
             set => SetProperty(ref _allocatedTalkProgress, value);
@@ -70,29 +66,6 @@ namespace DailyTool.ViewModels.Daily
         {
             get => _index;
             set => SetProperty(ref _index, value);
-        }
-
-        public static ParticipantViewModel FromParticipant(Participant participant)
-        {
-            return new ParticipantViewModel
-            {
-                Id = participant.Id,
-                Name = participant.Name,
-                ParticipantMode = participant.ParticipantMode,
-                AllocatedTalkStart = participant.AllocatedTalkStart,
-                AllocatedTalkDuration = participant.AllocatedTalkDuration,
-                AllocatedTalkProgress = participant.AllocatedTalkProgress,
-                Index = participant.Index,
-            };
-        }
-
-        public void MergeFromParticipant(Participant participant)
-        {
-            ParticipantMode = participant.ParticipantMode;
-            AllocatedTalkStart = participant.AllocatedTalkStart;
-            AllocatedTalkDuration = participant.AllocatedTalkDuration;
-            AllocatedTalkProgress = participant.AllocatedTalkProgress;
-            Index = participant.Index;
         }
     }
 }

@@ -3,7 +3,7 @@ using DailyTool.Infrastructure.Abstractions;
 
 namespace DailyTool.ViewModels.Daily
 {
-    public class ParticipantViewModelMapper : IMapper<Participant, ParticipantViewModel>, IMerger<Participant, ParticipantViewModel>
+    public class ParticipantViewModelMapper : IMapper<Participant, ParticipantViewModel>
     {
         public ParticipantViewModel Map(Participant source)
         {
@@ -13,12 +13,12 @@ namespace DailyTool.ViewModels.Daily
                 Name = source.Name,
             };
 
-            Merge(result, source);
+            Merge(source, result);
 
             return result;
         }
 
-        public void Merge(ParticipantViewModel destination, Participant source)
+        public void Merge(Participant source, ParticipantViewModel destination)
         {
             destination.AllocatedProgress = source.AllocatedProgress;
             destination.Index = source.Index;

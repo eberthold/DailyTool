@@ -5,6 +5,7 @@ using DailyTool.ViewModels.Daily;
 using DailyTool.ViewModels.MeetingInfos;
 using DailyTool.ViewModels.Navigation;
 using DailyTool.ViewModels.People;
+using Scrummy.ViewModels.Shared.Data;
 
 namespace DailyTool.ViewModels.Initialization
 {

@@ -4,6 +4,7 @@ using DailyTool.BusinessLogic.Daily.Abstractions;
 using DailyTool.Infrastructure.Abstractions;
 using DailyTool.ViewModels.Abstractions;
 using DailyTool.ViewModels.Navigation;
+using Scrummy.ViewModels.Shared.Data;
 
 namespace DailyTool.ViewModels.MeetingInfos
 {

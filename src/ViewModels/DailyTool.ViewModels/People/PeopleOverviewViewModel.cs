@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DailyTool.BusinessLogic.Daily;
 using DailyTool.BusinessLogic.Daily.Abstractions;
 using DailyTool.Infrastructure.Abstractions;
 using DailyTool.ViewModels.Navigation;
@@ -10,7 +11,7 @@ namespace DailyTool.ViewModels.People
     public class PeopleOverviewViewModel : ObservableObject, INavigationTarget
     {
         private readonly IPersonService _personService;
-        private readonly IPersonViewModelFactory _personViewModelFactory;
+        private readonly IMapper<Person, PersonViewModel> _viewModelMapper;
         private readonly INavigationService _navigationService;
 
         private AddPersonViewModel? _addPersonViewModel;
@@ -19,11 +20,11 @@ namespace DailyTool.ViewModels.People
 
         public PeopleOverviewViewModel(
             IPersonService personService,
-            IPersonViewModelFactory personViewModelFactory,
+            IMapper<Person, PersonViewModel> viewModelMapper,
             INavigationService navigationService)
         {
             _personService = personService ?? throw new ArgumentNullException(nameof(personService));
-            _personViewModelFactory = personViewModelFactory ?? throw new ArgumentNullException(nameof(personViewModelFactory));
+            _viewModelMapper = viewModelMapper ?? throw new ArgumentNullException(nameof(viewModelMapper));
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
 
             AddPersonCommand = new AsyncRelayCommand(AddPersonAsync, CanAddPerson);
@@ -80,7 +81,7 @@ namespace DailyTool.ViewModels.People
         public async Task LoadDataAsync()
         {
             var people = await _personService.GetAllAsync().ConfigureAwait(true);
-            var mappedPeople = people.Select(_personViewModelFactory.Create);
+            var mappedPeople = people.Select(_viewModelMapper.Map);
             People = new ObservableCollection<PersonViewModel>(mappedPeople);
         }
 

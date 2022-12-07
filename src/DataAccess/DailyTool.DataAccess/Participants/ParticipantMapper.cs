@@ -13,5 +13,10 @@ namespace DailyTool.DataAccess.Participants
                 Name = source.Name,
             };
         }
+
+        public void Merge(Person source, Participant destination)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

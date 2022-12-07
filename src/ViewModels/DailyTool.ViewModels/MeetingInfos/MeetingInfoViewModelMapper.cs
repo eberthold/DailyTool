@@ -7,22 +7,30 @@ namespace DailyTool.ViewModels.MeetingInfos
     {
         public MeetingInfo Map(MeetingInfoViewModel source)
         {
-            return new MeetingInfo
-            {
-                StartTime = source.StartTime,
-                Duration = source.Duration,
-                SprintBoardUri = source.SprintBoardUri
-            };
+            var result = new MeetingInfo();
+            Merge(source, result);
+            return result;
+        }
+
+        public void Merge(MeetingInfoViewModel source, MeetingInfo destination)
+        {
+            destination.StartTime = source.StartTime;
+            destination.Duration = source.Duration;
+            destination.SprintBoardUri = source.SprintBoardUri;
         }
 
         public MeetingInfoViewModel Map(MeetingInfo source)
         {
-            return new MeetingInfoViewModel
-            {
-                StartTime = source.StartTime,
-                Duration = source.Duration,
-                SprintBoardUri = source.SprintBoardUri
-            };
+            var result = new MeetingInfoViewModel();
+            Merge(source, result);
+            return result;
+        }
+
+        public void Merge(MeetingInfo source, MeetingInfoViewModel destination)
+        {
+            destination.StartTime = source.StartTime;
+            destination.Duration = source.Duration;
+            destination.SprintBoardUri = source.SprintBoardUri;
         }
     }
 }

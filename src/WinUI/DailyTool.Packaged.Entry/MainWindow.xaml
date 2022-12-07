@@ -6,7 +6,10 @@
         mc:Ignorable="d">
 
     <Grid x:Name="PART_Content">
-        <Frame x:Name="PART_NavigationFrame" />
+        <NavigationView PaneDisplayMode="Top" MenuItemsSource="{Binding Teams}">
+
+            <Frame x:Name="PART_NavigationFrame" />
+        </NavigationView>
 
         <ItemsControl Margin="24 0 0 24"
                       HorizontalAlignment="Center"

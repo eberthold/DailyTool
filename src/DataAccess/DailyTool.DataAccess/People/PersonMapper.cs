@@ -24,5 +24,15 @@ namespace DailyTool.DataAccess.People
                 IsParticipating = source.IsParticipating
             };
         }
+
+        public void Merge(Person source, PersonStorage destination)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Merge(PersonStorage source, Person destination)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

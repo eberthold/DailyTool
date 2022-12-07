@@ -1,4 +1,5 @@
 ﻿using DailyTool.ViewModels.Abstractions;
+using Scrummy.ViewModels.Shared.Data;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 

@@ -22,5 +22,15 @@ namespace DailyTool.DataAccess.MeetingInfos
                 Duration = source.MeetingDuration
             };
         }
+
+        public void Merge(MeetingInfo source, MeetingInfoStorage destination)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Merge(MeetingInfoStorage source, MeetingInfo destination)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

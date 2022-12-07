@@ -29,7 +29,6 @@ namespace DailyTool.Packaged.Entry
     internal static class Bootstrapper
     {
         private static readonly Type MapperInterfaceDefinition = typeof(IMapper<,>);
-        private static readonly Type MergerInterfaceDefinition = typeof(IMerger<,>);
 
         internal static void Bootstrap(this IServiceCollection services)
         {
@@ -62,7 +61,6 @@ namespace DailyTool.Packaged.Entry
             services.AddTransient<MeetingInfoEditViewModel>();
             services.AddTransient<PeopleOverviewViewModel>();
 
-            services.AddSingleton<IPersonViewModelFactory, PersonViewModelFactory>();
             services.AddTransient<MainWindowViewModel>();
         }
 
@@ -97,6 +95,11 @@ namespace DailyTool.Packaged.Entry
             services.AddSingleton<IMapper, GenericMapper>();
             services.AddSingleton<ITaskQueue, TaskQueue>();
 
+            RegisterMappers(services);
+        }
+
+        private static void RegisterMappers(IServiceCollection services)
+        {
             var assemblyNames = Assembly.GetExecutingAssembly().GetReferencedAssemblies();
 
             Assembly assembly;
@@ -105,7 +108,7 @@ namespace DailyTool.Packaged.Entry
                 assembly = Assembly.Load(assemblyName);
                 foreach (var type in assembly.GetTypes())
                 {
-                    var interfaces = type.GetInterfaces().Where(x => CheckIsMapper(x) || CheckIsMerger(x));
+                    var interfaces = type.GetInterfaces().Where(CheckIsMapper);
                     foreach (var @interface in interfaces)
                     {
                         services.AddSingleton(@interface, type);
@@ -122,16 +125,6 @@ namespace DailyTool.Packaged.Entry
             }
 
             return x.GetGenericTypeDefinition() == MapperInterfaceDefinition;
-        }
-
-        private static bool CheckIsMerger(Type x)
-        {
-            if (!x.IsGenericType)
-            {
-                return false;
-            }
-
-            return x.GetGenericTypeDefinition() == MergerInterfaceDefinition;
         }
     }
 }

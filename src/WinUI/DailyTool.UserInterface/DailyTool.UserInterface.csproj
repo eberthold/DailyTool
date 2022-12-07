@@ -1,69 +1,72 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
-    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
-    <RootNamespace>DailyTool.UserInterface</RootNamespace>
-    <RuntimeIdentifiers>win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
-    <UseWinUI>true</UseWinUI>
-  </PropertyGroup>
-  <ItemGroup>
-    <None Remove="Daily\DailyView.xaml" />
-    <None Remove="Daily\MeetingInfoEditView.xaml" />
-    <None Remove="Daily\PeopleOverviewView.xaml" />
-    <None Remove="Initialization\AddPersonView.xaml" />
-    <None Remove="Initialization\InitializationView.xaml" />
-    <None Remove="Resources\ModuleResourceDictionary.xaml" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
+		<TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+		<RootNamespace>DailyTool.UserInterface</RootNamespace>
+		<RuntimeIdentifiers>win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
+		<UseWinUI>true</UseWinUI>
 
-  <ItemGroup>
-	  <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.1" />
-      <PackageReference Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
-      <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.5" />
-      <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.1" />
-      <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.435">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
-  </ItemGroup>
+		<EnableMsixTooling>true</EnableMsixTooling>
+		<GenerateLibraryLayout>true</GenerateLibraryLayout>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Remove="Daily\DailyView.xaml" />
+		<None Remove="Daily\MeetingInfoEditView.xaml" />
+		<None Remove="Daily\PeopleOverviewView.xaml" />
+		<None Remove="Initialization\AddPersonView.xaml" />
+		<None Remove="Initialization\InitializationView.xaml" />
+		<None Remove="Resources\ModuleResourceDictionary.xaml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\DataAccess\DailyTool.DataAccess\DailyTool.DataAccess.csproj" />
-    <ProjectReference Include="..\..\ViewModels\DailyTool.ViewModels\DailyTool.ViewModels.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+		<PackageReference Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
+		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.5" />
+		<PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.1" />
+		<PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.435">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
 
-  <ItemGroup>
-    <Page Update="Daily\PeopleOverviewView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\DataAccess\DailyTool.DataAccess\DailyTool.DataAccess.csproj" />
+		<ProjectReference Include="..\..\ViewModels\DailyTool.ViewModels\DailyTool.ViewModels.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Page Update="Daily\MeetingInfoEditView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
+	<ItemGroup>
+		<Page Update="Daily\PeopleOverviewView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+	</ItemGroup>
 
-  <ItemGroup>
-    <Page Update="Daily\AddPersonView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
+	<ItemGroup>
+		<Page Update="Daily\MeetingInfoEditView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+	</ItemGroup>
 
-  <ItemGroup>
-    <Page Update="Initialization\InitializationView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
+	<ItemGroup>
+		<Page Update="Daily\AddPersonView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+	</ItemGroup>
 
-  <ItemGroup>
-    <Page Update="Resources\ModuleResourceDictionary.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
+	<ItemGroup>
+		<Page Update="Initialization\InitializationView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+	</ItemGroup>
 
-  <ItemGroup>
-    <Page Update="Daily\DailyView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
+	<ItemGroup>
+		<Page Update="Resources\ModuleResourceDictionary.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Page Update="Daily\DailyView.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+	</ItemGroup>
 </Project>

@@ -5,6 +5,7 @@ using DailyTool.BusinessLogic.Daily.Abstractions;
 using DailyTool.Infrastructure.Abstractions;
 using DailyTool.ViewModels.Abstractions;
 using DailyTool.ViewModels.Navigation;
+using Scrummy.ViewModels.Shared.Data;
 using System.Collections.ObjectModel;
 
 namespace DailyTool.ViewModels.Daily
@@ -13,8 +14,7 @@ namespace DailyTool.ViewModels.Daily
     {
         private readonly IDailyStateProvider _dailyStateProvider;
         private readonly IDailyService _dailyService;
-        private readonly IMapper _mapper;
-        private readonly IMerger<Participant, ParticipantViewModel> _participantMerger;
+        private readonly IMapper<Participant, ParticipantViewModel> _viewModelMapper;
         private readonly INavigationService _navigationService;
         private readonly ITimestampProvider _timeStampProvider;
         private readonly IMainThreadInvoker _mainThreadInvoker;
@@ -27,19 +27,17 @@ namespace DailyTool.ViewModels.Daily
         public DailyViewModel(
             IDailyStateProvider dailyStateProvider,
             IDailyService dailyService,
-            IMapper mapper,
-            IMerger<Participant, ParticipantViewModel> participantMerger,
+            IMapper<Participant, ParticipantViewModel> viewModelMapper,
             INavigationService navigationService,
             ITimestampProvider timeStampProvider,
             IMainThreadInvoker mainThreadInvoker)
         {
-            _dailyStateProvider = dailyStateProvider ?? throw new ArgumentNullException(nameof(dailyStateProvider));
-            _dailyService = dailyService ?? throw new ArgumentNullException(nameof(dailyService));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _participantMerger = participantMerger ?? throw new ArgumentNullException(nameof(participantMerger));
-            _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
-            _timeStampProvider = timeStampProvider ?? throw new ArgumentNullException(nameof(timeStampProvider));
-            _mainThreadInvoker = mainThreadInvoker ?? throw new ArgumentNullException(nameof(mainThreadInvoker));
+            _dailyStateProvider = dailyStateProvider;
+            _dailyService = dailyService;
+            _viewModelMapper = viewModelMapper;
+            _navigationService = navigationService;
+            _timeStampProvider = timeStampProvider;
+            _mainThreadInvoker = mainThreadInvoker;
 
             NavigateBackCommand = new AsyncRelayCommand(NavigateBackAsync);
             PreviousSpeakerCommand = new AsyncRelayCommand(SetPreviousParticipantAsync);
@@ -114,7 +112,7 @@ namespace DailyTool.ViewModels.Daily
             await _dailyService.ShuffleParticipantsAsync(_dailyState);
             var mappedParticipants = _dailyState
                 .OrderedParticipants
-                .Select(_mapper.Map<ParticipantViewModel>)
+                .Select(_viewModelMapper.Map)
                 .ToList();
 
             Participants = new ObservableCollection<ParticipantViewModel>(mappedParticipants);
@@ -129,7 +127,7 @@ namespace DailyTool.ViewModels.Daily
             foreach (var participant in _dailyState.OrderedParticipants)
             {
                 var participantToUpdate = Participants.Single(x => x.Id == participant.Id);
-                _participantMerger.Merge(participantToUpdate, participant);
+                _viewModelMapper.Merge(participant, participantToUpdate);
             }
         }
     }

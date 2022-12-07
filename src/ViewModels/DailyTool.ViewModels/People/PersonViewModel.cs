@@ -40,7 +40,8 @@ namespace DailyTool.ViewModels.People
                     return;
                 }
 
-                _taskQueue.Enqueue(UpdateAsync);
+                _taskQueue.Enqueue(() => UpdateAsync());
+                _taskQueue.ProcessQueueAsync();
             }
         }
 
@@ -54,7 +55,8 @@ namespace DailyTool.ViewModels.People
                     return;
                 }
 
-                _taskQueue.Enqueue(UpdateAsync);
+                _taskQueue.Enqueue(() => UpdateAsync());
+                _taskQueue.ProcessQueueAsync();
             }
         }
 
@@ -76,7 +78,7 @@ namespace DailyTool.ViewModels.People
                 notification.IsRunning = false;
                 notification.Text = "TODO: Person saved";
             }
-            finally
+            catch
             {
                 notification.IsRunning = false;
                 notification.Text = "TODO: failed to save person";

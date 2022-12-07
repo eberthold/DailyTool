@@ -11,6 +11,7 @@ namespace DailyTool.ViewModels.People
         private readonly INotificationService _notificationService;
         private readonly IMapper<PersonViewModel, Person> _modelMapper;
         private readonly IPersonService _personService;
+        private readonly ITaskQueue _taskQueue;
 
         private string _name = string.Empty;
         private bool _isParticipating;
@@ -18,11 +19,13 @@ namespace DailyTool.ViewModels.People
         public PersonViewModel(
             INotificationService notificationService,
             IMapper<PersonViewModel, Person> modelMapper,
-            IPersonService personService)
+            IPersonService personService,
+            ITaskQueue taskQueue)
         {
             _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
             _modelMapper = modelMapper ?? throw new ArgumentNullException(nameof(modelMapper));
             _personService = personService ?? throw new ArgumentNullException(nameof(personService));
+            _taskQueue = taskQueue;
         }
 
         public int Id { get; set; }
@@ -37,7 +40,7 @@ namespace DailyTool.ViewModels.People
                     return;
                 }
 
-                _ = UpdateAsync();
+                _taskQueue.Enqueue(UpdateAsync);
             }
         }
 
@@ -51,7 +54,7 @@ namespace DailyTool.ViewModels.People
                     return;
                 }
 
-                _ = UpdateAsync();
+                _taskQueue.Enqueue(UpdateAsync);
             }
         }
 

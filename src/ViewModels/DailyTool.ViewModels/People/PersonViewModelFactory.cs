@@ -11,17 +11,20 @@ namespace DailyTool.ViewModels.People
         private readonly IMapper<PersonViewModel, Person> _modelMapper;
         private readonly INotificationService _notificationService;
         private readonly IPersonService _personService;
+        private readonly ITaskQueue _taskQueue;
 
         public PersonViewModelFactory(
             IMerger<Person, PersonViewModel> viewModelMerger,
             IMapper<PersonViewModel, Person> modelMapper,
             INotificationService notificationService,
-            IPersonService personService)
+            IPersonService personService,
+            ITaskQueue taskQueue)
         {
             _viewModelMerger = viewModelMerger ?? throw new ArgumentNullException(nameof(viewModelMerger));
             _modelMapper = modelMapper ?? throw new ArgumentNullException(nameof(modelMapper));
             _notificationService = notificationService;
             _personService = personService ?? throw new ArgumentNullException(nameof(personService));
+            _taskQueue = taskQueue;
         }
 
         public PersonViewModel Create(Person person)
@@ -29,7 +32,8 @@ namespace DailyTool.ViewModels.People
             var result = new PersonViewModel(
                 _notificationService,
                 _modelMapper,
-                _personService);
+                _personService,
+                _taskQueue);
 
             _viewModelMerger.Merge(result, person);
 

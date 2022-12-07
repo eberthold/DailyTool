@@ -63,13 +63,21 @@ namespace DailyTool.ViewModels.People
                 Text = "TODO: Saving person..."
             };
 
-            await _notificationService.ShowNotificationAsync(notification);
+            try
+            {
+                await _notificationService.ShowNotificationAsync(notification);
 
-            var model = _modelMapper.Map(this);
-            await _personService.UpdatePersonAsync(model);
+                var model = _modelMapper.Map(this);
+                await _personService.UpdatePersonAsync(model);
 
-            notification.IsRunning = false;
-            notification.Text = "TODO: Person saved";
+                notification.IsRunning = false;
+                notification.Text = "TODO: Person saved";
+            }
+            finally
+            {
+                notification.IsRunning = false;
+                notification.Text = "TODO: failed to save person";
+            }
         }
     }
 }

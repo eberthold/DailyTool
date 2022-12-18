@@ -9,7 +9,7 @@ namespace DailyTool.ViewModels.People
     public class PersonViewModel : ObservableObject
     {
         private readonly INotificationService _notificationService;
-        private readonly IMapper<PersonViewModel, Person> _modelMapper;
+        private readonly IMapper<PersonViewModel, PersonModel> _modelMapper;
         private readonly IPersonService _personService;
 
         private string _name = string.Empty;
@@ -17,7 +17,7 @@ namespace DailyTool.ViewModels.People
 
         public PersonViewModel(
             INotificationService notificationService,
-            IMapper<PersonViewModel, Person> modelMapper,
+            IMapper<PersonViewModel, PersonModel> modelMapper,
             IPersonService personService)
         {
             _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));

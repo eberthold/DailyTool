@@ -1,10 +1,9 @@
-﻿using DailyTool.DataAccess.Framework;
-using Microsoft.Data.Sqlite;
+﻿using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 namespace DailyTool.DataAccess.Tests
 {
-    internal class InMemoryDbContextFactory : IDbContextFactory
+    internal class InMemoryDbContextFactory : IDbContextFactory<DatabaseContext>
     {
         private readonly Guid _guid = Guid.NewGuid();
         private readonly string _connectionString;
@@ -15,15 +14,19 @@ namespace DailyTool.DataAccess.Tests
         public InMemoryDbContextFactory()
         {
             var optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>();
-            _connectionString = $"DataSource=:memory:";
+            _connectionString = $"Data Source={_guid};mode=memory;cache=shared";
             _connection = new SqliteConnection(_connectionString);
-            _options = optionsBuilder.UseSqlite(_connection).Options;
+            _connection.Open();
+
+            _options = optionsBuilder
+                .UseSqlite(_connection)
+                .Options;
         }
 
-        public DatabaseContext Create()
+        public DatabaseContext CreateDbContext()
         {
             var context = new DatabaseContext(_options);
-            context.Database.Migrate();
+            context.Database.EnsureCreated();
             return context;
         }
     }

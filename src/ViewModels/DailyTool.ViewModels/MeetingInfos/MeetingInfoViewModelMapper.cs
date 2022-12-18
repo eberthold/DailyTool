@@ -3,30 +3,30 @@ using DailyTool.Infrastructure.Abstractions;
 
 namespace DailyTool.ViewModels.MeetingInfos
 {
-    public class MeetingInfoViewModelMapper : IMapper<MeetingInfoViewModel, MeetingInfo>, IMapper<MeetingInfo, MeetingInfoViewModel>
+    public class MeetingInfoViewModelMapper : IMapper<MeetingInfoViewModel, DailyMeetingModel>, IMapper<DailyMeetingModel, MeetingInfoViewModel>
     {
-        public MeetingInfo Map(MeetingInfoViewModel source)
+        public DailyMeetingModel Map(MeetingInfoViewModel source)
         {
-            var result = new MeetingInfo();
+            var result = new DailyMeetingModel();
             Merge(source, result);
             return result;
         }
 
-        public void Merge(MeetingInfoViewModel source, MeetingInfo destination)
+        public void Merge(MeetingInfoViewModel source, DailyMeetingModel destination)
         {
             destination.StartTime = source.StartTime;
             destination.Duration = source.Duration;
             destination.SprintBoardUri = source.SprintBoardUri;
         }
 
-        public MeetingInfoViewModel Map(MeetingInfo source)
+        public MeetingInfoViewModel Map(DailyMeetingModel source)
         {
             var result = new MeetingInfoViewModel();
             Merge(source, result);
             return result;
         }
 
-        public void Merge(MeetingInfo source, MeetingInfoViewModel destination)
+        public void Merge(DailyMeetingModel source, MeetingInfoViewModel destination)
         {
             destination.StartTime = source.StartTime;
             destination.Duration = source.Duration;

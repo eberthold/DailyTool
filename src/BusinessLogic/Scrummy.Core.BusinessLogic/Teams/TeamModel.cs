@@ -1,4 +1,4 @@
-﻿using Scrummy.Core.BusinessLogic.Data;
+﻿using DailyTool.Infrastructure.Abstractions.Data;
 
 namespace Scrummy.Core.BusinessLogic.Teams
 {

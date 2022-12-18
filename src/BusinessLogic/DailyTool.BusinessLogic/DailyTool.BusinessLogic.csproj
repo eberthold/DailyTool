@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Infrastructure\DailyTool.Infrastructure.Abstractions\DailyTool.Infrastructure.Abstractions.csproj" />
+    <ProjectReference Include="..\Scrummy.Core.BusinessLogic\Scrummy.Core.BusinessLogic.csproj" />
   </ItemGroup>
 
 </Project>

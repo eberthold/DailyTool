@@ -1,38 +1,37 @@
 ﻿using DailyTool.BusinessLogic.Daily;
+using DailyTool.DataAccess.Helpers;
 using DailyTool.Infrastructure.Abstractions;
 
 namespace DailyTool.DataAccess.People
 {
-    public class PersonMapper : IMapper<PersonStorage, Person>, IMapper<Person, PersonStorage>
+    public class PersonMapper : IMapper<PersonEntity, PersonModel>, IMapper<PersonModel, PersonEntity>
     {
-        public PersonStorage Map(Person source)
+        public PersonEntity Map(PersonModel source)
         {
-            return new PersonStorage
-            {
-                Id = source.Id,
-                Name = source.Name,
-                IsParticipating = source.IsParticipating
-            };
+            var result = new PersonEntity();
+            Merge(source, result);
+            return result;
         }
 
-        public Person Map(PersonStorage source)
+        public PersonModel Map(PersonEntity source)
         {
-            return new Person
-            {
-                Id = source.Id,
-                Name = source.Name,
-                IsParticipating = source.IsParticipating
-            };
+            var result = new PersonModel();
+            Merge(source, result);
+            return result;
         }
 
-        public void Merge(Person source, PersonStorage destination)
+        public void Merge(PersonModel source, PersonEntity destination)
         {
-            throw new NotImplementedException();
+            destination.Id = source.Id;
+            destination.Name = source.Name;
+            destination.EMailAddress = source.EMailAddress.MapToEntity();
         }
 
-        public void Merge(PersonStorage source, Person destination)
+        public void Merge(PersonEntity source, PersonModel destination)
         {
-            throw new NotImplementedException();
+            destination.Id = source.Id;
+            destination.Name = source.Name;
+            destination.EMailAddress = source.EMailAddress.MapToModel();
         }
     }
 }

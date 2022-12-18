@@ -3,6 +3,7 @@ using DailyTool.ViewModels.Initialization;
 using DailyTool.ViewModels.Navigation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
+using System;
 
 namespace DailyTool.Packaged.Entry
 {
@@ -34,16 +35,24 @@ namespace DailyTool.Packaged.Entry
                 ValidateOnBuild = true
             };
             var serviceProvider = services.BuildServiceProvider(options);
-            UIHelper.ServiceProvider = serviceProvider;
 
-            var window = serviceProvider.GetRequiredService<MainWindow>();
-            var windowViewModel = serviceProvider.GetRequiredService<MainWindowViewModel>();
-            window.DataContext = windowViewModel;
-            window.Activate();
-            UIHelper.CurrentWindow = window;
+            try
+            {
+                var window = serviceProvider.GetRequiredService<MainWindow>();
+                var shell = serviceProvider.GetRequiredService<Shell>();
+                shell.Initialize();
 
-            var navigationService = serviceProvider.GetRequiredService<INavigationService>();
-            navigationService.NavigateAsync<InitializationViewModel>();
+                window.Content = shell;
+                window.Activate();
+                UIHelper.CurrentWindow = window;
+
+                var navigationService = serviceProvider.GetRequiredService<INavigationService>();
+                navigationService.NavigateAsync<InitializationViewModel>();
+            }
+            catch (Exception ex)
+            {
+                Exit();
+            }
         }
     }
 }

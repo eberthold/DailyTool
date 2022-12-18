@@ -10,8 +10,8 @@
 
         Task RefreshStateAsync(DailyState state);
 
-        Task SetPreviousParticipantAsync(IReadOnlyCollection<Participant> participants);
+        Task SetPreviousParticipantAsync(IReadOnlyCollection<ParticipantModel> participants);
 
-        Task SetNextParticipantAsync(IReadOnlyCollection<Participant> participants);
+        Task SetNextParticipantAsync(IReadOnlyCollection<ParticipantModel> participants);
     }
 }

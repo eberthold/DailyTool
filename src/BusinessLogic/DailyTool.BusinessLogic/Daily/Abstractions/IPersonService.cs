@@ -2,11 +2,11 @@
 {
     public interface IPersonService
     {
-        Task<IReadOnlyCollection<Person>> GetAllAsync();
+        Task<IReadOnlyCollection<PersonModel>> GetAllAsync();
 
-        Task<int> CreatePersonAsync(Person person);
+        Task<int> CreatePersonAsync(PersonModel person);
 
-        Task UpdatePersonAsync(Person person);
+        Task UpdatePersonAsync(PersonModel person);
 
         Task DeletePersonAsync(int id);
     }

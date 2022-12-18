@@ -46,10 +46,9 @@ namespace DailyTool.ViewModels.People
 
         private async Task AddPersonAsync()
         {
-            var person = new Person
+            var person = new PersonModel
             {
                 Name = Name,
-                IsParticipating = true
             };
 
             await _personService.CreatePersonAsync(person);
@@ -78,7 +77,7 @@ namespace DailyTool.ViewModels.People
             await Task.WhenAll(tasks);
         }
 
-        public Task OnNavigatedToAsync(NavigationMode navigationMode)
+        public Task OnNavigatedToAsync(IReadOnlyDictionary<string, string> parameters, NavigationMode navigationMode)
         {
             return Task.CompletedTask;
         }

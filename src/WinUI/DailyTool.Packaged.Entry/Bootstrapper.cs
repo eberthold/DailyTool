@@ -2,14 +2,17 @@
 using DailyTool.BusinessLogic.Daily;
 using DailyTool.BusinessLogic.Daily.Abstractions;
 using DailyTool.DataAccess;
-using DailyTool.DataAccess.MeetingInfos;
-using DailyTool.DataAccess.Participants;
+using DailyTool.DataAccess.Framework;
+using DailyTool.DataAccess.Generic;
+using DailyTool.DataAccess.Meetings;
 using DailyTool.DataAccess.People;
+using DailyTool.DataAccess.Teams;
 using DailyTool.Infrastructure;
 using DailyTool.Infrastructure.Abstractions;
-using DailyTool.Packaged.Entry.Navigation;
 using DailyTool.Packaged.Entry.Notifications;
 using DailyTool.Packaged.Entry.Threading;
+using DailyTool.UserInterface;
+using DailyTool.UserInterface.Navigation;
 using DailyTool.ViewModels.Abstractions;
 using DailyTool.ViewModels.Daily;
 using DailyTool.ViewModels.Initialization;
@@ -17,9 +20,16 @@ using DailyTool.ViewModels.MeetingInfos;
 using DailyTool.ViewModels.Navigation;
 using DailyTool.ViewModels.Notifications;
 using DailyTool.ViewModels.People;
+using DailyTool.ViewModels.Settings;
+using DailyTool.ViewModels.Teams;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Scrummy.Core.BusinessLogic.Data;
+using Scrummy.Core.BusinessLogic.Teams;
 using System;
-using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
 using System.Reflection;
@@ -38,12 +48,23 @@ namespace DailyTool.Packaged.Entry
             services.RegisterServices();
             services.RegisterRepositories();
             services.RegisterFrameworks();
+
+            services.RegisterSettings();
+        }
+
+        private static void RegisterSettings(this IServiceCollection services)
+        {
+            services.AddTransient<SettingsOverviewViewModel>();
+
+            services.AddTransient<TeamsOverviewViewModel>();
+            services.AddSingleton<ISettingsProvider, SettingsProvider>();
         }
 
         private static void RegisterNavigation(this IServiceCollection services)
         {
             services.AddSingleton<INavigationMap, NavigationMap>();
-            services.AddSingleton<INavigationService>(provider => provider.GetRequiredService<MainWindow>());
+            services.AddSingleton<Shell>();
+            services.AddSingleton<INavigationService>(provider => provider.GetRequiredService<Shell>());
         }
 
         private static void RegisterViews(this IServiceCollection services)
@@ -53,6 +74,8 @@ namespace DailyTool.Packaged.Entry
 
         private static void RegisterViewModels(this IServiceCollection services)
         {
+            services.AddSingleton<ShellViewModel>();
+
             services.AddSingleton<IDailyStateProvider, DailyStateProvider>();
 
             services.AddTransient<InitializationViewModel>();
@@ -60,29 +83,34 @@ namespace DailyTool.Packaged.Entry
             services.AddTransient<AddPersonViewModel>();
             services.AddTransient<MeetingInfoEditViewModel>();
             services.AddTransient<PeopleOverviewViewModel>();
-
-            services.AddTransient<MainWindowViewModel>();
         }
 
         private static void RegisterServices(this IServiceCollection services)
         {
             services.AddSingleton<IDailyService, DailyService>();
             services.AddSingleton<IPersonService, PersonService>();
-            services.AddSingleton<IMeetingInfoService, MeetingInfoService>();
+            services.AddSingleton<IDailyMeetingDataService, DailyMeetingDataService>();
             services.AddSingleton<IParticipantService, ParticipantService>();
 
             services.AddSingleton<INotificationService, NotificationService>();
+
+            services.AddSingleton<ITeamService, TeamService>();
         }
 
         private static void RegisterRepositories(this IServiceCollection services)
         {
-            services.AddSingleton<IPersonRepository, PersonRepository>();
-            services.AddSingleton<IMeetingInfoRepository, MeetingInfoRepository>();
-            services.AddSingleton<IStorageRepository<MeetingInfoStorage>, StorageRepository<MeetingInfoStorage>>();
-            services.AddSingleton<IStorageRepository<List<PersonStorage>>, StorageRepository<List<PersonStorage>>>();
-            services.AddSingleton<IParticipantRepository, ParticpantRepository>();
+            services.AddSingleton<IRepository<PersonModel>, GenericRepository<PersonModel, PersonEntity>>();
+            services.AddSingleton<IRepository<TeamModel>, GenericRepository<TeamModel, TeamEntity>>();
+            services.AddSingleton<IRepository<DailyMeetingModel>, GenericRepository<DailyMeetingModel, DailyMeetingEntityContainer>>();
+            services.AddSingleton<IMeetingParticipantsRepository, MeetingParticipantsRepository>();
 
-            services.AddSingleton<IFileCopy, FileCopy>();
+            services.AddSingleton<IDbContextFactory<DatabaseContext>, DbContextFactory>();
+            services.AddSingleton<ITransactionProvider, TransactionProvider>();
+
+            var path = Path.Combine(AppContext.BaseDirectory, "data.db");
+            var connectionString = $"DataSource={path}";
+            services.AddSqlite<DatabaseContext>(connectionString);
+            services.AddSingleton(new SqliteConnection(connectionString));
         }
 
         private static void RegisterFrameworks(this IServiceCollection services)

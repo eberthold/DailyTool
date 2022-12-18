@@ -11,45 +11,15 @@ namespace DailyTool.UserInterface.Initialization
 {
     public sealed partial class InitializationView : Page
     {
-        private readonly IMeetingInfoRepository? _meetingInfoRepository;
-        private readonly IPersonRepository? _personRepository;
-
         public InitializationView()
         {
             InitializeComponent();
-
-            _meetingInfoRepository = UIHelper.ServiceProvider?.GetService<IMeetingInfoRepository>();
-            _personRepository = UIHelper.ServiceProvider?.GetService<IPersonRepository>();
-        }
-
-        private async void OnImportMeetingInfo(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
-        {
-            var file = await GetFileForOpen();
-            await ((IImportable)_meetingInfoRepository).ImportAsync(file.Path);
-        }
-
-        private async void OnExportMeetingInfo(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
-        {
-            var file = await GetFileForSave();
-            await ((IExportable)_meetingInfoRepository).ExportAsync(file.Path);
-        }
-
-        private async void OnImportPeople(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
-        {
-            var file = await GetFileForOpen();
-            await((IImportable)_personRepository).ImportAsync(file.Path);
-        }
-
-        private async void OnExportPeople(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
-        {
-            var file = await GetFileForSave();
-            await((IExportable)_personRepository).ExportAsync(file.Path);
         }
 
         private async Task<StorageFile> GetFileForOpen()
         {
             var picker = new FileOpenPicker();
-            picker.FileTypeFilter.Add(".json");
+            picker.FileTypeFilter.Add(".db");
             InitializePicker(picker);
             var file = await picker.PickSingleFileAsync();
             return file;
@@ -58,7 +28,7 @@ namespace DailyTool.UserInterface.Initialization
         private async Task<StorageFile> GetFileForSave()
         {
             var picker = new FileSavePicker();
-            picker.FileTypeChoices.Add("json", new[] { ".json" });
+            picker.FileTypeChoices.Add("db", new[] { ".db" });
             InitializePicker(picker);
             var file = await picker.PickSaveFileAsync();
             return file;

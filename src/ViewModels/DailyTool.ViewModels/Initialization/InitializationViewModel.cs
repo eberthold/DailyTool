@@ -9,7 +9,7 @@ using Scrummy.ViewModels.Shared.Data;
 
 namespace DailyTool.ViewModels.Initialization
 {
-    public class InitializationViewModel : ObservableObject, INavigationTarget, ILoadDataAsync
+    public class InitializationViewModel : ObservableObject, INavigationTarget, ILoadDataAsync, ITitle
     {
         private readonly INavigationService _navigationService;
         private MeetingInfoEditViewModel? _meetingInfoEditViewModel;
@@ -36,6 +36,8 @@ namespace DailyTool.ViewModels.Initialization
             private set => SetProperty(ref _peopleEditViewModel, value);
         }
 
+        public string Title => "TODO: Daily Vorbereitung";
+
         public async Task LoadDataAsync()
         {
             MeetingInfoEditViewModel = await _navigationService.CreateNavigationTarget<MeetingInfoEditViewModel>();
@@ -57,7 +59,7 @@ namespace DailyTool.ViewModels.Initialization
             return _navigationService.NavigateAsync<DailyViewModel>();
         }
 
-        public Task OnNavigatedToAsync(NavigationMode navigationMode)
+        public Task OnNavigatedToAsync(IReadOnlyDictionary<string, string> parameters, NavigationMode navigationMode)
         {
             return Task.CompletedTask;
         }

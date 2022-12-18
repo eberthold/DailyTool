@@ -25,27 +25,22 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock Margin="24 12 24 12"
-                   Style="{ThemeResource TitleTextBlockStyle}"
-                   Text="TODO: Daily Vorbereitung" />
-
-        <daily:MeetingInfoEditView Grid.Row="1"
+        <daily:MeetingInfoEditView Grid.Row="0"
                                    Margin="24 0 24 12"
                                    DataContext="{Binding MeetingInfoEditViewModel}" />
 
-        <daily:PeopleOverviewView Grid.Row="2"
-                              Margin="24 0 24 12"
-                              DataContext="{Binding PeopleEditViewModel}" />
+        <daily:PeopleOverviewView Grid.Row="1"
+                                  Margin="24 0 24 12"
+                                  DataContext="{Binding PeopleEditViewModel}" />
 
-        <StackPanel Grid.Row="3"
+        <StackPanel Grid.Row="2"
                     Margin="24 0 24 0"
                     Orientation="Horizontal">
-            <Button Content="TODO: Import/Export">
+            <!--<Button Content="TODO: Import/Export">
                 <Button.Flyout>
                     <MenuFlyout>
                         <MenuFlyoutSubItem Text="Import">
@@ -59,9 +54,9 @@
                         </MenuFlyoutSubItem>
                     </MenuFlyout>
                 </Button.Flyout>
-            </Button>
+            </Button>-->
         </StackPanel>
-        
+
         <StackPanel Grid.Row="3"
                     Margin="0 0 24 24"
                     HorizontalAlignment="Right"
@@ -71,7 +66,7 @@
                     Style="{StaticResource AccentButtonStyle}" />
         </StackPanel>
 
-        <Grid Grid.RowSpan="4"
+        <Grid Grid.RowSpan="3"
               Background="{ThemeResource ListViewItemOverlayBackgroundThemeBrush}"
               Visibility="{Binding PeopleEditViewModel.IsInPersonAddMode, Converter={StaticResource BooleanToVisibilityConverter}}">
             <daily:AddPersonView HorizontalAlignment="Center"

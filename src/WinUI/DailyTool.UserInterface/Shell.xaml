@@ -1,0 +1,79 @@
+<UserControl x:Class="DailyTool.UserInterface.Shell"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+
+            <Grid Padding="24, 12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}"
+                           Text="{Binding ElementName=PART_NavigationFrame, Path=Content.DataContext.Title}"
+                           TextWrapping="NoWrap" />
+
+                <Button Grid.Column="1"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Command="{Binding NavigateSettingsCommand}">
+                    <SymbolIcon Symbol="Setting" />
+                </Button>
+            </Grid>
+
+            <Frame x:Name="PART_NavigationFrame" Grid.Row="1" />
+        </Grid>
+
+        <ItemsControl Margin="24 0 0 24"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Bottom"
+                      ItemsSource="{Binding NotificationService.Notifications}">
+            <ItemsControl.ItemContainerStyle>
+                <Style TargetType="ContentPresenter">
+                    <Setter Property="Margin" Value="8" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <UserControl>
+                        <Border x:Name="PART_TemplateRoot"
+                                Background="{ThemeResource AcrylicBackgroundFillColorDefaultBrush}"
+                                BorderBrush="{ThemeResource AccentFillColorDefaultBrush}"
+                                BorderThickness="1"
+                                CornerRadius="16">
+                            <Grid Margin="12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="12" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <ProgressRing Width="16"
+                                              Height="16"
+                                              VerticalAlignment="Center"
+                                              Foreground="{ThemeResource AccentFillColorDefaultBrush}"
+                                              IsIndeterminate="{Binding IsRunning}"
+                                              Visibility="{Binding IsRunning, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                                <TextBlock Grid.Column="2"
+                                           VerticalAlignment="Center"
+                                           Text="{Binding Text}"
+                                           TextWrapping="WrapWholeWords" />
+                            </Grid>
+                        </Border>
+                    </UserControl>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</UserControl>

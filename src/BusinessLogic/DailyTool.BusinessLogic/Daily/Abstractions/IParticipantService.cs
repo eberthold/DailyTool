@@ -2,10 +2,10 @@
 {
     public interface IParticipantService
     {
-        Task<IReadOnlyCollection<Participant>> GetAllAsync();
+        Task<IReadOnlyCollection<ParticipantModel>> GetParticipantsAsync(int meetingId);
 
-        Task RefreshParticipantsAsync(IReadOnlyCollection<Participant> participants, MeetingInfo meetingInfo);
+        Task RefreshParticipantsAsync(IReadOnlyCollection<ParticipantModel> participants, DailyMeetingModel meetingInfo);
 
-        IReadOnlyCollection<Participant> ShuffleQueuedParticipants(IReadOnlyCollection<Participant> participants);
+        IReadOnlyCollection<ParticipantModel> ShuffleQueuedParticipants(IReadOnlyCollection<ParticipantModel> participants);
     }
 }

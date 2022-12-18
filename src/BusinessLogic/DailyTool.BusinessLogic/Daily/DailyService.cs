@@ -5,11 +5,11 @@ namespace DailyTool.BusinessLogic.Daily
     public class DailyService : IDailyService
     {
         private readonly IParticipantService _participantService;
-        private readonly IMeetingInfoService _meetingInfoService;
+        private readonly IDailyMeetingDataService _meetingInfoService;
 
         public DailyService(
             IParticipantService participantService,
-            IMeetingInfoService meetingInfoService)
+            IDailyMeetingDataService meetingInfoService)
         {
             _participantService = participantService ?? throw new ArgumentNullException(nameof(participantService));
             _meetingInfoService = meetingInfoService ?? throw new ArgumentNullException(nameof(meetingInfoService));
@@ -23,7 +23,9 @@ namespace DailyTool.BusinessLogic.Daily
 
         public async Task InitializeParticipantsAsync(DailyState state, ParticipantInitializationSettings settings)
         {
-            state.OrderedParticipants = await _participantService.GetAllAsync().ConfigureAwait(false);
+            state.OrderedParticipants = await _participantService
+                .GetParticipantsAsync(state.MeetingId)
+                .ConfigureAwait(false);
 
             if (settings.Shuffle)
             {
@@ -33,7 +35,7 @@ namespace DailyTool.BusinessLogic.Daily
 
         public async Task InitializeMeetingInfoAsync(DailyState state)
         {
-            state.MeetingInfo = await _meetingInfoService.GetAsync();
+            state.MeetingInfo = await _meetingInfoService.GetAsync(state.MeetingId);
         }
 
         public async Task RefreshStateAsync(DailyState state)
@@ -41,7 +43,7 @@ namespace DailyTool.BusinessLogic.Daily
             await _participantService.RefreshParticipantsAsync(state.OrderedParticipants, state.MeetingInfo);
         }
 
-        public Task SetPreviousParticipantAsync(IReadOnlyCollection<Participant> participants)
+        public Task SetPreviousParticipantAsync(IReadOnlyCollection<ParticipantModel> participants)
         {
             var requeuedParticipant = participants.FirstOrDefault(x => x.ParticipantState == ParticipantState.Active);
             if (requeuedParticipant is not null)
@@ -58,7 +60,7 @@ namespace DailyTool.BusinessLogic.Daily
             return Task.CompletedTask;
         }
 
-        public Task SetNextParticipantAsync(IReadOnlyCollection<Participant> participants)
+        public Task SetNextParticipantAsync(IReadOnlyCollection<ParticipantModel> participants)
         {
             var doneParticipant = participants.FirstOrDefault(x => x.ParticipantState == ParticipantState.Active);
             if (doneParticipant is not null)

@@ -11,7 +11,7 @@ namespace DailyTool.ViewModels.People
     public class PeopleOverviewViewModel : ObservableObject, INavigationTarget
     {
         private readonly IPersonService _personService;
-        private readonly IMapper<Person, PersonViewModel> _viewModelMapper;
+        private readonly IMapper<PersonModel, PersonViewModel> _viewModelMapper;
         private readonly INavigationService _navigationService;
 
         private AddPersonViewModel? _addPersonViewModel;
@@ -20,7 +20,7 @@ namespace DailyTool.ViewModels.People
 
         public PeopleOverviewViewModel(
             IPersonService personService,
-            IMapper<Person, PersonViewModel> viewModelMapper,
+            IMapper<PersonModel, PersonViewModel> viewModelMapper,
             INavigationService navigationService)
         {
             _personService = personService ?? throw new ArgumentNullException(nameof(personService));
@@ -85,7 +85,7 @@ namespace DailyTool.ViewModels.People
             People = new ObservableCollection<PersonViewModel>(mappedPeople);
         }
 
-        public Task OnNavigatedToAsync(NavigationMode navigationMode)
+        public Task OnNavigatedToAsync(IReadOnlyDictionary<string, string> parameters, NavigationMode navigationMode)
         {
             return Task.CompletedTask;
         }

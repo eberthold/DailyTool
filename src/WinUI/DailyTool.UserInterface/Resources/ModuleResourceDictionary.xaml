@@ -4,6 +4,8 @@
                     xmlns:converters="using:DailyTool.UserInterface.Converters"
                     xmlns:daily="using:DailyTool.UserInterface.Daily"
                     xmlns:local="using:DailyTool.UserInterface.Resources"
+                    xmlns:settings="using:DailyTool.UserInterface.Settings"
+                    xmlns:teamsVm="using:DailyTool.ViewModels.Teams"
                     xmlns:toolkit="using:CommunityToolkit.WinUI.UI.Controls">
 
     <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -64,7 +66,7 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                
+
                 <Border Width="8"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Stretch">
@@ -80,8 +82,8 @@
 
                 <TextBlock x:Name="PART_Participant"
                            Grid.Column="1"
+                           Margin="12 4"
                            FontSize="26"
-                           Margin="12, 4"
                            FontWeight="Bold"
                            Foreground="{ThemeResource SystemAccentColor}"
                            Style="{ThemeResource BodyStrongTextBlockStyle}"
@@ -118,4 +120,26 @@
             </Grid>
         </UserControl>
     </DataTemplate>
+
+    <DataTemplate x:Key="TeamsOverviewSettingsTemplate" x:DataType="teamsVm:TeamsOverviewViewModel">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                <Button Content="TODO: Add" />
+                <Button Content="TODO: Delete" />
+            </StackPanel>
+
+            <ItemsControl Grid.Row="1" ItemsSource="{Binding Teams}" />
+        </Grid>
+    </DataTemplate>
+
+    <settings:SettingsTemplateSelector x:Key="SettingsTemplateSelector">
+        <settings:SettingsTemplateSelector.Map>
+            <settings:MappingEntry DataType="teamsVm:TeamsOverviewViewModel" Template="{StaticResource TeamsOverviewSettingsTemplate}" />
+        </settings:SettingsTemplateSelector.Map>
+    </settings:SettingsTemplateSelector>
 </ResourceDictionary>

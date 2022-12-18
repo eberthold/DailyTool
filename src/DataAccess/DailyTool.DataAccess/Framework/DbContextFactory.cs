@@ -2,22 +2,22 @@
 
 namespace DailyTool.DataAccess.Framework
 {
-    public class DbContextFactory : IDbContextFactory
+    public class DbContextFactory : IDbContextFactory<DatabaseContext>
     {
+        private readonly DbContextOptions<DatabaseContext> _options;
         private readonly ITransactionProvider _transactionProvider;
-        private readonly IDbContextFactory<DatabaseContext> _dbContextFactory;
 
         public DbContextFactory(
-            ITransactionProvider transactionProvider,
-            IDbContextFactory<DatabaseContext> dbContextFactory)
+            DbContextOptions<DatabaseContext> options,
+            ITransactionProvider transactionProvider)
         {
+            _options = options;
             _transactionProvider = transactionProvider;
-            _dbContextFactory = dbContextFactory;
         }
 
-        public DatabaseContext Create()
+        public DatabaseContext CreateDbContext()
         {
-            var context = _dbContextFactory.CreateDbContext();
+            var context = new DatabaseContext(_options);
 
             if (_transactionProvider is not null)
             {

@@ -5,7 +5,7 @@
         /// <summary>
         /// Triggered when navigation to view model has happened.
         /// </summary>
-        Task OnNavigatedToAsync(NavigationMode navigationMode);
+        Task OnNavigatedToAsync(IReadOnlyDictionary<string, string> parameters, NavigationMode navigationMode);
 
         /// <summary>
         /// Triggered when naviation away from view model is about to happen.

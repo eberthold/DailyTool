@@ -27,7 +27,7 @@ namespace DailyTool.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Teams");
+                    b.ToTable("Teams", (string)null);
                 });
 #pragma warning restore 612, 618
         }

@@ -9,15 +9,15 @@ namespace DailyTool.BusinessLogic.Tests
     public class DailyServiceTests
     {
         private readonly IParticipantService _participantService = Substitute.For<IParticipantService>();
-        private readonly IMeetingInfoService _meetinInfoService = Substitute.For<IMeetingInfoService>();
+        private readonly IDailyMeetingDataService _meetinInfoService = Substitute.For<IDailyMeetingDataService>();
 
         [TestMethod]
         public async Task ShuffleParticipants_HappyPath_CallsParticipantService()
         {
             // Arrange
             var sut = CreateSut();
-            var originalParticipants = new List<Participant>();
-            var shuffledParticipants = new List<Participant>();
+            var originalParticipants = new List<ParticipantModel>();
+            var shuffledParticipants = new List<ParticipantModel>();
             var state = new DailyState
             {
                 OrderedParticipants = originalParticipants
@@ -38,10 +38,13 @@ namespace DailyTool.BusinessLogic.Tests
         {
             // Arrange
             var sut = CreateSut();
-            var state = new DailyState();
-            var originalParticipants = new List<Participant>();
-            var shuffledParticipants = new List<Participant>();
-            _participantService.GetAllAsync().Returns(originalParticipants);
+            var state = new DailyState
+            {
+                MeetingId = 5
+            };
+            var originalParticipants = new List<ParticipantModel>();
+            var shuffledParticipants = new List<ParticipantModel>();
+            _participantService.GetParticipantsAsync(5).Returns(originalParticipants);
             _participantService.ShuffleQueuedParticipants(originalParticipants).Returns(shuffledParticipants);
 
             var settings = new ParticipantInitializationSettings
@@ -61,10 +64,13 @@ namespace DailyTool.BusinessLogic.Tests
         {
             // Arrange
             var sut = CreateSut();
-            var state = new DailyState();
-            var meetingInfo = new MeetingInfo();
+            var state = new DailyState
+            {
+                MeetingId = 5,
+            };
+            var meetingInfo = new DailyMeetingModel();
 
-            _meetinInfoService.GetAsync().Returns(meetingInfo);
+            _meetinInfoService.GetAsync(5).Returns(meetingInfo);
 
             // Act
             await sut.InitializeMeetingInfoAsync(state);
@@ -80,8 +86,8 @@ namespace DailyTool.BusinessLogic.Tests
             var sut = CreateSut();
             var state = new DailyState
             {
-                OrderedParticipants = new List<Participant>(),
-                MeetingInfo = new MeetingInfo()
+                OrderedParticipants = new List<ParticipantModel>(),
+                MeetingInfo = new DailyMeetingModel()
             };
 
             // Act
@@ -102,7 +108,7 @@ namespace DailyTool.BusinessLogic.Tests
             // Arrange
             var sut = CreateSut();
 
-            var participants = new List<Participant>
+            var participants = new List<ParticipantModel>
             {
                 new(), new(), new()
             };
@@ -131,7 +137,7 @@ namespace DailyTool.BusinessLogic.Tests
             // Arrange
             var sut = CreateSut();
 
-            var participants = new List<Participant>
+            var participants = new List<ParticipantModel>
             {
                 new() { ParticipantState = ParticipantState.Done },
                 new() { ParticipantState = ParticipantState.Done },

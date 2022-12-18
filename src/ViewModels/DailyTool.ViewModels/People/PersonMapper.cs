@@ -5,7 +5,7 @@ using DailyTool.ViewModels.Notifications;
 
 namespace DailyTool.ViewModels.People
 {
-    public class PersonMapper : IMapper<PersonViewModel, Person>, IMapper<Person, PersonViewModel>
+    public class PersonMapper : IMapper<PersonViewModel, PersonModel>, IMapper<PersonModel, PersonViewModel>
     {
         private readonly INotificationService _notificationService;
         private readonly IPersonService _personService;
@@ -18,21 +18,20 @@ namespace DailyTool.ViewModels.People
             _personService = personService;
         }
 
-        public Person Map(PersonViewModel source)
+        public PersonModel Map(PersonViewModel source)
         {
-            var result = new Person();
+            var result = new PersonModel();
             Merge(source, result);
             return result;
         }
 
-        public void Merge(PersonViewModel source, Person destination)
+        public void Merge(PersonViewModel source, PersonModel destination)
         {
             destination.Id = source.Id;
-            destination.IsParticipating = source.IsParticipating;
             destination.Name = source.Name;
         }
 
-        public PersonViewModel Map(Person source)
+        public PersonViewModel Map(PersonModel source)
         {
             var result = new PersonViewModel(
                 _notificationService,
@@ -43,10 +42,9 @@ namespace DailyTool.ViewModels.People
             return result;
         }
 
-        public void Merge(Person source, PersonViewModel destination)
+        public void Merge(PersonModel source, PersonViewModel destination)
         {
             destination.Id = source.Id;
-            destination.IsParticipating = source.IsParticipating;
             destination.Name = source.Name;
         }
     }

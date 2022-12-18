@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using DailyTool.Infrastructure.Abstractions.Data;
+using System.Collections.Immutable;
 
 namespace Scrummy.Core.BusinessLogic.Data
 {

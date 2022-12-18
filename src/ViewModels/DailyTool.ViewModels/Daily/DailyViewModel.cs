@@ -14,7 +14,7 @@ namespace DailyTool.ViewModels.Daily
     {
         private readonly IDailyStateProvider _dailyStateProvider;
         private readonly IDailyService _dailyService;
-        private readonly IMapper<Participant, ParticipantViewModel> _viewModelMapper;
+        private readonly IMapper<ParticipantModel, ParticipantViewModel> _viewModelMapper;
         private readonly INavigationService _navigationService;
         private readonly ITimestampProvider _timeStampProvider;
         private readonly IMainThreadInvoker _mainThreadInvoker;
@@ -27,7 +27,7 @@ namespace DailyTool.ViewModels.Daily
         public DailyViewModel(
             IDailyStateProvider dailyStateProvider,
             IDailyService dailyService,
-            IMapper<Participant, ParticipantViewModel> viewModelMapper,
+            IMapper<ParticipantModel, ParticipantViewModel> viewModelMapper,
             INavigationService navigationService,
             ITimestampProvider timeStampProvider,
             IMainThreadInvoker mainThreadInvoker)
@@ -76,7 +76,7 @@ namespace DailyTool.ViewModels.Daily
             _timer.Change(0, 100);
         }
 
-        public Task OnNavigatedToAsync(NavigationMode navigationMode)
+        public Task OnNavigatedToAsync(IReadOnlyDictionary<string, string> parameters, NavigationMode navigationMode)
          => Task.CompletedTask;
 
         public Task<bool> OnNavigatingFromAsync(NavigationMode navigationMode)
@@ -93,7 +93,7 @@ namespace DailyTool.ViewModels.Daily
         }
 
         private Task NavigateBackAsync()
-            => _navigationService.GoBackAsync();
+            => _navigationService.NavigateBackAsync();
 
         private async Task SetPreviousParticipantAsync()
         {

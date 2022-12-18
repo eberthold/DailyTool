@@ -10,14 +10,17 @@ namespace DailyTool.ViewModels.MeetingInfos
 {
     public class MeetingInfoEditViewModel : ObservableObject, ILoadDataAsync, ISaveDataAsync, INavigationTarget
     {
-        private readonly IMeetingInfoService _meetingInfoService;
+        public const string MeetingIdParameter = "MeetingId";
+
+        private readonly IDailyMeetingDataService _meetingInfoService;
         private readonly IMapper _mapper;
         private readonly ITaskQueue _taskQueue;
 
         private MeetingInfoViewModel _meetingInfo = new();
+        private int _meetingId;
 
         public MeetingInfoEditViewModel(
-            IMeetingInfoService meetingInfoService,
+            IDailyMeetingDataService meetingInfoService,
             IMapper mapper,
             ITaskQueue taskQueue)
         {
@@ -51,13 +54,13 @@ namespace DailyTool.ViewModels.MeetingInfos
 
         public async Task LoadDataAsync()
         {
-            var meetingInfo = await _meetingInfoService.GetAsync();
+            var meetingInfo = await _meetingInfoService.GetAsync(_meetingId);
             MeetingInfo = _mapper.Map<MeetingInfoViewModel>(meetingInfo);
         }
 
         public Task SaveDataAsync()
         {
-            var meetingInfo = _mapper.Map<MeetingInfo>(MeetingInfo);
+            var meetingInfo = _mapper.Map<DailyMeetingModel>(MeetingInfo);
             return _meetingInfoService.UpdateAsync(meetingInfo);
         }
 
@@ -68,8 +71,11 @@ namespace DailyTool.ViewModels.MeetingInfos
             _taskQueue.ProcessQueueAsync(new());
         }
 
-        public Task OnNavigatedToAsync(NavigationMode navigationMode)
-            => Task.CompletedTask;
+        public Task OnNavigatedToAsync(IReadOnlyDictionary<string, string> parameters, NavigationMode navigationMode)
+        {
+            _meetingId = int.Parse(parameters[MeetingIdParameter]);
+            return Task.CompletedTask;
+        }
 
         public Task<bool> OnNavigatingFromAsync(NavigationMode navigationMode)
             => Task.FromResult(true);

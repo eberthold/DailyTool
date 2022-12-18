@@ -9,7 +9,7 @@ namespace DailyTool.BusinessLogic.Tests
     [TestClass]
     public class ParticipantServiceTests
     {
-        private readonly IParticipantRepository _participantRepository = Substitute.For<IParticipantRepository>();
+        private readonly IMeetingParticipantsRepository _participantRepository = Substitute.For<IMeetingParticipantsRepository>();
         private readonly ITimestampProvider _timestampProvider = Substitute.For<ITimestampProvider>();
         private readonly IRandomProvider _randomProvider = Substitute.For<IRandomProvider>();
 
@@ -18,14 +18,14 @@ namespace DailyTool.BusinessLogic.Tests
         {
             // Arrange
             var sut = CreateSut();
-            var meetingInfo = new MeetingInfo
+            var meetingInfo = new DailyMeetingModel
             {
                 StartTime = new TimeSpan(9, 0, 0),
                 Duration = new TimeSpan(0, 10, 0)
             };
 
             // make percentages of 25 for easier testing
-            var participants = new List<Participant>
+            var participants = new List<ParticipantModel>
             {
                 new(), new(), new(), new()
             };
@@ -48,15 +48,15 @@ namespace DailyTool.BusinessLogic.Tests
             // Arrange
             var sut = CreateSut();
 
-            var participants = new List<Participant>
+            var participants = new List<ParticipantModel>
             {
-                new Participant { Id = 1, ParticipantState = ParticipantState.Done },
-                new Participant { Id = 2, ParticipantState = ParticipantState.Done },
-                new Participant { Id = 3, ParticipantState = ParticipantState.Active },
-                new Participant { Id = 4 },
-                new Participant { Id = 5 },
-                new Participant { Id = 6 },
-                new Participant { Id = 7 },
+                new ParticipantModel { Id = 1, ParticipantState = ParticipantState.Done },
+                new ParticipantModel { Id = 2, ParticipantState = ParticipantState.Done },
+                new ParticipantModel { Id = 3, ParticipantState = ParticipantState.Active },
+                new ParticipantModel { Id = 4 },
+                new ParticipantModel { Id = 5 },
+                new ParticipantModel { Id = 6 },
+                new ParticipantModel { Id = 7 },
             };
 
             // fix seed for predictable results

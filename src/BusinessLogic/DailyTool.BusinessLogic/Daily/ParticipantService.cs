@@ -5,12 +5,12 @@ namespace DailyTool.BusinessLogic.Daily
 {
     public class ParticipantService : IParticipantService
     {
-        private readonly IParticipantRepository _repository;
+        private readonly IMeetingParticipantsRepository _repository;
         private readonly ITimestampProvider _timestampProvider;
         private readonly IRandomProvider _randomProvider;
 
         public ParticipantService(
-            IParticipantRepository repository,
+            IMeetingParticipantsRepository repository,
             ITimestampProvider timestampProvider,
             IRandomProvider randomProvider)
         {
@@ -19,12 +19,12 @@ namespace DailyTool.BusinessLogic.Daily
             _randomProvider = randomProvider ?? throw new ArgumentNullException(nameof(randomProvider));
         }
 
-        public Task<IReadOnlyCollection<Participant>> GetAllAsync()
+        public Task<IReadOnlyCollection<ParticipantModel>> GetParticipantsAsync(int meetingId)
         {
-            return _repository.GetAllAsync();
+            return _repository.GetParticipantsAsync(meetingId);
         }
 
-        public IReadOnlyCollection<Participant> ShuffleQueuedParticipants(IReadOnlyCollection<Participant> participants)
+        public IReadOnlyCollection<ParticipantModel> ShuffleQueuedParticipants(IReadOnlyCollection<ParticipantModel> participants)
         {
             var rand = _randomProvider.GetRandom();
 
@@ -32,7 +32,7 @@ namespace DailyTool.BusinessLogic.Daily
             var unchangedParticipants = participants.Except(participantsToShuffle).ToList();
 
             int index = 0;
-            var result = new List<Participant>(unchangedParticipants);
+            var result = new List<ParticipantModel>(unchangedParticipants);
             while (participantsToShuffle.Any())
             {
                 index = rand.Next(0, participantsToShuffle.Count);
@@ -43,7 +43,7 @@ namespace DailyTool.BusinessLogic.Daily
             return result;
         }
 
-        public Task RefreshParticipantsAsync(IReadOnlyCollection<Participant> participants, MeetingInfo meetingInfo)
+        public Task RefreshParticipantsAsync(IReadOnlyCollection<ParticipantModel> participants, DailyMeetingModel meetingInfo)
         {
             var percentagePerParticipant = 100d / participants.Count;
             var elapsedTime = _timestampProvider.CurrentClock - meetingInfo.StartTime;

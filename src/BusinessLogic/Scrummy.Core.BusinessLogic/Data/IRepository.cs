@@ -1,4 +1,6 @@
-﻿namespace Scrummy.Core.BusinessLogic.Data
+﻿using DailyTool.Infrastructure.Abstractions.Data;
+
+namespace Scrummy.Core.BusinessLogic.Data
 {
     public interface IRepository<T>
         where T : IIdentifiable

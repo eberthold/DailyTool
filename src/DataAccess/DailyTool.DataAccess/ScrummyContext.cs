@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DailyTool.DataAccess
 {
-    public class DatabaseContext : DbContext
+    public class ScrummyContext : DbContext
     {
-        public DatabaseContext(DbContextOptions<DatabaseContext> options)
+        public ScrummyContext(DbContextOptions<ScrummyContext> options)
             : base(options)
         {
         }
@@ -16,7 +16,7 @@ namespace DailyTool.DataAccess
 
         public DbSet<PersonEntity> People { get; set; }
 
-        public DbSet<MeetingEntity> Meetings { get; set; }
+        public DbSet<DailyMeetingEntity> Dailies { get; set; }
 
         public DbSet<MeetingParticipantEntity> MeetingParticipants { get; set; }
 
@@ -36,7 +36,7 @@ namespace DailyTool.DataAccess
 
             modelBuilder.Entity<TeamEntity>();
             modelBuilder.Entity<PersonEntity>();
-            modelBuilder.Entity<MeetingEntity>();
+            modelBuilder.Entity<DailyMeetingEntity>();
             modelBuilder.Entity<MeetingParticipantEntity>();
         }
     }

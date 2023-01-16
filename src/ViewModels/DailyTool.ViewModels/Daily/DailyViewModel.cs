@@ -4,7 +4,7 @@ using DailyTool.BusinessLogic.Daily;
 using DailyTool.BusinessLogic.Daily.Abstractions;
 using DailyTool.Infrastructure.Abstractions;
 using DailyTool.ViewModels.Abstractions;
-using DailyTool.ViewModels.Navigation;
+using Scrummy.Core.ViewModels.Navigation;
 using Scrummy.ViewModels.Shared.Data;
 using System.Collections.ObjectModel;
 

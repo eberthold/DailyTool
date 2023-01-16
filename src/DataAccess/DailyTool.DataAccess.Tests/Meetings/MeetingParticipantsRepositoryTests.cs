@@ -8,7 +8,7 @@ namespace DailyTool.DataAccess.Tests.Meetings
     [TestClass]
     public class MeetingParticipantsRepositoryTests
     {
-        private IDbContextFactory<DatabaseContext> _contextFactory = new InMemoryDbContextFactory();
+        private IDbContextFactory<ScrummyContext> _contextFactory = new InMemoryDbContextFactory();
 
         [TestMethod]
         public async Task AddParticipantAsync_HappyPath_AddsParticipant()
@@ -38,12 +38,12 @@ namespace DailyTool.DataAccess.Tests.Meetings
                 };
                 context.Teams.Add(team);
 
-                var meeting = new MeetingEntity
+                var meeting = new DailyMeetingEntity
                 {
                     Id = 8,
                     Team = team
                 };
-                context.Meetings.Add(meeting);
+                context.Dailies.Add(meeting);
 
                 await context.SaveChangesAsync();
             }

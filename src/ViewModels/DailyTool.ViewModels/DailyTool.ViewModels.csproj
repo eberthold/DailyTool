@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\BusinessLogic\DailyTool.BusinessLogic\DailyTool.BusinessLogic.csproj" />
+    <ProjectReference Include="..\Scrummy.Core.ViewModels\Scrummy.Core.ViewModels.csproj" />
     <ProjectReference Include="..\Scrummy.ViewModels.Shared\Scrummy.ViewModels.Shared.csproj" />
   </ItemGroup>
 

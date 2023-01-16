@@ -17,6 +17,8 @@ namespace DailyTool.ViewModels.MeetingInfos
             destination.StartTime = source.StartTime;
             destination.Duration = source.Duration;
             destination.SprintBoardUri = source.SprintBoardUri;
+            destination.Id = source.Id;
+            destination.TeamId = source.TeamId;
         }
 
         public MeetingInfoViewModel Map(DailyMeetingModel source)
@@ -31,6 +33,8 @@ namespace DailyTool.ViewModels.MeetingInfos
             destination.StartTime = source.StartTime;
             destination.Duration = source.Duration;
             destination.SprintBoardUri = source.SprintBoardUri;
+            destination.Id = source.Id;
+            destination.TeamId = source.TeamId;
         }
     }
 }

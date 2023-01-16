@@ -10,12 +10,12 @@ namespace DailyTool.DataAccess.Generic
         where TModel : IIdentifiable
         where TEntity : class, IIdentifiableSet
     {
-        private readonly IDbContextFactory<DatabaseContext> _dbContextFactory;
+        private readonly IDbContextFactory<ScrummyContext> _dbContextFactory;
         private readonly IMapper<TModel, TEntity> _entityMapper;
         private readonly IMapper<TEntity, TModel> _modelMapper;
 
         public GenericRepository(
-            IDbContextFactory<DatabaseContext> dbContextFactory,
+            IDbContextFactory<ScrummyContext> dbContextFactory,
             IMapper<TModel, TEntity> entityMapper,
             IMapper<TEntity, TModel> modelMapper)
         {

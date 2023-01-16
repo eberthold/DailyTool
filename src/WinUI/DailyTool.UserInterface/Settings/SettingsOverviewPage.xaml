@@ -4,14 +4,20 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="using:DailyTool.UserInterface.Settings"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:viewModel="using:DailyTool.ViewModels.Settings"
+      d:DataContext="{d:DesignInstance Type=viewModel:SettingsOverviewViewModel,
+                                       IsDesignTimeCreatable=False}"
       mc:Ignorable="d">
     <Grid Padding="24 12">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" MinWidth="150" />
+            <ColumnDefinition Width="24" />
             <ColumnDefinition Width="5*" />
         </Grid.ColumnDefinitions>
 
-        <ListView x:Name="PART_SettingsMenu" ItemsSource="{Binding Settings}">
+        <ListView x:Name="PART_SettingsMenu"
+                  ItemsSource="{Binding Settings}"
+                  SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Title}" />
@@ -19,11 +25,20 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <Border Grid.Column="1">
-            <ContentControl MinWidth="80"
-                            MinHeight="80"
-                            Content="{Binding ElementName=PART_SettingsMenu, Mode=OneWay, Path=SelectedItem}"
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Text="{Binding SelectedItem.Title}" />
+
+            <ContentControl Grid.Row="1"
+                            HorizontalContentAlignment="Stretch"
+                            VerticalContentAlignment="Stretch"
+                            Content="{Binding SelectedItem}"
                             ContentTemplateSelector="{StaticResource SettingsTemplateSelector}" />
-        </Border>
+        </Grid>
+
     </Grid>
 </Page>

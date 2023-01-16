@@ -3,14 +3,14 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace DailyTool.DataAccess
 {
-    internal class DatabaseContextDesignTimeFactory : IDesignTimeDbContextFactory<DatabaseContext>
+    internal class DatabaseContextDesignTimeFactory : IDesignTimeDbContextFactory<ScrummyContext>
     {
-        public DatabaseContext CreateDbContext(string[] args)
+        public ScrummyContext CreateDbContext(string[] args)
         {
-            var optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>();
+            var optionsBuilder = new DbContextOptionsBuilder<ScrummyContext>();
             optionsBuilder.UseSqlite("Data Source=:memory:");
 
-            return new DatabaseContext(optionsBuilder.Options);
+            return new ScrummyContext(optionsBuilder.Options);
         }
     }
 }

@@ -2,6 +2,6 @@
 {
     public interface ITitle
     {
-        public string Title { get; }
+        public object Title { get; }
     }
 }

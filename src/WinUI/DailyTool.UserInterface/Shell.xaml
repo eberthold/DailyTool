@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             x:Name="PART_Root"
              mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -13,17 +14,23 @@
             </Grid.RowDefinitions>
 
 
-            <Grid Padding="24, 12">
+            <Grid Padding="24 12">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}"
-                           Text="{Binding ElementName=PART_NavigationFrame, Path=Content.DataContext.Title}"
-                           TextWrapping="NoWrap" />
+                <Button Margin="0 0 12 0"
+                        Command="{Binding NavigateBackCommand}"
+                        Style="{StaticResource NavigationBackButtonNormalStyle}"
+                        Visibility="{Binding ElementName=PART_Root, Path=CanGoBack, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                <Button Grid.Column="1"
+                <ContentControl Grid.Column="1"
+                                Content="{Binding ElementName=PART_NavigationFrame, Path=Content.DataContext.Title}"
+                                ContentTemplateSelector="{StaticResource TitleTemplateSelector}" />
+
+                <Button Grid.Column="2"
                         Background="Transparent"
                         BorderThickness="0"
                         Command="{Binding NavigateSettingsCommand}">
@@ -31,7 +38,12 @@
                 </Button>
             </Grid>
 
-            <Frame x:Name="PART_NavigationFrame" Grid.Row="1" />
+            <ContentControl x:Name="PART_NavigationFrame"
+                            Grid.Row="1"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            HorizontalContentAlignment="Stretch"
+                            VerticalContentAlignment="Stretch" />
         </Grid>
 
         <ItemsControl Margin="24 0 0 24"

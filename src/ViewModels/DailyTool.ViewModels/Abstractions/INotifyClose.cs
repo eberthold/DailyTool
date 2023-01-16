@@ -2,6 +2,6 @@
 {
     internal interface INotifyClose
     {
-        void AddCloseCallback(Func<Task> callback);
+        event EventHandler? Closed;
     }
 }

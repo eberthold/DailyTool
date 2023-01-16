@@ -1,27 +1,20 @@
-﻿using Microsoft.UI.Xaml;
+﻿using DailyTool.ViewModels.Teams;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace DailyTool.UserInterface.Settings
 {
     public class SettingsTemplateSelector : DataTemplateSelector
     {
-        public List<MappingEntry> Map { get; set; } = new List<MappingEntry>();
+        public DataTemplate? TeamsTemplate { get; set; }
 
         protected override DataTemplate? SelectTemplateCore(object? item)
         {
-            if (item is null)
+            return item switch
             {
-                return null;
-            }
-
-            var dataTemplate = Map
-                .SingleOrDefault(x => x.DataType == item.GetType())
-                ?.Template;
-
-            return dataTemplate;
+                TeamsOverviewViewModel _ => TeamsTemplate,
+                _ => null
+            };
         }
 
         /// <inheritdoc />

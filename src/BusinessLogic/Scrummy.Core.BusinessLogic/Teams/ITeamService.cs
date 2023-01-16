@@ -1,11 +1,9 @@
-﻿namespace Scrummy.Core.BusinessLogic.Teams
+﻿using Scrummy.Core.BusinessLogic.Data;
+
+namespace Scrummy.Core.BusinessLogic.Teams
 {
-    public interface ITeamService
+    public interface ITeamService : IDataService<TeamModel>
     {
-        Task<TeamModel> GetAsync(int id);
-
-        Task<IReadOnlyCollection<TeamModel>> GetAllAsync();
-
         Task<int> CreateAsync(TeamModel team);
 
         Task UpdateAsync(TeamModel team);

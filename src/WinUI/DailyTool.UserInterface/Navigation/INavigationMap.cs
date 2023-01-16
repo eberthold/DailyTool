@@ -1,4 +1,4 @@
-﻿using DailyTool.ViewModels.Navigation;
+﻿using Scrummy.Core.ViewModels.Navigation;
 using System;
 
 namespace DailyTool.UserInterface.Navigation
@@ -7,5 +7,7 @@ namespace DailyTool.UserInterface.Navigation
     {
         Type GetForTarget<T>()
             where T : INavigationTarget;
+
+        Type GetForTarget(Type type);
     }
 }

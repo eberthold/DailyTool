@@ -35,7 +35,7 @@ namespace DailyTool.BusinessLogic.Daily
 
         public async Task InitializeMeetingInfoAsync(DailyState state)
         {
-            state.MeetingInfo = await _meetingInfoService.GetAsync(state.MeetingId);
+            state.MeetingInfo = await _meetingInfoService.GetByTeamAsync(state.MeetingId);
         }
 
         public async Task RefreshStateAsync(DailyState state)

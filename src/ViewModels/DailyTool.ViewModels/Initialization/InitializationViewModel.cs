@@ -3,17 +3,20 @@ using CommunityToolkit.Mvvm.Input;
 using DailyTool.ViewModels.Abstractions;
 using DailyTool.ViewModels.Daily;
 using DailyTool.ViewModels.MeetingInfos;
-using DailyTool.ViewModels.Navigation;
 using DailyTool.ViewModels.People;
+using Scrummy.Core.BusinessLogic.Meeting;
+using Scrummy.Core.ViewModels.Navigation;
+using Scrummy.Core.ViewModels.Parameters;
 using Scrummy.ViewModels.Shared.Data;
 
 namespace DailyTool.ViewModels.Initialization
 {
-    public class InitializationViewModel : ObservableObject, INavigationTarget, ILoadDataAsync, ITitle
+    public class InitializationViewModel : ObservableObject, INavigationTarget<TeamParameter>, ILoadDataAsync, ITitle
     {
         private readonly INavigationService _navigationService;
         private MeetingInfoEditViewModel? _meetingInfoEditViewModel;
         private PeopleOverviewViewModel? _peopleEditViewModel;
+        private int _teamId;
 
         public InitializationViewModel(INavigationService navigationService)
         {
@@ -36,11 +39,16 @@ namespace DailyTool.ViewModels.Initialization
             private set => SetProperty(ref _peopleEditViewModel, value);
         }
 
-        public string Title => "TODO: Daily Vorbereitung";
+        public object Title => "TODO: Daily Vorbereitung";
 
         public async Task LoadDataAsync()
         {
-            MeetingInfoEditViewModel = await _navigationService.CreateNavigationTarget<MeetingInfoEditViewModel>();
+            MeetingInfoEditViewModel = await _navigationService.CreateNavigationTarget<MeetingInfoEditViewModel, MeetingParameter>(new MeetingParameter
+            {
+                TeamId = _teamId,
+                MeetingType = KnownMeetingType.Daily
+            });
+
             PeopleEditViewModel = await _navigationService.CreateNavigationTarget<PeopleOverviewViewModel>();
 
             PeopleEditViewModel.PropertyChanged += (_, __) => RefreshCommands();
@@ -59,9 +67,11 @@ namespace DailyTool.ViewModels.Initialization
             return _navigationService.NavigateAsync<DailyViewModel>();
         }
 
-        public Task OnNavigatedToAsync(IReadOnlyDictionary<string, string> parameters, NavigationMode navigationMode)
+        public Task OnNavigatedToAsync(TeamParameter parameter, NavigationMode navigationMode)
         {
-            return Task.CompletedTask;
+            _teamId = parameter.TeamId;
+
+            return LoadDataAsync();
         }
 
         public Task<bool> OnNavigatingFromAsync(NavigationMode navigationMode)

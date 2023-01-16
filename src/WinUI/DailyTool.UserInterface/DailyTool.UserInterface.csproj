@@ -13,17 +13,20 @@
 		<None Remove="Daily\DailyView.xaml" />
 		<None Remove="Daily\MeetingInfoEditView.xaml" />
 		<None Remove="Daily\PeopleOverviewView.xaml" />
+		<None Remove="Dashboard\DashboardView.xaml" />
 		<None Remove="Initialization\AddPersonView.xaml" />
 		<None Remove="Initialization\InitializationView.xaml" />
 		<None Remove="Resources\ModuleResourceDictionary.xaml" />
 		<None Remove="Settings\SettingsOverviewPage.xaml" />
 		<None Remove="Shell.xaml" />
+		<None Remove="Teams\EditTeamView.xaml" />
+		<None Remove="Teams\TeamsOverviewView.xaml" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
 		<PackageReference Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
-		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.2.221116.1" />
+		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.2.221209.1" />
 		<PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.755" />
 		<PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.435">
 			<PrivateAssets>all</PrivateAssets>
@@ -35,6 +38,12 @@
 		<ProjectReference Include="..\..\DataAccess\DailyTool.DataAccess\DailyTool.DataAccess.csproj" />
 		<ProjectReference Include="..\..\ViewModels\DailyTool.ViewModels\DailyTool.ViewModels.csproj" />
 		<ProjectReference Include="..\..\ViewModels\Scrummy.Core.ViewModels\Scrummy.Core.ViewModels.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Page Update="Teams\EditTeamView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -81,6 +90,18 @@
 
 	<ItemGroup>
 	  <Page Update="Settings\SettingsOverviewPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Page Update="Teams\TeamsOverviewView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Page Update="Dashboard\DashboardView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </Page>
 	</ItemGroup>

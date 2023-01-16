@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using DailyTool.BusinessLogic.Daily;
 using DailyTool.BusinessLogic.Daily.Abstractions;
 using DailyTool.Infrastructure.Abstractions;
-using DailyTool.ViewModels.Navigation;
+using Scrummy.Core.ViewModels.Navigation;
 using System.Collections.ObjectModel;
 
 namespace DailyTool.ViewModels.People
@@ -103,7 +103,7 @@ namespace DailyTool.ViewModels.People
         private async Task AddPersonAsync()
         {
             AddPersonViewModel = await _navigationService.CreateNavigationTarget<AddPersonViewModel>();
-            AddPersonViewModel.AddCloseCallback(() => OnAddPersonClosed());
+            AddPersonViewModel.Closed += OnAddPersonClosed;
         }
 
         private void RefreshCommands()
@@ -112,10 +112,15 @@ namespace DailyTool.ViewModels.People
             RemovePersonCommand.NotifyCanExecuteChanged();
         }
 
-        private Task OnAddPersonClosed()
+        private void OnAddPersonClosed(object? sender, EventArgs eventArgs)
         {
+            if (AddPersonViewModel is null)
+            {
+                return;
+            }
+
+            AddPersonViewModel.Closed -= OnAddPersonClosed;
             AddPersonViewModel = null;
-            return Task.CompletedTask;
         }
 
         private bool CanRemovePerson()

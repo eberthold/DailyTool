@@ -5,8 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DailyTool.DataAccess.Meetings
 {
-    [Table("Meetings")]
-    public class MeetingEntity : IIdentifiableSet
+    [Table("Dailies")]
+    public class DailyMeetingEntity : IIdentifiableSet
     {
         [Key]
         public int Id { get; set; }
@@ -19,5 +19,7 @@ namespace DailyTool.DataAccess.Meetings
         public TimeSpan StartTime { get; set; }
 
         public TimeSpan Duration { get; set; }
+
+        public string? SprintBoardUri { get; set; }
     }
 }

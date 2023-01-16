@@ -15,9 +15,10 @@ using DailyTool.UserInterface;
 using DailyTool.UserInterface.Navigation;
 using DailyTool.ViewModels.Abstractions;
 using DailyTool.ViewModels.Daily;
+using DailyTool.ViewModels.Dashboard;
+using DailyTool.ViewModels.Data;
 using DailyTool.ViewModels.Initialization;
 using DailyTool.ViewModels.MeetingInfos;
-using DailyTool.ViewModels.Navigation;
 using DailyTool.ViewModels.Notifications;
 using DailyTool.ViewModels.People;
 using DailyTool.ViewModels.Settings;
@@ -27,6 +28,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Scrummy.Core.BusinessLogic.Data;
 using Scrummy.Core.BusinessLogic.Teams;
+using Scrummy.Core.ViewModels.Navigation;
 using System;
 using System.Data;
 using System.IO;
@@ -83,6 +85,8 @@ namespace DailyTool.Packaged.Entry
             services.AddTransient<AddPersonViewModel>();
             services.AddTransient<MeetingInfoEditViewModel>();
             services.AddTransient<PeopleOverviewViewModel>();
+            services.AddTransient<EditTeamViewModel>();
+            services.AddTransient<DashboardViewModel>();
         }
 
         private static void RegisterServices(this IServiceCollection services)
@@ -95,21 +99,26 @@ namespace DailyTool.Packaged.Entry
             services.AddSingleton<INotificationService, NotificationService>();
 
             services.AddSingleton<ITeamService, TeamService>();
+            services.AddSingleton<ITeamContext, TeamContext>();
+            services.AddSingleton<IDataService<TeamModel>>(provider => provider.GetRequiredService<ITeamService>());
+
+            services.AddSingleton<IOverviewViewModelService<TeamViewModel>, OverviewViewModelService<TeamModel, TeamViewModel>>();
         }
 
         private static void RegisterRepositories(this IServiceCollection services)
         {
             services.AddSingleton<IRepository<PersonModel>, GenericRepository<PersonModel, PersonEntity>>();
             services.AddSingleton<IRepository<TeamModel>, GenericRepository<TeamModel, TeamEntity>>();
-            services.AddSingleton<IRepository<DailyMeetingModel>, GenericRepository<DailyMeetingModel, DailyMeetingEntityContainer>>();
+            services.AddSingleton<IRepository<DailyMeetingModel>, GenericRepository<DailyMeetingModel, DailyMeetingEntity>>();
+            services.AddSingleton<IDailyMeetingRepository, DailyMeetingRepository>();
             services.AddSingleton<IMeetingParticipantsRepository, MeetingParticipantsRepository>();
 
-            services.AddSingleton<IDbContextFactory<DatabaseContext>, DbContextFactory>();
+            services.AddSingleton<IDbContextFactory<ScrummyContext>, DbContextFactory>();
             services.AddSingleton<ITransactionProvider, TransactionProvider>();
 
             var path = Path.Combine(AppContext.BaseDirectory, "data.db");
             var connectionString = $"DataSource={path}";
-            services.AddSqlite<DatabaseContext>(connectionString);
+            services.AddSqlite<ScrummyContext>(connectionString);
             services.AddSingleton(new SqliteConnection(connectionString));
         }
 

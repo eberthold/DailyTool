@@ -1,13 +1,18 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using DailyTool.Infrastructure.Abstractions.Data;
 
 namespace DailyTool.ViewModels.MeetingInfos
 {
-    public class MeetingInfoViewModel : ObservableObject
+    public class MeetingInfoViewModel : ObservableObject, IIdentifiableSet
     {
         private TimeSpan _startTime;
         private TimeSpan _duration;
         private TimeSpan _endTime;
         private string _sprintBoardUri = string.Empty;
+
+        public int Id { get; set; }
+
+        public int TeamId { get; set; }
 
         public TimeSpan StartTime
         {

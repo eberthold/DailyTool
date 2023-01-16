@@ -3,13 +3,12 @@ using CommunityToolkit.Mvvm.Input;
 using DailyTool.BusinessLogic.Daily;
 using DailyTool.BusinessLogic.Daily.Abstractions;
 using DailyTool.ViewModels.Abstractions;
-using DailyTool.ViewModels.Navigation;
+using Scrummy.Core.ViewModels.Navigation;
 
 namespace DailyTool.ViewModels.People
 {
     public class AddPersonViewModel : ObservableObject, INavigationTarget, INotifyClose
     {
-        private readonly List<Func<Task>> _closeCallbacks = new List<Func<Task>>();
         private readonly IPersonService _personService;
         private string _name = string.Empty;
 
@@ -20,6 +19,8 @@ namespace DailyTool.ViewModels.People
 
             _personService = personService ?? throw new ArgumentNullException(nameof(personService));
         }
+
+        public event EventHandler? Closed;
 
         public IAsyncRelayCommand AddPersonCommand { get; }
 
@@ -52,7 +53,7 @@ namespace DailyTool.ViewModels.People
             };
 
             await _personService.CreatePersonAsync(person);
-            await OnCloseAsync();
+            Closed?.Invoke(this, EventArgs.Empty);
         }
 
         private void RefreshCommands()
@@ -62,19 +63,8 @@ namespace DailyTool.ViewModels.People
 
         private Task CancelAsync()
         {
-            return OnCloseAsync();
-        }
-
-        public void AddCloseCallback(Func<Task> callback)
-        {
-            _closeCallbacks.Add(callback);
-        }
-
-        private async Task OnCloseAsync()
-        {
-            var tasks = _closeCallbacks.Select(x => x()).ToList();
-            _closeCallbacks.Clear();
-            await Task.WhenAll(tasks);
+            Closed?.Invoke(this, EventArgs.Empty);
+            return Task.CompletedTask;
         }
 
         public Task OnNavigatedToAsync(IReadOnlyDictionary<string, string> parameters, NavigationMode navigationMode)

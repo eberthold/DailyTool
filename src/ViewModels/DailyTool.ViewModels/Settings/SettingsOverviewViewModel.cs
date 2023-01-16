@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using DailyTool.ViewModels.Abstractions;
-using DailyTool.ViewModels.Navigation;
+using Scrummy.Core.ViewModels.Navigation;
 using Scrummy.ViewModels.Shared.Data;
 using System.Collections.Immutable;
 
@@ -11,6 +11,7 @@ namespace DailyTool.ViewModels.Settings
         private readonly ISettingsProvider _settingsProvider;
 
         private IReadOnlyCollection<ISettingsViewModel> _settings = ImmutableArray<ISettingsViewModel>.Empty;
+        private ISettingsViewModel? _selectedItem;
 
         public SettingsOverviewViewModel(ISettingsProvider settingsProvider)
         {
@@ -23,7 +24,13 @@ namespace DailyTool.ViewModels.Settings
             set => SetProperty(ref _settings, value);
         }
 
-        public string Title => "TODO: Einstellungen";
+        public ISettingsViewModel? SelectedItem
+        {
+            get => _selectedItem;
+            set => SetProperty(ref _selectedItem, value);
+        }
+
+        public object Title => "TODO: Einstellungen";
 
         public async Task LoadDataAsync()
         {
@@ -31,7 +38,9 @@ namespace DailyTool.ViewModels.Settings
         }
 
         public Task OnNavigatedToAsync(IReadOnlyDictionary<string, string> parameters, NavigationMode navigationMode)
-            => Task.CompletedTask;
+        {
+            return LoadDataAsync();
+        }
 
         public Task<bool> OnNavigatingFromAsync(NavigationMode navigationMode)
             => Task.FromResult(true);

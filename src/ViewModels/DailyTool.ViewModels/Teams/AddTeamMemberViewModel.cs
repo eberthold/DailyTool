@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DailyTool.Infrastructure.Abstractions;
-using DailyTool.ViewModels.Navigation;
 using Scrummy.Core.BusinessLogic.Teams;
+using Scrummy.Core.ViewModels.Navigation;
 
 namespace DailyTool.ViewModels.Teams
 {

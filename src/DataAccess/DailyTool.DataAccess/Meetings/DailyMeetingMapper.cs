@@ -4,37 +4,37 @@ using DailyTool.Infrastructure.Abstractions;
 
 namespace DailyTool.DataAccess.Meetings
 {
-    public class DailyMeetingMapper : IMapper<DailyMeetingModel, DailyMeetingEntityContainer>, IMapper<DailyMeetingEntityContainer, DailyMeetingModel>
+    public class DailyMeetingMapper : IMapper<DailyMeetingModel, DailyMeetingEntity>, IMapper<DailyMeetingEntity, DailyMeetingModel>
     {
-        public DailyMeetingEntityContainer Map(DailyMeetingModel source)
+        public DailyMeetingEntity Map(DailyMeetingModel source)
         {
-            var result = new DailyMeetingEntityContainer();
+            var result = new DailyMeetingEntity();
             Merge(source, result);
             return result;
         }
 
-        public DailyMeetingModel Map(DailyMeetingEntityContainer source)
+        public DailyMeetingModel Map(DailyMeetingEntity source)
         {
             var result = new DailyMeetingModel();
             Merge(source, result);
             return result;
         }
 
-        public void Merge(DailyMeetingModel source, DailyMeetingEntityContainer destination)
+        public void Merge(DailyMeetingModel source, DailyMeetingEntity destination)
         {
-            destination.Meeting.Id = source.Id;
-            destination.Meeting.TeamId = source.TeamId;
-            destination.Meeting.StartTime = source.StartTime;
-            destination.Meeting.Duration = source.Duration;
+            destination.Id = source.Id;
+            destination.TeamId = source.TeamId;
+            destination.StartTime = source.StartTime;
+            destination.Duration = source.Duration;
             destination.SprintBoardUri = source.SprintBoardUri.MapToEntity();
         }
 
-        public void Merge(DailyMeetingEntityContainer source, DailyMeetingModel destination)
+        public void Merge(DailyMeetingEntity source, DailyMeetingModel destination)
         {
-            destination.Id = source.Meeting.Id;
-            destination.TeamId = source.Meeting.TeamId;
-            destination.StartTime = source.Meeting.StartTime;
-            destination.Duration = source.Meeting.Duration;
+            destination.Id = source.Id;
+            destination.TeamId = source.TeamId;
+            destination.StartTime = source.StartTime;
+            destination.Duration = source.Duration;
             destination.SprintBoardUri = source.SprintBoardUri.MapToModel();
         }
     }

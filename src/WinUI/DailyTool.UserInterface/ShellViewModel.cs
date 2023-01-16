@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DailyTool.ViewModels.Navigation;
 using DailyTool.ViewModels.Notifications;
 using DailyTool.ViewModels.Settings;
+using Scrummy.Core.ViewModels.Navigation;
 using Scrummy.Core.ViewModels.Teams;
 using Scrummy.ViewModels.Shared.Data;
 using System.Collections.ObjectModel;
@@ -21,8 +21,11 @@ namespace DailyTool.UserInterface
             NotificationService = notificationService;
             _navigationService = navigationService;
 
+            NavigateBackCommand = new AsyncRelayCommand(NavigateBackAsync);
             NavigateSettingsCommand = new AsyncRelayCommand(NavigateToSettingsAsync);
         }
+
+        public IRelayCommand NavigateBackCommand { get; }
 
         public IRelayCommand NavigateSettingsCommand { get; }
 
@@ -38,6 +41,11 @@ namespace DailyTool.UserInterface
         private Task NavigateToSettingsAsync()
         {
             return _navigationService.NavigateAsync<SettingsOverviewViewModel>();
+        }
+
+        private Task NavigateBackAsync()
+        {
+            return _navigationService.NavigateBackAsync();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace DailyTool.ViewModels.Navigation
+﻿namespace Scrummy.Core.ViewModels.Navigation
 {
     public enum NavigationMode
     {

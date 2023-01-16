@@ -7,10 +7,10 @@ namespace DailyTool.DataAccess.Meetings
 {
     public class MeetingParticipantsRepository : IMeetingParticipantsRepository
     {
-        private readonly IDbContextFactory<DatabaseContext> _dbContextFactory;
+        private readonly IDbContextFactory<ScrummyContext> _dbContextFactory;
 
         public MeetingParticipantsRepository(
-            IDbContextFactory<DatabaseContext> dbContextFactory)
+            IDbContextFactory<ScrummyContext> dbContextFactory)
         {
             _dbContextFactory = dbContextFactory;
         }
@@ -40,7 +40,7 @@ namespace DailyTool.DataAccess.Meetings
         {
             await using var context = _dbContextFactory.CreateDbContext();
 
-            var meeting = await context.Meetings.FindAsync(dailyMeetingId).ConfigureAwait(false);
+            var meeting = await context.Dailies.FindAsync(dailyMeetingId).ConfigureAwait(false);
             if (meeting is null)
             {
                 throw new NotFoundException<DailyMeetingModel>(dailyMeetingId);

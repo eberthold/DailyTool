@@ -1,11 +1,23 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using DailyTool.Infrastructure.Abstractions.Data;
 
 namespace DailyTool.ViewModels.Teams
 {
-    public class TeamViewModel : ObservableObject
+    public class TeamViewModel : ObservableObject, IIdentifiable
     {
-        public int Id { get; set; }
+        private int _id;
+        private string _name = string.Empty;
 
-        public string Name { get; set; } = string.Empty;
+        public int Id
+        {
+            get => _id;
+            set => SetProperty(ref _id, value);
+        }
+
+        public string Name
+        {
+            get => _name;
+            set => SetProperty(ref _name, value);
+        }
     }
 }

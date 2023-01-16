@@ -1,27 +1,25 @@
-﻿namespace DailyTool.ViewModels.Settings
+﻿using DailyTool.ViewModels.Teams;
+using Scrummy.Core.ViewModels.Navigation;
+
+namespace DailyTool.ViewModels.Settings
 {
     public class SettingsProvider : ISettingsProvider
     {
-        private readonly IServiceProvider _serviceProvider;
+        private readonly INavigationService _navigationService;
 
-        public SettingsProvider(IServiceProvider serviceProvider)
+        public SettingsProvider(INavigationService navigationService)
         {
-            _serviceProvider = serviceProvider;
+            _navigationService = navigationService;
         }
 
-        public Task<IReadOnlyCollection<ISettingsViewModel>> GetSettingsAsync()
+        public async Task<IReadOnlyCollection<ISettingsViewModel>> GetSettingsAsync()
         {
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            var result = new List<ISettingsViewModel>
+            {
+                await _navigationService.CreateNavigationTarget<TeamsOverviewViewModel>(),
+            };
 
-            var allTypes = assemblies.SelectMany(x => x.GetTypes());
-            var settingsViewModelTypes = allTypes.Where(x => x.GetInterfaces().Contains(typeof(ISettingsViewModel)));
-
-            var instances = settingsViewModelTypes
-                .Select(x => _serviceProvider.GetService(x))
-                .OfType<ISettingsViewModel>()
-                .ToList();
-
-            return Task.FromResult<IReadOnlyCollection<ISettingsViewModel>>(instances);
+            return result;
         }
     }
 }

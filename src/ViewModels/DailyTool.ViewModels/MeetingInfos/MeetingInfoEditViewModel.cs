@@ -3,21 +3,23 @@ using DailyTool.BusinessLogic.Daily;
 using DailyTool.BusinessLogic.Daily.Abstractions;
 using DailyTool.Infrastructure.Abstractions;
 using DailyTool.ViewModels.Abstractions;
-using DailyTool.ViewModels.Navigation;
+using Scrummy.Core.BusinessLogic.Meeting;
+using Scrummy.Core.ViewModels.Navigation;
+using Scrummy.Core.ViewModels.Parameters;
 using Scrummy.ViewModels.Shared.Data;
 
 namespace DailyTool.ViewModels.MeetingInfos
 {
-    public class MeetingInfoEditViewModel : ObservableObject, ILoadDataAsync, ISaveDataAsync, INavigationTarget
+    public class MeetingInfoEditViewModel : ObservableObject, ILoadDataAsync, ISaveDataAsync, INavigationTarget<MeetingParameter>
     {
-        public const string MeetingIdParameter = "MeetingId";
-
         private readonly IDailyMeetingDataService _meetingInfoService;
         private readonly IMapper _mapper;
         private readonly ITaskQueue _taskQueue;
 
         private MeetingInfoViewModel _meetingInfo = new();
-        private int _meetingId;
+        private int _meetingId = 0;
+        private int _teamId = 0;
+        private KnownMeetingType _meetingType = KnownMeetingType.Daily;
 
         public MeetingInfoEditViewModel(
             IDailyMeetingDataService meetingInfoService,
@@ -54,7 +56,7 @@ namespace DailyTool.ViewModels.MeetingInfos
 
         public async Task LoadDataAsync()
         {
-            var meetingInfo = await _meetingInfoService.GetAsync(_meetingId);
+            var meetingInfo = await _meetingInfoService.GetByTeamAsync(_teamId);
             MeetingInfo = _mapper.Map<MeetingInfoViewModel>(meetingInfo);
         }
 
@@ -71,10 +73,12 @@ namespace DailyTool.ViewModels.MeetingInfos
             _taskQueue.ProcessQueueAsync(new());
         }
 
-        public Task OnNavigatedToAsync(IReadOnlyDictionary<string, string> parameters, NavigationMode navigationMode)
+        public Task OnNavigatedToAsync(MeetingParameter parameter, NavigationMode navigationMode)
         {
-            _meetingId = int.Parse(parameters[MeetingIdParameter]);
-            return Task.CompletedTask;
+            _teamId = parameter.TeamId;
+            _meetingType = parameter.MeetingType;
+
+            return LoadDataAsync();
         }
 
         public Task<bool> OnNavigatingFromAsync(NavigationMode navigationMode)

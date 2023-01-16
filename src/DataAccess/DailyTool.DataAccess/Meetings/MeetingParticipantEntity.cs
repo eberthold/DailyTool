@@ -14,7 +14,7 @@ namespace DailyTool.DataAccess.Meetings
         [ForeignKey(nameof(DailyMeeting))]
         public int DailyMeetingId { get; set; }
 
-        public MeetingEntity DailyMeeting { get; set; } = new MeetingEntity();
+        public DailyMeetingEntity DailyMeeting { get; set; } = new DailyMeetingEntity();
 
         [ForeignKey(nameof(Person))]
         public int PersonId { get; set; }

@@ -2,22 +2,22 @@
 
 namespace DailyTool.DataAccess.Framework
 {
-    public class DbContextFactory : IDbContextFactory<DatabaseContext>
+    public class DbContextFactory : IDbContextFactory<ScrummyContext>
     {
-        private readonly DbContextOptions<DatabaseContext> _options;
+        private readonly DbContextOptions<ScrummyContext> _options;
         private readonly ITransactionProvider _transactionProvider;
 
         public DbContextFactory(
-            DbContextOptions<DatabaseContext> options,
+            DbContextOptions<ScrummyContext> options,
             ITransactionProvider transactionProvider)
         {
             _options = options;
             _transactionProvider = transactionProvider;
         }
 
-        public DatabaseContext CreateDbContext()
+        public ScrummyContext CreateDbContext()
         {
-            var context = new DatabaseContext(_options);
+            var context = new ScrummyContext(_options);
 
             if (_transactionProvider is not null)
             {

@@ -70,7 +70,7 @@ namespace DailyTool.BusinessLogic.Tests
             };
             var meetingInfo = new DailyMeetingModel();
 
-            _meetinInfoService.GetAsync(5).Returns(meetingInfo);
+            _meetinInfoService.GetByTeamAsync(5).Returns(meetingInfo);
 
             // Act
             await sut.InitializeMeetingInfoAsync(state);

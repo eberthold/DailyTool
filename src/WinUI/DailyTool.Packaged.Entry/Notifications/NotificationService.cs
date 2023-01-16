@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using DailyTool.ViewModels.Notifications;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
@@ -8,6 +9,13 @@ namespace DailyTool.Packaged.Entry.Notifications
 {
     public class NotificationService : ObservableObject, INotificationService
     {
+        private static IReadOnlyDictionary<NotificationType, TimeSpan> DisplayTimeMap = new Dictionary<NotificationType, TimeSpan>
+        {
+            [NotificationType.Default] = TimeSpan.FromSeconds(2),
+            [NotificationType.Warning] = TimeSpan.FromSeconds(3.5),
+            [NotificationType.Error] = TimeSpan.FromSeconds(5)
+        };
+
         public ObservableCollection<Notification> Notifications { get; } = new ObservableCollection<Notification>();
 
         public Task ShowNotificationAsync(Notification notification)
@@ -52,7 +60,12 @@ namespace DailyTool.Packaged.Entry.Notifications
 
         private async Task TriggerKillNotification(Notification notification)
         {
-            var delay = TimeSpan.FromSeconds(1.5);
+            var delay = DisplayTimeMap[NotificationType.Default];
+            if (DisplayTimeMap.ContainsKey(notification.NotificationType))
+            {
+                delay = DisplayTimeMap[notification.NotificationType];
+            }
+
             await Task.Delay(delay);
 
             Notifications.Remove(notification);

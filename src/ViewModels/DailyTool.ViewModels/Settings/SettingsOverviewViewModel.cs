@@ -6,6 +6,7 @@ using System.Collections.Immutable;
 
 namespace DailyTool.ViewModels.Settings
 {
+    [NavigationTarget("/settings")]
     public class SettingsOverviewViewModel : ObservableObject, INavigationTarget, ILoadDataAsync, ITitle
     {
         private readonly ISettingsProvider _settingsProvider;
@@ -37,7 +38,7 @@ namespace DailyTool.ViewModels.Settings
             Settings = await _settingsProvider.GetSettingsAsync();
         }
 
-        public Task OnNavigatedToAsync(IReadOnlyDictionary<string, string> parameters, NavigationMode navigationMode)
+        public Task OnNavigatedToAsync(NavigationMode navigationMode)
         {
             return LoadDataAsync();
         }

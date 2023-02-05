@@ -12,10 +12,10 @@
 
         Task NavigateBackAsync();
 
-        Task<T> CreateNavigationTarget<T>()
-            where T : INavigationTarget;
+        Task<T?> CreateNavigationTarget<T>()
+            where T : class, INavigationTarget;
 
-        Task<T> CreateNavigationTarget<T, TParam>(TParam parameter)
-            where T : INavigationTarget<TParam>;
+        Task<T?> CreateNavigationTarget<T, TParam>(TParam parameter)
+            where T : class, INavigationTarget<TParam>;
     }
 }

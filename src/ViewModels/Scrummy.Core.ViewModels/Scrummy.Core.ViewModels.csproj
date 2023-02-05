@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\BusinessLogic\Scrummy.Core.BusinessLogic\Scrummy.Core.BusinessLogic.csproj" />
     <ProjectReference Include="..\..\Infrastructure\DailyTool.Infrastructure.Abstractions\DailyTool.Infrastructure.Abstractions.csproj" />
     <ProjectReference Include="..\Scrummy.ViewModels.Shared\Scrummy.ViewModels.Shared.csproj" />

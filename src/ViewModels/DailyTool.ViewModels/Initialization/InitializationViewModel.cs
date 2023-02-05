@@ -11,6 +11,7 @@ using Scrummy.ViewModels.Shared.Data;
 
 namespace DailyTool.ViewModels.Initialization
 {
+    [NavigationTarget("/daily/{teamId}/configuration")]
     public class InitializationViewModel : ObservableObject, INavigationTarget<TeamParameter>, ILoadDataAsync, ITitle
     {
         private readonly INavigationService _navigationService;
@@ -67,10 +68,8 @@ namespace DailyTool.ViewModels.Initialization
             return _navigationService.NavigateAsync<DailyViewModel>();
         }
 
-        public Task OnNavigatedToAsync(TeamParameter parameter, NavigationMode navigationMode)
+        public Task OnNavigatedToAsync(NavigationMode navigationMode)
         {
-            _teamId = parameter.TeamId;
-
             return LoadDataAsync();
         }
 
@@ -86,5 +85,10 @@ namespace DailyTool.ViewModels.Initialization
 
         private bool CanStartDaily()
             => PeopleEditViewModel?.IsInViewMode ?? false;
+
+        public void SetParameters(TeamParameter parameter)
+        {
+            _teamId = parameter.TeamId;
+        }
     }
 }

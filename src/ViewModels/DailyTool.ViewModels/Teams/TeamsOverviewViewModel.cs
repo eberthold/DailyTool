@@ -13,6 +13,7 @@ using System.Collections.Specialized;
 
 namespace DailyTool.ViewModels.Teams
 {
+    [NavigationTarget("/teams")]
     public class TeamsOverviewViewModel : ObservableObject, INavigationTarget, ILoadDataAsync, ISettingsViewModel, IOverviewViewModel<TeamViewModel>
     {
         private readonly ITeamService _teamService;
@@ -99,7 +100,7 @@ namespace DailyTool.ViewModels.Teams
             return _overviewService.LoadDataAsync(this);
         }
 
-        public async Task OnNavigatedToAsync(IReadOnlyDictionary<string, string> parameters, NavigationMode navigationMode)
+        public async Task OnNavigatedToAsync(NavigationMode navigationMode)
         {
             await LoadDataAsync();
             _overviewService.RegisterItemUpdates(this);

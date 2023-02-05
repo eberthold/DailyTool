@@ -60,10 +60,8 @@ namespace DailyTool.ViewModels.Teams
             Team = _viewModelMapper.Map(teamModel);
         }
 
-        public async Task OnNavigatedToAsync(TeamParameter parameter, NavigationMode navigationMode)
+        public async Task OnNavigatedToAsync(NavigationMode navigationMode)
         {
-            _teamId = parameter.TeamId;
-
             await LoadDataAsync();
         }
 
@@ -105,6 +103,11 @@ namespace DailyTool.ViewModels.Teams
         {
             Closed?.Invoke(this, EventArgs.Empty);
             return Task.CompletedTask;
+        }
+
+        public void SetParameters(TeamParameter parameter)
+        {
+            _teamId = parameter.TeamId;
         }
     }
 }

@@ -73,15 +73,18 @@ namespace DailyTool.ViewModels.MeetingInfos
             _taskQueue.ProcessQueueAsync(new());
         }
 
-        public Task OnNavigatedToAsync(MeetingParameter parameter, NavigationMode navigationMode)
+        public Task OnNavigatedToAsync(NavigationMode navigationMode)
         {
-            _teamId = parameter.TeamId;
-            _meetingType = parameter.MeetingType;
-
             return LoadDataAsync();
         }
 
         public Task<bool> OnNavigatingFromAsync(NavigationMode navigationMode)
             => Task.FromResult(true);
+
+        public void SetParameters(MeetingParameter parameter)
+        {
+            _teamId = parameter.TeamId;
+            _meetingType = parameter.MeetingType;
+        }
     }
 }

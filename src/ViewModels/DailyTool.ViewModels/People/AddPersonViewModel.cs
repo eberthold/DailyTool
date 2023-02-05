@@ -67,7 +67,7 @@ namespace DailyTool.ViewModels.People
             return Task.CompletedTask;
         }
 
-        public Task OnNavigatedToAsync(IReadOnlyDictionary<string, string> parameters, NavigationMode navigationMode)
+        public Task OnNavigatedToAsync(NavigationMode navigationMode)
         {
             return Task.CompletedTask;
         }

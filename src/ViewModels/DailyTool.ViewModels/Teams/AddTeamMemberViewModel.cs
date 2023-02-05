@@ -33,7 +33,7 @@ namespace DailyTool.ViewModels.Teams
             set => SetProperty(ref _team, value);
         }
 
-        public Task OnNavigatedToAsync(IReadOnlyDictionary<string, string> parameters, NavigationMode navigationMode)
+        public Task OnNavigatedToAsync(NavigationMode navigationMode)
             => Task.CompletedTask;
 
         public Task<bool> OnNavigatingFromAsync(NavigationMode navigationMode)

@@ -76,7 +76,7 @@ namespace DailyTool.ViewModels.Daily
             _timer.Change(0, 100);
         }
 
-        public Task OnNavigatedToAsync(IReadOnlyDictionary<string, string> parameters, NavigationMode navigationMode)
+        public Task OnNavigatedToAsync(NavigationMode navigationMode)
          => Task.CompletedTask;
 
         public Task<bool> OnNavigatingFromAsync(NavigationMode navigationMode)

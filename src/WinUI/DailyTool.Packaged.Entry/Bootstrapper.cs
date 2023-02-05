@@ -97,6 +97,7 @@ namespace DailyTool.Packaged.Entry
             services.AddSingleton<IParticipantService, ParticipantService>();
 
             services.AddSingleton<INotificationService, NotificationService>();
+            services.AddSingleton<IUriNavigationHandler, UriNavigationHandler>();
 
             services.AddSingleton<ITeamService, TeamService>();
             services.AddSingleton<ITeamContext, TeamContext>();

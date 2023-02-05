@@ -12,6 +12,7 @@ using System.Collections.ObjectModel;
 
 namespace DailyTool.ViewModels.Dashboard
 {
+    [NavigationTarget("/dashboard")]
     public class DashboardViewModel : ObservableObject, IOverviewViewModel<TeamViewModel>, INavigationTarget, ILoadDataAsync, ITitle
     {
         private readonly IOverviewViewModelService<TeamViewModel> _overviewViewModelService;
@@ -61,7 +62,7 @@ namespace DailyTool.ViewModels.Dashboard
             OnPropertyChanged(nameof(SelectedItem));
         }
 
-        public async Task OnNavigatedToAsync(IReadOnlyDictionary<string, string> parameters, NavigationMode navigationMode)
+        public async Task OnNavigatedToAsync(NavigationMode navigationMode)
         {
             await LoadDataAsync();
         }
